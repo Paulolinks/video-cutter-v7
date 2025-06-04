@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube Video Cutter</title>
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+  <style>
+    body {
+      background-color: #0e0e0e;
+      color: #f1f1f1;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 30px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #00f7ff;
+      text-shadow: 0 0 10px #00f7ff;
+      margin-bottom: 20px;
+    }
+
+    .form-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .input-section, .config-section {
+      background-color: #161616;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+      text-align: left;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .input-section input, .config-section input, .config-section select {
+      background-color: #222;
+      border: 1px solid #00f7ff;
+      color: #fff;
+      border-radius: 6px;
+      padding: 8px;
+      margin: 8px 0;
+      width: 100%;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      color: #ccc;
+    }
+
+    .buttons {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      background-color: #00f7ff;
+      color: #000;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      background-color: #00c9d9;
+      box-shadow: 0 0 10px #00f7ff;
+    }
+
+    progress {
+      width: 100%;
+      height: 10px;
+      margin-top: 15px;
+      appearance: none;
+      background: #222;
+    }
+
+    progress::-webkit-progress-bar {
+      background-color: #222;
+    }
+
+    progress::-webkit-progress-value {
+      background-color: #00f7ff;
+      box-shadow: 0 0 6px #00f7ff;
+    }
+
+    #videosContainer {
+      margin-top: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    video {
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00f7ff55;
+      width: 240px;
+    }
+
+    .section-title {
+      color: #ffcc00;
+      font-weight: bold;
+      margin-top: 40px;
+      font-size: 20px;
+    }
+
+    .vermelho {
+      color: #ff0033;
+      font-weight: bold;
+      text-shadow:
+      0 0 5px #ffffff,
+      0 0 10px #ffffff,
+      0 0 15px #ffffff;
+}
+
+
+  </style>
+</head>
+<body onload="carregarVideos()">
+
+  <h1><span class="vermelho">🎞️ YouTube</span> Video Cutter</h1>
+
+
+  <div class="form-wrapper">
+    <div class="input-section">
+      <label for="link"> YouTube Link</label>
+      <input id="link" type="text" placeholder="https://www.youtube.com/watch?v=..." />
+      <button onclick="deletarVideos()">🗑️ Delete Previous Video</button>
+    </div>
+
+    <div class="config-section">
+      <label>Caption Settings</label>
+
+      <select id="fonte"></select>
+
+      <label for="cor">Color of text:</label>
+      <input type="color" id="cor" value="#ffffff">
+
+      <div style="display: flex; gap: 10px;">
+        <div style="flex: 1">
+          <label for="posicao">Text position:</label>
+          <select id="posicao">
+            <option value="0.2">Top (20%)</option>
+            <option value="0.4" selected>40%</option>
+            <option value="0.5">Middle (50%)</option>
+            <option value="0.8">Bottom (80%)</option>
+          </select>
+        </div>
+        <div style="flex: 1">
+          <label for="tamanho">Font Size:</label>
+          <input type="number" id="tamanho" value="60">
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <div style="flex: 1">
+          <label for="altura">Font size px:</label>
+          <input type="number" id="altura" value="1280">
+        </div>
+        <div style="flex: 1">
+          <label for="largura">Width (px):</label>
+          <input type="number" id="largura" value="720">
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button onclick="iniciarProcesso()">⏯️ Start Cutting</button>
+        <button onclick="carregarVideos()">🔃 Load Videos</button>
+        <button onclick="window.location.reload()">Recarregar Página</button>
+      </div>
+    </div>
+  </div>
+
+  <progress id="barra" value="0" max="100"></progress>
+  <p id="etapa">Waiting...</p>
+  <p id="resposta"></p>
+
+  <div class="section-title">🎬 Videos Gerados:</div>
+  <div id="videosContainer"></div>
+  <div class="buttons" style="margin-top: 20px;">
+    <button onclick="uploadDrive()">📂 Upload to Drive</button>
+  </div>
+
+
+
+
+<script>
+    let intervalo;
+
+    // Função para iniciar o processo completo de download e corte
+    function iniciarProcesso() {
+        const link = document.getElementById("link").value;
+        const fonte = document.getElementById("fonte").value;
+        const cor = document.getElementById("cor").value;
+        const tamanho = parseInt(document.getElementById("tamanho").value);
+        const altura = parseInt(document.getElementById("altura").value);
+        const largura = parseInt(document.getElementById("largura").value);
+        const posicao = parseFloat(document.getElementById("posicao").value);
+
+
+        if (!link) {
+            alert("Por favor, informe o link do YouTube.");
+            return;
+        }
+
+        document.getElementById("resposta").innerText = "⏳ Processando...";
+        document.getElementById("barra").value = 0;
+        document.getElementById("etapa").innerText = "Iniciando...";
+
+        // Inicia o polling de progresso
+        intervalo = setInterval(() => {
+            fetch("/progresso")
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("barra").value = data.etapa;
+                    document.getElementById("etapa").innerText = data.descricao;
+
+                    if (data.etapa >= 100) {
+                        clearInterval(intervalo);
+                        document.getElementById("resposta").innerText = "✅ Finalizado!";
+                        // Após finalizar, exibe os vídeos sem recarregar a página
+                        carregarVideos();
+                    }
+                });
+        }, 1000);
+
+        // Envia requisição POST para iniciar o processamento
+        fetch("/process", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ link, fonte, cor, tamanho, altura, largura, posicao })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (!data.success) {
+                clearInterval(intervalo);
+                document.getElementById("resposta").innerText = "❌ Erro ao processar: " + data.message;
+                document.getElementById("etapa").innerText = "Erro";
+                document.getElementById("barra").value = 0;
+            }
+        })
+        .catch(err => {
+            clearInterval(intervalo);
+            document.getElementById("resposta").innerText = "❌ Erro na requisição.";
+            document.getElementById("etapa").innerText = "Erro";
+            document.getElementById("barra").value = 0;
+        });
+    }
+
+    // Função para carregar e exibir vídeos já existentes na pasta static/final
+    function carregarVideos() {
+        fetch("/videos")
+            .then(res => res.json())
+            .then(videos => {
+                const container = document.getElementById("videosContainer");
+                container.innerHTML = "";
+                videos.forEach(url => {
+                    const video = document.createElement("video");
+                    video.src = url;
+                    video.controls = true;
+                    video.width = 240;
+                    container.appendChild(video);
+                });
+            })
+            .catch(err => {
+                console.error("Erro ao carregar vídeos:", err);
+            });
+    }
+
+
+      // ===== Googgle API Google my drive função para chamar /upload =====
+    function uploadDrive() {
+      document.getElementById("resposta").innerText = "⏳ Enviando ao Google Drive...";
+      fetch("/upload", { method: "POST" })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            document.getElementById("resposta").innerText =
+              `✅ Upload concluído! IDs no Drive: ${data.uploaded_ids.join(", ")}`;
+          } else {
+            document.getElementById("resposta").innerText =
+              `❌ Falha no upload: ${data.message}`;
+          }
+        })
+        .catch(err => {
+          document.getElementById("resposta").innerText = "❌ Erro de requisição.";
+          console.error(err);
+        });
+    }
+
+
+    // Preenche o dropdown com as fontes do sistema
+fetch("/fonts")
+  .then(res => res.json())
+  .then(fontes => {
+    const selectFonte = document.getElementById("fonte");
+    selectFonte.innerHTML = "";
+    fontes.forEach(fonte => {
+      const option = document.createElement("option");
+      option.value = fonte;
+      option.textContent = fonte;
+      selectFonte.appendChild(option);
+    });
+  })
+  .catch(err => {
+    console.error("Erro ao carregar fontes:", err);
+  });
+
+
+
+
+// Função para deletar vídeos da pasta static/final
+function deletarVideos() {
+  if (confirm("Tem certeza que deseja deletar todos os vídeos da pasta 'data/videos'?")) {
+    fetch("/deletar_videos", { method: "POST" })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert("✅ Vídeos deletados:\n" + data.deletados.join("\n"));
+        } else {
+          alert("❌ Erro ao deletar vídeos.");
+        }
+      })
+      .catch(err => {
+        console.error("Erro:", err);
+        alert("❌ Erro na requisição.");
+      });
+  }
+}
+
+</script>
+
+</body>
+</html>
