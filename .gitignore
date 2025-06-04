@@ -1,8 +1,14 @@
 venv/
 __pycache__/
-*.pyc
-*.log
 *.mp4
+*.wav
+*.log
 *.json
 *.db
 .env
+token.json
+status.*
+config.json
+credentials.json
+data/
+static/final/
