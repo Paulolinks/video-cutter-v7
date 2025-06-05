@@ -8,7 +8,6 @@ __pycache__/
 .env
 token.json
 status.*
-config.json
 credentials.json
-data/
-static/final/
+
+status.json

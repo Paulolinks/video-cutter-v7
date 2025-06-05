@@ -34,8 +34,8 @@ def cortar_com_base_nas_frases(video_path, partes):
                 codec="libx264",
                 audio_codec="aac",
                 remove_temp=True,
-                ffmpeg_params=["-preset", "ultrafast"],
-                threads=os.cpu_count(),      # usa todos núcleos   threads=1,
+                ffmpeg_params=["-preset", "ultrafast"], 
+                threads=2,      # usa todos núcleos   threads=1, ou  threads=os.cpu_count(), 
                 write_logfile=False,
                 logger=None
         )

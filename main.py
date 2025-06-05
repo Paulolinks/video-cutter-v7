@@ -1,5 +1,6 @@
-# main.py (trecho completo com cópia no final da função main)
 import sys
+# main.py (trecho completo com cópia no final da função main)
+import psutil
 import os
 import io
 import json
@@ -63,7 +64,7 @@ def legendar_video_por_segmentos(video_path, segmentos, saida_path):
         codec="libx264",
         audio_codec="aac",
         preset="ultrafast",
-        threads=os.cpu_count()      # usa todos núcleos threads=2  
+        threads=2       # usa todos núcleos threads=2  threads=os.cpu_count()
     )
         
     #Carregar videos cortados
@@ -141,14 +142,37 @@ def main():
     t, n = medir_etapa("Etapa 2 – Extrair áudio")
     with open("status.json", "w", encoding="utf-8") as f:
         json.dump({"etapa": 20, "descricao": "Extraindo áudio..."}, f, ensure_ascii=False)
+    #audio_path = extrair_audio(video_path)
+    #fim_etapa(t, n)
+############### DEBUGANDO ####################
+    # Verifica se o áudio foi extraído corretamente
     audio_path = extrair_audio(video_path)
-    fim_etapa(t, n)
+    print("🎯 Audio salvo em:", audio_path)
+    sys.stdout.flush()
+
+    print("🧠 Subprocessos ativos:")
+    for p in psutil.Process().children(recursive=True):
+        print(f" - PID: {p.pid}, name: {p.name()}")
+################ DEBUGANDO #####################33
+
+
 
       # Etapa 3: transcrever áudio
     t, n = medir_etapa("Etapa 3 – Transcrição (Whisper)")
     with open("status.json", "w", encoding="utf-8") as f:
         json.dump({"etapa": 30, "descricao": "Transcrevendo áudio..."}, f, ensure_ascii=False)
+    #texto, segmentos = transcrever_audio(audio_path)
+
+################################################
+    print("🎙️ Iniciando transcrição com Whisper...")
+    sys.stdout.flush()
+
     texto, segmentos = transcrever_audio(audio_path)
+
+    print("✅ Transcrição concluída")
+    sys.stdout.flush()
+  
+##########################################
     idioma = detect(texto)
     fim_etapa(t, n)
 

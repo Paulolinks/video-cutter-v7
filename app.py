@@ -109,7 +109,7 @@ def process():
 
         # Executa o script main.py com encoding utf-8
         result = subprocess.run(
-            ["python", "main.py", link],
+            [sys.executable, "main.py", link],
             capture_output=True,
             text=True,
             encoding="utf-8"

@@ -1,6 +1,45 @@
+
+# 🎬 Video Cutter com Legendas Automáticas
+
+Este projeto é uma ferramenta automática que:
+
+- Baixa vídeos do YouTube
+- Extrai o áudio
+- Transcreve com o modelo **Whisper**
+- Detecta frases de impacto com **spaCy**
+- Corta os trechos do vídeo
+- Gera vídeos curtos com **legendas personalizadas**
+- (Opcional) envia os vídeos para o Google Drive
+
+## 🚀 Requisitos
+
+- Python 3.11 (recomendado)
+- Git (opcional para clonar)
+- Internet para baixar os modelos (Whisper, spaCy, etc.)
+
+---
+
+## 🛠️ Instalação
+
+```bash
+git clone https://github.com/SEU-USUARIO/NOME-REPO.git
+cd NOME-REPO
+python -m venv venv
+venv\Scripts\activate  # ou source venv/bin/activate no Linux/Mac
+
+pip install -r requirements.txt
+
+# Baixar modelo spaCy
+python -m spacy download en_core_web_sm
+
+
+----------------------------------------------------------
 Para installar requiments
 pip install -r requirements.txt
 
+- Apos Intalar requirimentos instale isso abaixo
+python -m spacy download en_core_web_sm
+python -m spacy download pt_core_news_sm
 
 
 ✅ Passo 1 – Ative o ambiente virtual (parece já estar ativo):
@@ -12,43 +51,16 @@ venv\Scripts\activate
 Rodar Programa pela interface -> python main.py
 Rodar Programa -> python main.py https://www.youtube.com/watch?v=jBT4_Cx5ihs
 
-VERSAO V4
-- Adicionado um botao para carregar video e um para iniciar processo de corte
-
-adicionar legenda animada
-
-Se quiser, posso te ajudar a transformar essa legenda traduzida em texto animado no vídeo depois. Quer seguir com isso?
-
-
-Mudar fonte.
-Abrir APP em interface com pequeno terminal de progresso (print)
-Opcoes de modicar tamnaho do corte
-Opcao de modificar tamnaho do video
-Adicionar fade-in/out à legenda
-Centralizar com movimento suave
+-------------------Novos features --------------
 Colocar logo/marca d’água
 Colocar gift dancando no video
-
-
-
-
-Versao V5
-
-- Conection to google my drive credential - credentials.json
-- mostrar fontes disponivel do computador
-- Deletar todos videos das pastas para ficar leve o processo dos novos videos
-
-
+----------------------------------------------------
 
 
 
 Instalacao para mostrar fontes do sistema windows
 pip install matplotlib
 pip install google-api-python-client google-auth-httplib2 google-auth-oauthlibv
-
-versao 7
-
-nova interface e executacel
 
 
 ------------------Erro no APP with moviepy ----------------------
@@ -62,31 +74,21 @@ Copy
 Edit
 Remove-Item -Recurse -Force .\venv
 ✅ Passo 2: Criar um ambiente virtual novo
-bash
-Copy
-Edit
-python -m venv venv
-Ative o ambiente:
 
-bash
-Copy
-Edit
+python -m venv venv
+
+Ative o ambiente:
 .\venv\Scripts\activate
 ✅ Passo 3: Instalar tudo com versões compatíveis
 Execute este comando:
 
-bash
-Copy
-Edit
 pip install flask==3.1.1 moviepy==1.0.3 pillow==9.5.0 numpy==1.24.4 matplotlib==3.7.1 deep-translator==1.11.4 langdetect==1.0.9 faster-whisper spacy==3.5.4 torch==2.1.0 transformers==4.38.2 google-auth google-auth-oauthlib google-api-python-client
 Essas versões são estáveis e compatíveis entre si.
 
 ✅ Passo 4: Testar moviepy
 Agora rode:
 
-bash
-Copy
-Edit
 python -c "from moviepy.editor import VideoFileClip; print('✅ OK')"
 
 --------------------------------------------
+
