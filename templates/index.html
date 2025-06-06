@@ -155,7 +155,7 @@
         <div style="flex: 1">
           <label for="posicao">Text position:</label>
           <select id="posicao">
-            <option value="0.1">Top (10%)</option>
+            <option value="0.">Top (10%)</option>
             <option value="0.2">Top (20%)</option>
             <option value="0.4" selected>40%</option>
             <option value="0.5">Middle (50%)</option>
@@ -307,23 +307,48 @@
 
     // Função para carregar e exibir vídeos já existentes na pasta static/final
     function carregarVideos() {
-        fetch("/videos")
-            .then(res => res.json())
-            .then(videos => {
-                const container = document.getElementById("videosContainer");
-                container.innerHTML = "";
-                videos.forEach(url => {
-                    const video = document.createElement("video");
-                    video.src = url;
-                    video.controls = true;
-                    video.width = 240;
-                    container.appendChild(video);
-                });
-            })
-            .catch(err => {
-                console.error("Erro ao carregar vídeos:", err);
-            });
-    }
+  fetch("/videos")
+    .then(res => res.json())
+    .then(videos => {
+      const container = document.getElementById("videosContainer");
+      container.innerHTML = "";
+
+      videos.forEach(url => {
+        const nomeArquivo = url.split("/").pop(); // ex: corte_1.mp4
+
+        const div = document.createElement("div");
+        div.style.position = "relative";
+        div.style.display = "inline-block";
+        div.style.margin = "10px";
+
+        const video = document.createElement("video");
+        video.src = url;
+        video.controls = true;
+        video.width = 240;
+        video.style.borderRadius = "10px";
+        video.style.boxShadow = "0 0 10px #00f7ff55";
+
+        const botao = document.createElement("button");
+        botao.innerText = "🗑️";
+        botao.title = "Deletar vídeo";
+        botao.style.position = "absolute";
+        botao.style.top = "5px";
+        botao.style.right = "5px";
+        botao.style.background = "#ff0033";
+        botao.style.color = "#fff";
+        botao.style.border = "none";
+        botao.style.borderRadius = "5px";
+        botao.style.cursor = "pointer";
+        botao.style.padding = "4px 8px";
+        botao.onclick = () => deletarVideo(nomeArquivo, div);
+
+        div.appendChild(video);
+        div.appendChild(botao);
+        container.appendChild(div);
+      });
+    });
+}
+
 
 
       // ===== Googgle API Google my drive função para chamar /upload =====
@@ -449,6 +474,32 @@ function enviarCredencial() {
     console.error(err);
   });
 }
+
+
+// Função para deletar um vídeo específico
+function deletarVideo(nome, div) {
+  if (confirm(`Deseja realmente deletar "${nome}"?`)) {
+    fetch(`/deletar_video/${nome}`, {
+      method: "DELETE"
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        div.remove();
+      } else {
+        alert("Erro ao deletar: " + data.message);
+      }
+    })
+    .catch(err => {
+      alert("Erro de rede ao deletar.");
+      console.error(err);
+    });
+  }
+}
+
+
+
+
 
 </script>
 

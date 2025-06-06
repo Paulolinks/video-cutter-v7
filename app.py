@@ -228,6 +228,18 @@ def deletar_videos():
 
     return jsonify({"success": True, "deletados": deletados})
 
+# Deletar videos individuais - v8
+@app.route("/deletar_video/<nome>", methods=["DELETE"])
+def deletar_video_individual(nome):
+    try:
+        caminho = os.path.join("static/final", nome)
+        if os.path.exists(caminho):
+            os.remove(caminho)
+            return jsonify({"success": True})
+        else:
+            return jsonify({"success": False, "message": "Arquivo não encontrado."})
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
 
 
 if __name__ == "__main__":
