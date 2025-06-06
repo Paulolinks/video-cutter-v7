@@ -95,6 +95,25 @@ def upload_to_drive():
         return jsonify({"success": False, "message": str(e)})
 
 
+# Fazer upload de credenciais do Google Drive ( credentials.json )
+@app.route("/upload_credencial", methods=["POST"])
+def upload_credencial():
+    try:
+        arquivo = request.files.get("credencial")
+        if not arquivo:
+            return jsonify({"success": False, "message": "Nenhum arquivo foi enviado."})
+
+        caminho = os.path.join(os.getcwd(), "credentials.json")
+
+        if os.path.exists(caminho):
+            print("⚠️ Credencial anterior será substituída.")
+
+        arquivo.save(caminho)
+
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
+
 
 
 @app.route("/")

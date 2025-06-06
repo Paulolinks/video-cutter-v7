@@ -90,7 +90,10 @@ Agora rode:
 
 python -c "from moviepy.editor import VideoFileClip; print('✅ OK')"
 
---------------------------------------------
+-----------------V7 ---------------------------
+
+
+-----------------------------------------------
 
 Salvar no github
 
@@ -101,6 +104,6 @@ git remote add origin https://github.com/Paulolinks/video-cutter-v7.git
 
 
 git add .
-git commit -m "🚀 Atualização do projeto com README e melhorias"
+git commit -m "✅ Otimização do app 3X mais rapido em redenrização, opção para selecionar tempo de corte"
 
 git push

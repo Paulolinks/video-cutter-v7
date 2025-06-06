@@ -155,6 +155,7 @@
         <div style="flex: 1">
           <label for="posicao">Text position:</label>
           <select id="posicao">
+            <option value="0.1">Top (10%)</option>
             <option value="0.2">Top (20%)</option>
             <option value="0.4" selected>40%</option>
             <option value="0.5">Middle (50%)</option>
@@ -210,15 +211,33 @@
   ⚙️
 </button>
 
-<div id="popupConfig" style="display:none; background:#111; padding:20px; border:1px solid #00f7ff; border-radius:10px; position:fixed; top:20%; left:50%; transform:translateX(-50%); z-index:999;">
-  <h3 style="color:#00f7ff;">Configurar Pasta do Google Drive</h3>
-  <input type="text" id="idPastaInput" placeholder="Cole aqui o ID da pasta" style="width:100%; padding:8px;">
-  <button onclick="salvarPastaId()" style="margin-top:10px;">Salvar</button>
-  <button onclick="fecharConfig()" style="margin-top:10px;">Cancelar</button>
-</div>
+<div id="popupConfig" style="display:none; background:#111; padding:20px; border:1px solid #00f7ff; border-radius:10px; position:fixed; top:20%; left:50%; transform:translateX(-50%); z-index:999; max-width:500px; width:90%;">
+  <h3 style="color:#00f7ff;">Configurar Google Drive</h3>
 
+  <!-- 🔐 Upload da credencial -->
+  <p style="color:#ccc; font-size:14px; margin-bottom:8px;">
+    Baixe sua credencial do Google e salve como <code>credentials.json</code>.<br>
+    Você pode arrastar o arquivo aqui ou clicar para selecionar.
+  </p>
 
+  <form id="formCredencial" enctype="multipart/form-data" style="margin-bottom: 15px;">
+  <input type="file" id="inputCredencial" name="credencial" accept=".json"
+         style="width:100%; box-sizing: border-box; padding:20px; border:2px dashed #00f7ff; background:#161616; color:#ccc; border-radius:10px; text-align:center; cursor:pointer;" 
+         onchange="enviarCredencial()" />
+</form>
+
+  <p id="statusUpload" style="color:#00ff99; font-size:14px; margin-top:5px;"></p>
+
+  <!-- 📁 Campo do ID da pasta -->
+  <label for="idPastaInput" style="color:#ccc; margin-top:20px; display:block;">ID da pasta no Google Drive:</label>
+  <input type="text" id="idPastaInput" placeholder="Cole aqui o ID da pasta"
+         style="width:100%; padding:8px; margin-top:5px;">
+
+  <div style="margin-top:15px;">
+    <button onclick="salvarPastaId()">Salvar</button>
+    <button onclick="fecharConfig()" style="margin-left:10px;">Cancelar</button>
   </div>
+</div>
 
 
 
@@ -409,6 +428,27 @@ function salvarPastaId() {
 //Selecionar o tempo mínimo e máximo do vídeo
 const tempo_min = parseFloat(document.getElementById("tempo_min").value);
 const tempo_max = parseFloat(document.getElementById("tempo_max").value);
+
+// Função para enviar o arquivo de credencial
+function enviarCredencial() {
+  const formData = new FormData(document.getElementById("formCredencial"));
+  fetch("/upload_credencial", {
+    method: "POST",
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      document.getElementById("statusUpload").innerText = "✅ Credencial salva com sucesso!";
+    } else {
+      document.getElementById("statusUpload").innerText = "❌ Erro: " + data.message;
+    }
+  })
+  .catch(err => {
+    document.getElementById("statusUpload").innerText = "❌ Erro ao enviar arquivo.";
+    console.error(err);
+  });
+}
 
 </script>
 
