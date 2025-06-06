@@ -9,8 +9,8 @@ from matplotlib import font_manager
 from flask import jsonify
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
-
-
+# Verifica se o arquivo de configuração existe e carrega o ID da pasta
+from utils.pasta_drive import salvar_pasta_id, carregar_pasta_id
 
 # app.py (trecho novo, logo após as outras importações)
 from pathlib import Path
@@ -31,15 +31,33 @@ def get_drive_service():
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
 
     # Se não tiver credenciais ou forem inválidas, inicia o fluxo de login
-    if not creds or not creds.valid:
-        flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
-        creds = flow.run_local_server(port=5501)  # ✅ não use redirect_uri aqui
+    if not creds or not creds.valid or not creds.refresh_token:
+        flow = InstalledAppFlow.from_client_secrets_file(
+            'credentials.json',
+            SCOPES
+        )
+        creds = flow.run_local_server(
+            port=5501,
+            access_type='offline',
+            prompt='consent'
+        )
 
-        # Salva o token para reutilizar depois
+        # Salva o token com o refresh_token incluso
         with open('token.json', 'w', encoding='utf-8') as token_file:
             token_file.write(creds.to_json())
 
     return build('drive', 'v3', credentials=creds)
+
+
+# Rota para configurar a pasta do Google Drive
+@app.route("/salvar_pasta_id", methods=["POST"])
+def salvar_id():
+    folder_id = request.json.get("folder_id")
+    if not folder_id:
+        return jsonify({"success": False, "message": "ID vazio"})
+    salvar_pasta_id(folder_id)
+    return jsonify({"success": True})
+
 
 
 # Rota para upload de vídeos para o Google Drive
@@ -54,7 +72,10 @@ def upload_to_drive():
             return jsonify({"success": False, "message": "Nenhum vídeo em static/final."})
 
         uploaded_ids = []
-        target_folder_id = '1Xvh1Irayw0cpt1d_SG6uq9QV-GkpBXma'  # coloque seu ID de pasta aqui
+        target_folder_id = carregar_pasta_id()
+        if not target_folder_id:
+            return jsonify({"success": False, "message": "ID da pasta não configurado."})
+                 # coloque seu ID de pasta aqui
 
         for arquivo in arquivos:
             file_metadata = {
@@ -94,7 +115,10 @@ def process():
         "tamanho": request.json.get("tamanho", 60),
         "altura": request.json.get("altura", 1280),
         "largura": request.json.get("largura", 720),
-        "posicao": request.json.get("posicao", 0.2)
+        "posicao": request.json.get("posicao", 0.2),
+        "tempo_min": request.json.get("tempo_min", 15.0),
+        "tempo_max": request.json.get("tempo_max", 53.0),
+
     }
 
 

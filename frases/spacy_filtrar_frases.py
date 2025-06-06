@@ -1,10 +1,7 @@
 import spacy
-from transformers import pipeline
+import torch
 from difflib import SequenceMatcher
 from transformers import pipeline
-import torch
-
-
 
 def carregar_modelo_spacy(idioma):
     return spacy.load("pt_core_news_sm") if idioma == "pt" else spacy.load("en_core_web_sm")
@@ -14,42 +11,43 @@ def carregar_sumarizador(idioma):
     usar_gpu = 0 if torch.cuda.is_available() else -1
     return pipeline("summarization", model=modelo, device=usar_gpu, truncation=True)
 
-def extrair_frases_de_efeito(texto, idioma, segmentos):
+def extrair_frases_de_efeito(texto, idioma, segmentos, tempo_min=15.0, tempo_max=53.0, similaridade_min=0.75):
     nlp = carregar_modelo_spacy(idioma)
     doc = nlp(texto)
 
-    frases = [sent.text.strip() for sent in doc.sents if len(sent.text.strip()) > 1]
+    frases = [sent.text.strip() for sent in doc.sents if len(sent.text.strip()) > 20]
+    transcript = [(seg.start, seg.end, seg.text.strip()) for seg in segmentos]
+
     resultados = []
 
-    i = 0
-    while i < len(segmentos):
-        grupo_texto = ""
-        grupo_inicio = segmentos[i].start
-        grupo_fim = segmentos[i].end
+    for frase in frases:
+        melhor_match = None
+        maior_sim = 0.0
 
-        grupo_texto += segmentos[i].text.strip()
-        i += 1
+        for i in range(len(transcript)):
+            for j in range(i + 1, min(i + 6, len(transcript))):
+                trecho = " ".join(seg[2] for seg in transcript[i:j])
+                start = transcript[i][0]
+                end = transcript[j - 1][1]
+                duracao = end - start
 
-        while i < len(segmentos):
-            duracao = grupo_fim - grupo_inicio
+                if duracao < tempo_min or duracao > tempo_max:
+                    continue
 
-            if duracao >= 15 and duracao <= 35:
-                resultados.append({
-                    "start": round(grupo_inicio, 2),
-                    "end": round(grupo_fim, 2),
-                    "text": grupo_texto.strip()
-                })
-                break
+                sim = SequenceMatcher(None, frase.lower(), trecho.lower()).ratio()
+                if sim > maior_sim:
+                    maior_sim = sim
+                    melhor_match = {
+                        "start": round(start, 2),
+                        "end": round(end, 2),
+                        "text": frase
+                    }
 
-            if duracao > 35:
-                break
+        if melhor_match and maior_sim >= similaridade_min:
+            print(f"✅ Match: '{frase[:60]}...' ({maior_sim:.2f})")
+            resultados.append(melhor_match)
+        else:
+            print(f"❌ Ignorado: '{frase[:60]}...' (similaridade: {maior_sim:.2f})")
 
-            grupo_texto += " " + segmentos[i].text.strip()
-            grupo_fim = segmentos[i].end
-            i += 1
-
-    print(f"\n🔢 Total de cortes encontrados: {len(resultados)}")
-    for r in resultados:
-        print(f"[{r['start']}s - {r['end']}s] {r['text'][:80]}...")
-
+    print(f"\n🔢 Total de frases selecionadas: {len(resultados)}")
     return resultados

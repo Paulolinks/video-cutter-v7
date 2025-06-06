@@ -2,10 +2,8 @@ from difflib import SequenceMatcher
 
 
 
-
-
 # Aqui que definimos o tempo mínimo e máximo para os cortes
-def mapear_frases(frases, segments, tempo_min=15.0, tempo_max=45.0):
+def mapear_frases(frases, segments, tempo_min=15.0, tempo_max=53.0):
     transcript = [(seg.start, seg.end, seg.text.strip()) for seg in segments]
     print(f"🧠 Segments disponíveis: {len(transcript)}")
     print(f"🧠 Frases de efeito: {len(frases)}")
@@ -14,23 +12,30 @@ def mapear_frases(frases, segments, tempo_min=15.0, tempo_max=45.0):
 
     for frase in frases:
         texto = frase["text"].strip()
-        palavras = texto.split()
-
-        if len(palavras) < 4:
-            print(f"⚠️ Pulando frase curta: {texto}")
+        if len(texto.split()) < 6 or len(texto) < 25:
+            print(f"⚠️ Pulando frase irrelevante: {texto}")
             continue
+
 
         melhor_inicio, melhor_fim, maior_sim = None, None, 0
 
         for i in range(len(transcript)):
-            for j in range(i + 1, len(transcript) + 1):
-                trecho = " ".join(seg[2] for seg in transcript[i:j])
-                sim = SequenceMatcher(None, texto.lower(), trecho.lower()).ratio()
-                start = transcript[i][0]
-                end = transcript[j - 1][1]
-                if sim > maior_sim and tempo_min <= (end - start) <= tempo_max:
-                    maior_sim = sim
-                    melhor_inicio, melhor_fim = start, end
+            duracao_acumulada = 0
+            trecho = ""
+
+            for j in range(i, len(transcript)):
+                trecho += (" " + transcript[j][2]) if trecho else transcript[j][2]
+                duracao_acumulada = transcript[j][1] - transcript[i][0]
+
+                if duracao_acumulada > tempo_max:
+                    break
+
+                if duracao_acumulada >= tempo_min:
+                    sim = SequenceMatcher(None, texto.lower(), trecho.lower()).ratio()
+                    if sim > maior_sim:
+                        maior_sim = sim
+                        melhor_inicio = transcript[i][0]
+                        melhor_fim = transcript[j][1]
 
         if melhor_inicio is not None:
             print(f"✅ Match encontrado: '{texto}' ({maior_sim:.2f}) de {melhor_inicio:.2f}s a {melhor_fim:.2f}s")

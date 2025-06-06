@@ -33,6 +33,10 @@ tamanho = config.get("tamanho")
 altura = config.get("altura")
 largura = config.get("largura")
 posicao = float(config.get("posicao", 0.2))  # valor de 0.2 até 0.8
+tempo_min = config.get("tempo_min", 15.0)
+tempo_max = config.get("tempo_max", 53.0)
+
+
 
 # Adiciona legendas no vídeo com base nos segmentos (tempo + texto)
 def legendar_video_por_segmentos(video_path, segmentos, saida_path):
@@ -176,21 +180,18 @@ def main():
     idioma = detect(texto)
     fim_etapa(t, n)
 
-     # Etapa 4: extrair frases de impacto
+    # Etapa 4: extrair frases de impacto
     t, n = medir_etapa("Etapa 4 – Frases de efeito")
     with open("status.json", "w", encoding="utf-8") as f:
         json.dump({"etapa": 40, "descricao": "Filtrando frases de efeito..."}, f, ensure_ascii=False)
     frases = extrair_frases_de_efeito(texto, idioma, segmentos)
     fim_etapa(t, n)
 
-    # Etapa 5: mapear frases no tempo (timestamps)
-    t, n = medir_etapa("Etapa 5 – Mapear frases no tempo")
-    with open("status.json", "w", encoding="utf-8") as f:
-        json.dump({"etapa": 50, "descricao": "Mapeando frases no tempo..."}, f, ensure_ascii=False)
-    partes = mapear_frases(frases, segmentos)
+        # Etapa 5: (removida) – já mapeado na etapa 4
+    partes = frases
     for parte in partes:
         parte["segmentos"] = segmentos
-    fim_etapa(t, n)
+
 
      # Etapa 6: traduzir frases, se idioma for inglês
     t, n = medir_etapa("Etapa 6 – Traduzir frases")

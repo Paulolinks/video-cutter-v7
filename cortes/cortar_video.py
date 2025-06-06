@@ -45,3 +45,11 @@ def cortar_com_base_nas_frases(video_path, partes):
             print(f"✅ Corte salvo em: {out_path}")
         except Exception as e:
             print(f"❌ Erro ao salvar corte {i+1}: {e}")
+
+
+
+
+
+
+ #Tamanho do corte do video
+# usa todos núcleos   threads=1, ou  threads=os.cpu_count(), 

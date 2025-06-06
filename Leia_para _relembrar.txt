@@ -92,3 +92,15 @@ python -c "from moviepy.editor import VideoFileClip; print('✅ OK')"
 
 --------------------------------------------
 
+Salvar no github
+
+git remote -v
+
+Se não aparecer nada, adicione com:
+git remote add origin https://github.com/Paulolinks/video-cutter-v7.git
+
+
+git add .
+git commit -m "🚀 Atualização do projeto com README e melhorias"
+
+git push

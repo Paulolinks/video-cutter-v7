@@ -8,20 +8,20 @@ def extrair_audio(video_path):
     print("🎬 Carregando vídeo...")
     clip = VideoFileClip(video_path)
 
+    # Verifica se o vídeo tem áudio
+    if not clip.audio:
+        print("❌ ERRO: O vídeo não possui faixa de áudio.")
+        raise ValueError("Vídeo sem faixa de áudio. Tente outro link.")
+
     print("🎧 Extraindo áudio com MoviePy...")
     clip.audio.write_audiofile(audio_path)
 
-    # Fecha os processos internos corretamente
-    import sys
-
+    # Fecha recursos corretamente
     print("🔃 Fechando recursos MoviePy...")
     clip.reader.close()
-    if clip.audio:
-        clip.audio.reader.close_proc()
+    clip.audio.reader.close_proc()
     clip.close()
+
     print("✅ Recursos fechados.")
-    sys.stdout.flush()
-
-
     print("✅ Áudio extraído com sucesso:", audio_path)
     return audio_path
