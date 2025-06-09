@@ -155,7 +155,8 @@ def process():
             [sys.executable, "main.py", link],
             capture_output=True,
             text=True,
-            encoding="utf-8"
+            encoding="utf-8",
+            errors="replace"
         )
 
         if result.returncode != 0:
@@ -240,6 +241,7 @@ def deletar_video_individual(nome):
             return jsonify({"success": False, "message": "Arquivo não encontrado."})
     except Exception as e:
         return jsonify({"success": False, "message": str(e)})
+
 
 
 if __name__ == "__main__":

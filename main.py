@@ -187,10 +187,18 @@ def main():
     frases = extrair_frases_de_efeito(texto, idioma, segmentos)
     fim_etapa(t, n)
 
-        # Etapa 5: (removida) – já mapeado na etapa 4
-    partes = frases
+    # Etapa 5 – Mapear frases no tempo
+    t, n = medir_etapa("Etapa 5 – Mapear frases no tempo")
+    with open("status.json", "w", encoding="utf-8") as f:
+        json.dump({"etapa": 50, "descricao": "Mapeando frases no tempo..."}, f, ensure_ascii=False)
+
+    partes = mapear_frases(frases, segmentos)
+
     for parte in partes:
         parte["segmentos"] = segmentos
+
+    fim_etapa(t, n)
+
 
 
      # Etapa 6: traduzir frases, se idioma for inglês

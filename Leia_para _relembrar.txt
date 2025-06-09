@@ -104,6 +104,6 @@ git remote add origin https://github.com/Paulolinks/video-cutter-v7.git
 
 
 git add .
-git commit -m "✅ Botão de adicionar google credential adicionado"
+git commit -m "✅ Botão de deletar video individual"
 
 git push
