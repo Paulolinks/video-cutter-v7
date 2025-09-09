@@ -1,0 +1,34 @@
+# Python / venv
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# IDE
+.vscode/
+.idea/
+
+# Arquivos gerados pelo app
+data/
+static/final/
+static/frames/
+downloads/
+tmp/
+logs/
+*.mp4
+*.webm
+*.mkv
+
+# Binários locais (não versionar)
+bin/
+# se quiser liberar a estrutura mas ignorar executáveis, use:
+# bin/**
+
+# Segredos
+token.json
+credentials.json
+*.env
+
+status.json

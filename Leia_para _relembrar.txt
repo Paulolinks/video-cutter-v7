@@ -1,0 +1,129 @@
+
+# 🎬 Video Cutter com Legendas Automáticas
+
+Este projeto é uma ferramenta automática que:
+
+- Baixa vídeos do YouTube
+- Extrai o áudio
+- Transcreve com o modelo **Whisper**
+- Detecta frases de impacto com **spaCy**
+- Corta os trechos do vídeo
+- Gera vídeos curtos com **legendas personalizadas**
+- (Opcional) envia os vídeos para o Google Drive
+
+## 🚀 Requisitos
+
+- Python 3.11 (recomendado)
+- Git (opcional para clonar)
+- Internet para baixar os modelos (Whisper, spaCy, etc.)
+
+---
+
+## 🛠️ Instalação
+
+```bash
+git clone https://github.com/SEU-USUARIO/NOME-REPO.git
+cd NOME-REPO
+python -m venv venv
+venv\Scripts\activate  # ou source venv/bin/activate no Linux/Mac
+
+pip install -r requirements.txt
+
+# Baixar modelo spaCy
+python -m spacy download en_core_web_sm
+
+
+----------------------------------------------------------
+Para installar requiments
+pip install -r requirements.txt
+
+- Apos Intalar requirimentos instale isso abaixo
+python -m spacy download en_core_web_sm
+python -m spacy download pt_core_news_sm
+
+
+✅ Passo 1 – Ative o ambiente virtual (parece já estar ativo):
+python -m venv venv
+venv\Scripts\activate
+
+Para desarivar:
+deactivate
+
+
+Rodar Programa pela interface -> python main.py
+Rodar Programa -> python main.py https://www.youtube.com/watch?v=jBT4_Cx5ihs
+
+-------------------Novos features --------------
+Colocar logo/marca d’água
+Colocar gift dancando no video
+----------------------------------------------------
+
+
+
+Instalacao para mostrar fontes do sistema windows
+pip install matplotlib
+pip install google-api-python-client google-auth-httplib2 google-auth-oauthlibv
+
+
+------------------Erro no APP with moviepy ----------------------
+Seu ambiente ainda está apresentando conflitos e comportamentos estranhos. Vamos resolver passo a passo de forma limpa e definitiva:
+
+✅ Passo 1: Deletar o ambiente virtual corrompido
+Feche o VS Code e no terminal PowerShell:
+
+bash
+Copy
+Edit
+Remove-Item -Recurse -Force .\venv
+✅ Passo 2: Criar um ambiente virtual novo
+
+python -m venv venv
+
+Ative o ambiente:
+.\venv\Scripts\activate
+✅ Passo 3: Instalar tudo com versões compatíveis
+Execute este comando:
+
+pip install flask==3.1.1 moviepy==1.0.3 pillow==9.5.0 numpy==1.24.4 matplotlib==3.7.1 deep-translator==1.11.4 langdetect==1.0.9 faster-whisper spacy==3.5.4 torch==2.1.0 transformers==4.38.2 google-auth google-auth-oauthlib google-api-python-client
+Essas versões são estáveis e compatíveis entre si.
+
+✅ Passo 4: Testar moviepy
+Agora rode:
+
+python -c "from moviepy.editor import VideoFileClip; print('✅ OK')"
+
+-----------------V7 ---------------------------
+
+
+-----------------------------------------------
+
+Salvar no github
+
+git remote -v
+
+Se não aparecer nada, adicione com:
+git remote add origin https://github.com/Paulolinks/video-cutter-v7.git
+
+
+git add .
+git commit -m "⚠️ Aviso de erro no download em caso do youtube bloqueiar request por pensar que e boot, mensagem de solucao"
+
+git push
+
+
+Ao reinstalar o APP no pc ele pede o ImageMagick - Entao deixe o exe dentro da pasta para nao dar problemas quando alguem comprar.
+Baixe a versão portable/zip do ImageMagick (x64 Q16-HDRI) e do FFmpeg.
+
+Coloque dentro do seu projeto, por ex.:
+video-cutter/
+  bin/
+    imagemagick/magick.exe
+    ffmpeg/ffmpeg.exe
+
+
+
+
+Adicionar no requirements 
+spacy
+en-core-web-sm
+pt-core-news-sm

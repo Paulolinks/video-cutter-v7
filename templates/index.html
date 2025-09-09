@@ -1,0 +1,939 @@
+<!-- build: {{ build  }} -->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube Video Cutter</title>
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <style>
+    body {
+      background-color: #0e0e0e;
+      color: #f1f1f1;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 30px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #00f7ff;
+      text-shadow: 0 0 10px #00f7ff;
+      margin-bottom: 20px;
+    }
+
+    .form-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .input-section, .config-section {
+      background-color: #161616;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+      text-align: left;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .input-section input, .config-section input, .config-section select, .config-section textarea {
+      background-color: #222;
+      border: 1px solid #00f7ff;
+      color: #fff;
+      border-radius: 6px;
+      padding: 8px;
+      margin: 8px 0;
+      width: 100%;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      color: #ccc;
+    }
+
+    .buttons {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      background-color: #00f7ff;
+      color: #000;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      background-color: #00c9d9;
+      box-shadow: 0 0 10px #00f7ff;
+    }
+
+    /* Toggle switch */
+    .switch{ position:relative; display:inline-block; width:46px; height:24px; }
+    .switch input{ opacity:0; width:0; height:0; }
+    .switch .slider{
+      position:absolute; inset:0; cursor:pointer;
+      background:#222; border:1px solid #00f7ff; border-radius:999px;
+      box-shadow: inset 0 0 6px rgba(0,247,255,.35);
+      transition: background .15s ease;
+    }
+    .switch .slider:before{
+      content:""; position:absolute; top:2px; left:3px;
+      width:18px; height:18px; border-radius:50%;
+      background:#fff; transition: transform .2s ease;
+    }
+    .switch input:checked + .slider{ background:#002b2f; }
+    .switch input:checked + .slider:before{ transform: translateX(21px); }
+
+    /* Opções avançadas */
+    .opcoes-avancadas {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #1a1a1a;
+      border-radius: 8px;
+      border: 1px solid #00f7ff;
+    }
+
+    .opcoes-avancadas.show {
+      display: block;
+    }
+
+    .toggle-avancadas {
+      background-color: #333;
+      color: #00f7ff;
+      border: 1px solid #00f7ff;
+    }
+
+    .toggle-avancadas:hover {
+      background-color: #444;
+    }
+
+    .filtros {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .filtros label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 5px 0;
+    }
+
+    .filtros input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+    }
+
+    progress {
+      width: 100%;
+      height: 10px;
+      margin-top: 15px;
+      appearance: none;
+      background: #222;
+    }
+
+    progress::-webkit-progress-bar {
+      background-color: #222;
+    }
+
+    progress::-webkit-progress-value {
+      background-color: #00f7ff;
+      box-shadow: 0 0 6px #00f7ff;
+    }
+
+    #videosContainer {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .video-item {
+      background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 0;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .video-item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+      border-color: #00f7ff;
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .video-item video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 0;
+    }
+
+    .video-info {
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .video-filename {
+      color: #fff;
+      font-size: 14px;
+      margin: 0;
+      font-weight: 500;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .delete-btn {
+      background: #ff4757;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-right: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .delete-btn:hover {
+      background: #ff3742;
+      transform: scale(1.05);
+      box-shadow: 0 2px 8px rgba(255, 71, 87, 0.4);
+    }
+
+
+    .section-title {
+      color: #ffcc00;
+      font-weight: bold;
+      margin-top: 40px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body onload="carregarVideos()">
+
+  <h1><span style="color: #ff0033;">🎞️ YouTube</span> Video Cutter</h1>
+
+  <div class="form-wrapper">
+    <div class="input-section">
+      <label for="link">YouTube Link</label>
+      <input id="link" type="text" placeholder="https://www.youtube.com/watch?v=..." />
+    </div>
+
+    <div class="config-section">
+      <!-- Linha: Automático + Tema + Rede Social -->
+      <div style="display:flex; gap:10px; align-items:center; margin-bottom:6px; flex-wrap:wrap;">
+        <div style="flex:0 0 auto; display:flex; align-items:center; gap:8px;">
+          <label class="switch">
+            <input id="chkAutomatico" type="checkbox" checked>
+            <span class="slider"></span>
+          </label>
+          <span>Automático (sem tema)</span>
+        </div>
+
+        <div id="temaWrap" style="flex:1; display:none; min-width:200px;">
+          <label for="txtTema">Tema dos cortes</label>
+          <input id="txtTema" type="text" placeholder="ex.: Lei da Atração">
+        </div>
+
+        <div style="flex:0 0 auto; min-width:150px;">
+          <label for="redeSocial">Rede Social</label>
+          <select id="redeSocial">
+            <option value="instagram">Instagram</option>
+            <option value="tiktok">TikTok</option>
+            <option value="youtube">YouTube</option>
+            <option value="facebook">Facebook</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Atualizar a seção de seleção de fontes -->
+      <div class="config-item">
+        <label for="fonte">Fonte:</label>
+        <select id="fonte" name="fonte">
+          <option value="">Carregando fontes...</option>
+        </select>
+      </div>
+
+      <div class="config-item">
+        <label for="modo_video">Modo de Vídeo:</label>
+        <select id="modo_video" name="modo_video">
+          <option value="crop">Crop Centralizado (sem bordas pretas)</option>
+          <option value="letterbox">Letterbox (com bordas pretas)</option>
+        </select>
+      </div>
+
+      <div class="config-item">
+        <label for="qualidade_video">Qualidade do Vídeo:</label>
+        <select id="qualidade_video" name="qualidade_video">
+          <option value="alta">Alta Qualidade (CRF 18)</option>
+          <option value="media">Média Qualidade (CRF 23)</option>
+          <option value="rapida">Rápida (CRF 28)</option>
+        </select>
+      </div>
+
+      <label for="cor">Color of text:</label>
+      <input type="color" id="cor" value="#ffffff">
+
+      <div style="display: flex; gap: 10px;">
+        <div style="flex: 1">
+          <label for="posicao">Text position:</label>
+          <select id="posicao">
+            <option value="0.1">Top (10%)</option>
+            <option value="0.2" selected>Top (20%)</option>
+            <option value="0.4" >40%</option>
+            <option value="0.5">Middle (50%)</option>
+            <option value="0.8">Bottom (80%)</option>
+          </select>
+        </div>
+        <div style="flex: 1">
+          <label for="tamanho">Font Size:</label>
+          <input type="number" id="tamanho" value="60">
+        </div>
+      </div>
+
+      <!-- Botão para opções avançadas -->
+      <button class="toggle-avancadas" onclick="toggleOpcoesAvancadas()">
+        ⚙️ Opções Avançadas
+      </button>
+
+      <!-- Opções avançadas (ocultas por padrão) -->
+      <div id="opcoesAvancadas" class="opcoes-avancadas">
+        <h3 style="color: #00f7ff; margin-top: 0;"> Configurações Avançadas</h3>
+        
+        <!-- Nicho -->
+        <label for="nicho">Seu Nicho/Área:</label>
+        <select id="nicho">
+          <option value="geral">Geral</option>
+          <option value="educacao">Educação</option>
+          <option value="entretenimento">Entretenimento</option>
+          <option value="negocios">Negócios</option>
+          <option value="fitness">Fitness</option>
+          <option value="culinaria">Culinária</option>
+          <option value="tecnologia">Tecnologia</option>
+        </select>
+
+        <!-- Template -->
+        <label for="template">Template de Corte:</label>
+        <select id="template">
+          <option value="viral">🔥 Viral (máximo engajamento)</option>
+          <option value="educativo">📚 Educativo (conteúdo denso)</option>
+          <option value="entretenimento">🎬 Entretenimento (visual)</option>
+          <option value="negocios">💼 Negócios (profissional)</option>
+        </select>
+
+        <!-- Palavras-chave personalizadas -->
+        <label for="palavras_personalizadas">Palavras-chave do seu nicho:</label>
+        <textarea id="palavras_personalizadas" placeholder="viral, trending, incrível, resultado..." rows="3"></textarea>
+
+        <!-- Filtros -->
+        <div>
+          <h4 style="color: #ffcc00; margin-bottom: 10px;">Filtros de Conteúdo:</h4>
+          <div class="filtros">
+            <label>
+              <input type="checkbox" id="filtrar_perguntas" checked> 
+              Incluir perguntas
+            </label>
+            <label>
+              <input type="checkbox" id="filtrar_numeros" checked> 
+              Incluir números
+            </label>
+            <label>
+              <input type="checkbox" id="filtrar_exclamacoes" checked> 
+              Incluir exclamações
+            </label>
+            <label>
+              <input type="checkbox" id="filtrar_negativas" checked> 
+              Incluir palavras negativas
+            </label>
+          </div>
+        </div>
+
+        <!-- Configurações de duração -->
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+          <div style="flex: 1">
+            <label for="tempo_min">Tempo mínimo (segundos):</label>
+            <input type="number" id="tempo_min" value="15" min="5" max="120">
+          </div>
+          <div style="flex: 1">
+            <label for="tempo_max">Tempo máximo (segundos):</label>
+            <input type="number" id="tempo_max" value="60" min="10" max="300">
+          </div>
+        </div>
+
+      </div>
+
+      <div class="buttons">
+        <button onclick="iniciarProcesso()">⏯️ Start Cutting</button>
+        <button onclick="carregarVideos()">🔃 Load Videos</button>
+        <button onclick="window.location.reload()">Recarregar Página</button>
+      </div>
+    </div>
+  </div>
+
+  <progress id="barra" value="0" max="100"></progress>
+  <p id="etapa">Waiting...</p>
+  <p id="resposta"></p>
+
+  <div class="section-title">🎬 Videos Gerados:</div>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+    <button id="limpar-antigos-btn" class="btn btn-warning">
+      🗑️ Limpar Vídeos Antigos
+    </button>
+    <button id="deletar-todos-btn" class="btn btn-danger" style="display: none;">
+      🗑️ Deletar Todos os Vídeos
+    </button>
+  </div>
+  <div id="videosContainer"></div>
+
+  <!-- Botão só com engrenagem -->
+<div style="text-align: center; margin: 30px 0;">
+  <button onclick="uploadToDrive()" id="uploadBtn" style="background: linear-gradient(45deg, #4285f4, #34a853); color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; cursor: pointer; margin-right: 10px;">
+    ☁️ Upload to Google Drive
+  </button>
+  <button onclick="toggleDriveSettings()" style="background: #666; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer;">
+    ⚙️
+  </button>
+</div>
+
+<!-- Modal exato como era antes -->
+<div id="driveModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000;" onclick="fecharModal(event)">
+  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #161616; padding: 30px; border-radius: 12px; width: 500px; max-width: 90%;" onclick="event.stopPropagation()">
+    <h3 style="color: #00f7ff; margin-bottom: 20px;">⚙️ Configurações do Google Drive</h3>
+    
+    <p style="color: #fff; margin-bottom: 10px;">1. Baixe o arquivo de credenciais do Google Drive</p>
+    <p style="color: #fff; margin-bottom: 20px;">2. Salve como <strong>credentials.json</strong> na pasta do projeto</p>
+    
+    <div style="margin-bottom: 20px;">
+      <label style="color: #fff; display: block; margin-bottom: 10px;">Upload do arquivo credentials.json:</label>
+      <input type="file" id="credenciais" accept=".json" style="width: 100%; padding: 10px; background: #222; border: 1px solid #00f7ff; color: #fff; border-radius: 4px;" />
+    </div>
+    
+    <p style="color: #fff; margin-bottom: 10px;">3. Cole o ID da pasta do Google Drive abaixo:</p>
+    
+    <div style="margin-bottom: 20px;">
+      <input type="text" id="pastaId" placeholder="Ex: 1Xvh1Irayw0cpt1d_SG6uq9QV-GkpBXma" style="width: 100%; padding: 10px; background: #222; border: 1px solid #00f7ff; color: #fff; border-radius: 4px;" />
+    </div>
+    
+    <div style="text-align: center;">
+      <button onclick="testarESalvar()" style="background: #00f7ff; color: #000; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; cursor: pointer;">
+        🔗 Testar e Salvar
+      </button>
+    </div>
+  </div>
+</div>
+
+  <!-- Formulário de Sugestões -->
+  <div class="config-section" style="max-width: 600px; margin: 30px auto;">
+    <h3 style="color: #00f7ff; text-align: center; margin-bottom: 20px;">💡 Sugestões e Feedback</h3>
+    <div class="config-item">
+      <label for="nomeSugestao">Nome:</label>
+      <input type="text" id="nomeSugestao" placeholder="Seu nome" style="width: 100%; padding: 10px; background: #222; border: 1px solid #00f7ff; color: #fff; border-radius: 4px;" />
+    </div>
+    <div class="config-item">
+      <label for="emailSugestao">E-mail:</label>
+      <input type="email" id="emailSugestao" placeholder="seu@email.com" style="width: 100%; padding: 10px; background: #222; border: 1px solid #00f7ff; color: #fff; border-radius: 4px;" />
+    </div>
+    <div class="config-item">
+      <label for="sugestao">Sugestão/Reporte de Bug:</label>
+      <textarea id="sugestao" rows="4" placeholder="Descreva sua sugestão ou reporte um bug..." style="width: 100%; padding: 10px; background: #222; border: 1px solid #00f7ff; color: #fff; border-radius: 4px; resize: vertical;"></textarea>
+    </div>
+    <div style="text-align: center;">
+      <button onclick="enviarSugestao()" style="background: #00f7ff; color: #000; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; cursor: pointer;">
+        📤 Enviar Sugestão
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let intervalo;
+
+    // Função para toggle das opções avançadas
+    function toggleOpcoesAvancadas() {
+      const opcoes = document.getElementById('opcoesAvancadas');
+      const botao = document.querySelector('.toggle-avancadas');
+      
+      if (opcoes.classList.contains('show')) {
+        opcoes.classList.remove('show');
+        botao.textContent = '⚙️ Opções Avançadas';
+      } else {
+        opcoes.classList.add('show');
+        botao.textContent = '⬆️ Ocultar Opções';
+      }
+    }
+
+    // Função para iniciar o processo completo de download e corte
+    function iniciarProcesso() {
+      const link = document.getElementById("link").value;
+      const fonte = document.getElementById("fonte").value;
+      const cor = document.getElementById("cor").value;
+      const tamanho = parseInt(document.getElementById("tamanho").value);
+      const posicao = parseFloat(document.getElementById("posicao").value);
+      const automatico = document.getElementById('chkAutomatico').checked;
+      const tema = document.getElementById('txtTema').value.trim();
+      const rede_social = document.getElementById('redeSocial').value;
+      
+      // Opções avançadas
+      const nicho = document.getElementById('nicho').value;
+      const template = document.getElementById('template').value;
+      const palavras_personalizadas = document.getElementById('palavras_personalizadas').value;
+      const filtrar_perguntas = document.getElementById('filtrar_perguntas').checked;
+      const filtrar_numeros = document.getElementById('filtrar_numeros').checked;
+      const filtrar_exclamacoes = document.getElementById('filtrar_exclamacoes').checked;
+      const filtrar_negativas = document.getElementById('filtrar_negativas').checked;
+      const tempo_min = parseFloat(document.getElementById('tempo_min').value) || 15.0;
+      const tempo_max = parseFloat(document.getElementById('tempo_max').value) || 60.0;
+
+      if (!link) {
+        alert("Por favor, informe o link do YouTube.");
+        return;
+      }
+
+      document.getElementById("resposta").innerText = "⏳ Processando...";
+      document.getElementById("barra").value = 0;
+      document.getElementById("etapa").innerText = "Iniciando...";
+
+      // Inicia o polling de progresso
+      intervalo = setInterval(() => {
+        fetch("/progresso")
+          .then(res => res.json())
+          .then(data => {
+            document.getElementById("barra").value = data.etapa;
+            document.getElementById("etapa").innerText = data.descricao;
+
+            if (data.etapa >= 100) {
+              clearInterval(intervalo);
+              document.getElementById("resposta").innerText = "✅ Finalizado!";
+              carregarVideos();
+            }
+          });
+      }, 1000);
+
+      // Envia requisição POST para iniciar o processamento
+      const modo_video = document.getElementById("modo_video").value;
+      const qualidade_video = document.getElementById("qualidade_video").value;
+      fetch("/process", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          link, fonte, cor, tamanho, posicao, 
+          automatico, tema, rede_social, modo_video, qualidade_video,
+          nicho, template, palavras_personalizadas,
+          filtrar_perguntas, filtrar_numeros, filtrar_exclamacoes, filtrar_negativas,
+          tempo_min, tempo_max, qualidade_video
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.success) {
+          clearInterval(intervalo);
+          document.getElementById("resposta").innerText = "❌ Erro ao processar: " + data.message;
+          document.getElementById("etapa").innerText = "Erro";
+          document.getElementById("barra").value = 0;
+        }
+      })
+      .catch(err => {
+        clearInterval(intervalo);
+        document.getElementById("resposta").innerText = "❌ Erro na requisição.";
+        document.getElementById("etapa").innerText = "Erro";
+        document.getElementById("barra").value = 0;
+      });
+    }
+
+    // Função para carregar fontes
+    async function carregarFontes() {
+      try {
+        const res = await fetch("/fontes");
+        const data = await res.json();
+        if (!data.success) {
+          console.error("Erro ao carregar fontes:", data.error);
+          return;
+        }
+        
+        const fontes = data.fontes || [];
+        const selectFonte = document.getElementById("fonte");
+        selectFonte.innerHTML = "";
+
+        console.log("Fontes carregadas:", fontes);
+
+        fontes.forEach((f) => {
+          const opt = document.createElement("option");
+          opt.value = f.caminho || f.nome; // Usar caminho completo para MoviePy
+          opt.textContent = f.nome;
+          selectFonte.appendChild(opt);
+        });
+
+        const preferidas = /impact|arial black|bebas|anton|oswald|franklin gothic heavy/i;
+        const optPref = [...selectFonte.options].find(o => preferidas.test(o.textContent));
+        if (optPref) selectFonte.value = optPref.value;
+
+      } catch (err) {
+        console.error("Erro ao carregar fontes:", err);
+      }
+    }
+
+    // Função para deletar vídeo individual
+    async function deletarVideoIndividual(nomeArquivo) {
+      if (!confirm(`Tem certeza que deseja deletar o vídeo ${nomeArquivo}?`)) {
+        return;
+      }
+      
+      try {
+        const res = await fetch(`/deletar_video_final/${nomeArquivo}`, {
+          method: 'DELETE'
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          alert('Vídeo deletado com sucesso!');
+          carregarVideos(); // Recarregar lista
+        } else {
+          alert('Erro ao deletar vídeo: ' + data.message);
+        }
+      } catch (err) {
+        console.error('Erro ao deletar vídeo:', err);
+        alert('Erro ao deletar vídeo');
+      }
+    }
+
+    // Função para deletar todos os vídeos da pasta final
+    async function deletarTodosVideos() {
+      if (!confirm('Tem certeza que deseja deletar TODOS os vídeos da pasta final?')) {
+        return;
+      }
+      
+      try {
+        const res = await fetch('/deletar_todos_final', {
+          method: 'POST'
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          alert(`Todos os vídeos foram deletados! (${data.deletados.length} arquivos)`);
+          carregarVideos(); // Recarregar lista
+        } else {
+          alert('Erro ao deletar vídeos: ' + data.message);
+        }
+      } catch (err) {
+        console.error('Erro ao deletar vídeos:', err);
+        alert('Erro ao deletar vídeos');
+      }
+    }
+
+    // Função para limpar vídeos antigos
+    async function limparVideosAntigos() {
+      if (!confirm('Tem certeza que deseja limpar todos os vídeos antigos das pastas de processamento?')) {
+        return;
+      }
+      
+      try {
+        const res = await fetch('/limpar_videos_antigos', {
+          method: 'POST'
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          alert(`Vídeos antigos limpos! (${data.deletados.length} arquivos removidos)`);
+        } else {
+          alert('Erro ao limpar vídeos: ' + data.message);
+        }
+      } catch (err) {
+        console.error('Erro ao limpar vídeos:', err);
+        alert('Erro ao limpar vídeos');
+      }
+    }
+
+    // Carregar fontes ao inicializar
+    document.addEventListener("DOMContentLoaded", carregarFontes);
+
+    // Também chamar diretamente para garantir
+    carregarFontes();
+
+    // Event listeners para os botões
+    document.addEventListener("DOMContentLoaded", function() {
+      document.getElementById("deletar-todos-btn").addEventListener("click", deletarTodosVideos);
+      document.getElementById("limpar-antigos-btn").addEventListener("click", limparVideosAntigos);
+    });
+
+    // Toggle do campo Tema
+    const chkAutomatico = document.getElementById('chkAutomatico');
+    const temaWrap = document.getElementById('temaWrap');
+
+    function atualizarTemaWrap() {
+      temaWrap.style.display = chkAutomatico.checked ? 'none' : 'block';
+    }
+    atualizarTemaWrap();
+    chkAutomatico.addEventListener('change', atualizarTemaWrap);
+
+    // Funções de deletar vídeos
+    // Função para carregar e exibir vídeos
+    async function carregarVideos() {
+      console.log(" Iniciando carregarVideos()");
+      try {
+        const res = await fetch("/videos");
+        console.log("📡 Resposta recebida:", res);
+        const data = await res.json();
+        console.log(" Dados recebidos:", data);
+        
+        let videos = [];
+        
+        // Verificar se é array direto ou objeto com success
+        if (Array.isArray(data)) {
+          videos = data;
+          console.log(" Array direto de vídeos:", videos);
+        } else if (data.success && data.videos) {
+          videos = data.videos;
+          console.log("📹 Vídeos do objeto:", videos);
+        } else {
+          console.error("Formato de dados inválido:", data);
+          return;
+        }
+        
+        const container = document.getElementById("videosContainer");
+        console.log("📦 Container encontrado:", container);
+        
+        if (!container) {
+          console.error("Container de vídeos não encontrado");
+          return;
+        }
+        
+        container.innerHTML = "";
+        
+        if (videos.length === 0) {
+          container.innerHTML = "<p>Nenhum vídeo encontrado.</p>";
+          console.log("ℹ️ Nenhum vídeo encontrado");
+          return;
+        }
+        
+        console.log(`📹 Carregando ${videos.length} vídeos`);
+        
+        // Mostrar botão de deletar todos se há vídeos
+        const deletarTodosBtn = document.getElementById("deletar-todos-btn");
+        if (videos.length > 0) {
+          deletarTodosBtn.style.display = "block";
+        } else {
+          deletarTodosBtn.style.display = "none";
+        }
+        
+        videos.forEach((video, index) => {
+          console.log(`📹 Vídeo ${index + 1}: ${video}`);
+          const div = document.createElement("div");
+          div.className = "video-item";
+          
+          // Se o vídeo já tem o caminho completo, usar diretamente, senão adicionar /static/final/
+          const videoSrc = video.startsWith('/static/final/') ? video : `/static/final/${video}`;
+          
+          // Extrair nome do arquivo para deletar
+          const nomeArquivo = video.split('/').pop();
+          
+          div.innerHTML = `
+            <div class="video-wrapper">
+              <video controls>
+                <source src="${videoSrc}" type="video/mp4">
+                Seu navegador não suporta vídeos.
+              </video>
+            </div>
+            <div class="video-info">
+              <p class="video-filename">
+                <button onclick="deletarVideoIndividual('${nomeArquivo}')" class="delete-btn" title="Deletar vídeo">
+                  🗑️
+                </button>
+                ${nomeArquivo}
+              </p>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+        console.log("✅ Vídeos carregados com sucesso");
+      } catch (err) {
+        console.error("Erro ao carregar vídeos:", err);
+      }
+    }
+
+    // Funções para Google Drive
+    function toggleDriveSettings() {
+      const modal = document.getElementById('driveModal');
+      modal.style.display = 'block';
+      
+      // Carregar ID salvo se existir
+      carregarPastaIdSalva();
+    }
+
+    function fecharModal(event) {
+      if (event.target.id === 'driveModal') {
+        document.getElementById('driveModal').style.display = 'none';
+      }
+    }
+
+    function carregarPastaIdSalva() {
+      fetch('/obter_pasta_id')
+        .then(response => response.json())
+        .then(data => {
+          if (data.success && data.pasta_id) {
+            document.getElementById('pastaId').value = data.pasta_id;
+          }
+        });
+    }
+
+    function testarESalvar() {
+      const fileInput = document.getElementById('credenciais');
+      const pastaId = document.getElementById('pastaId').value.trim();
+      
+      if (!fileInput.files[0]) {
+        alert('⚠️ Selecione o arquivo credentials.json');
+        return;
+      }
+      
+      if (!pastaId) {
+        alert('⚠️ Digite o ID da pasta do Google Drive');
+        return;
+      }
+      
+      
+      // Upload do arquivo de credenciais
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+      
+      fetch('/upload_credencial', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Salvar ID da pasta
+          return fetch('/salvar_pasta_id', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ folder_id: pastaId })
+          });
+        } else {
+          throw new Error(data.message);
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Testar conexão
+          return fetch('/upload');
+        } else {
+          throw new Error(data.message);
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('✅ Configuração salva e conexão testada com sucesso!');
+          document.getElementById('driveModal').style.display = 'none';
+        } else {
+          alert('❌ Erro na conexão: ' + data.message);
+        }
+      })
+      .catch(error => {
+        alert('❌ Erro: ' + error.message);
+      });
+    }
+
+    function uploadToDrive() {
+      const btn = document.getElementById('uploadBtn');
+      btn.innerHTML = '🔄 Enviando...';
+      btn.disabled = true;
+      
+      fetch('/upload', {
+        method: 'POST'
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          btn.innerHTML = '✅ Upload Concluído!';
+          alert(`✅ Upload concluído!\n\nArquivos enviados: ${data.uploaded_ids.length}`);
+        } else {
+          btn.innerHTML = '❌ Erro no Upload';
+          alert('❌ Erro no upload: ' + data.message);
+        }
+        btn.disabled = false;
+      });
+    }
+
+    function enviarSugestao() {
+      const nome = document.getElementById('nomeSugestao').value.trim();
+      const email = document.getElementById('emailSugestao').value.trim();
+      const sugestao = document.getElementById('sugestao').value.trim();
+      
+      if (!nome || !email || !sugestao) {
+        alert('⚠️ Preencha todos os campos');
+        return;
+      }
+      
+      // Salvar sugestão localmente (ou enviar para servidor)
+      const sugestaoData = {
+        nome: nome,
+        email: email,
+        sugestao: sugestao,
+        data: new Date().toISOString()
+      };
+      
+      // Salvar no localStorage
+      let sugestoes = JSON.parse(localStorage.getItem('sugestoes') || '[]');
+      sugestoes.push(sugestaoData);
+      localStorage.setItem('sugestoes', JSON.stringify(sugestoes));
+      
+      alert('✅ Sugestão enviada com sucesso!');
+      
+      // Limpar formulário
+      document.getElementById('nomeSugestao').value = '';
+      document.getElementById('emailSugestao').value = '';
+      document.getElementById('sugestao').value = '';
+    }
+
+    // Carregar dados salvos ao inicializar
+    window.addEventListener('load', function() {
+      const comentarioSalvo = localStorage.getItem('ultimoComentario');
+      if (comentarioSalvo) {
+        document.getElementById('comentario').value = comentarioSalvo;
+      }
+      
+      // Carregar ID da pasta salvo
+      fetch('/obter_pasta_id')
+        .then(response => response.json())
+        .then(data => {
+          if (data.success && data.pasta_id) {
+            document.getElementById('pastaId').value = data.pasta_id;
+          }
+        });
+    });
+  </script>
+
+</body>
+</html>
