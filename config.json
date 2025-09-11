@@ -1,10 +1,10 @@
 {
-  "fonte": "Impact",
-  "cor": "#1ffff0",
+  "fonte": "Segoe UI",
+  "cor": "#38ee2b",
   "tamanho": 60,
   "altura": 1280,
   "largura": 720,
-  "posicao": 0.1,
+  "posicao": 0.2,
   "tempo_min": 15,
   "tempo_max": 60,
   "automatico": true,

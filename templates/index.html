@@ -237,6 +237,31 @@
       margin-top: 40px;
       font-size: 20px;
     }
+
+    .btn-metadados {
+      background: linear-gradient(45deg, #ff6b6b, #ffa500);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      font-size: 14px;
+    }
+
+    .btn-metadados:hover {
+      background: linear-gradient(45deg, #ff5252, #ff9800);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    }
+
+    .btn-metadados:disabled {
+      background: #666;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
   </style>
 </head>
 <body onload="carregarVideos()">
@@ -405,25 +430,96 @@
   <p id="resposta"></p>
 
   <div class="section-title">🎬 Videos Gerados:</div>
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-    <button id="limpar-antigos-btn" class="btn btn-warning">
-      🗑️ Limpar Vídeos Antigos
-    </button>
-    <button id="deletar-todos-btn" class="btn btn-danger" style="display: none;">
-      🗑️ Deletar Todos os Vídeos
-    </button>
+  
+  <!-- Botões de Pós-Corte -->
+  <div class="pos-corte-section" style="background: #1a1a1a; padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid #333;">
+    <h3 style="color: #00f7ff; margin-top: 0; text-align: center;">📝 Pós-Corte - Metadados</h3>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+      <!-- Primeira linha: Geração e Tradução -->
+      <button onclick="gerarTodosComIA()" class="btn-metadados" style="background: #ff6b35;">
+        🤖 Gerar Textos com IA
+      </button>
+      
+      <!-- Segunda linha: Fazer Manualmente -->
+      <button onclick="abrirModalManual()" class="btn-metadados" style="background: #9c27b0;">
+        ✏️ Fazer Manualmente
+      </button>
+    </div>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+      <button id="limpar-antigos-btn" class="btn btn-warning">
+        🗑️ Limpar Vídeos Antigos
+      </button>
+      <button id="deletar-todos-btn" class="btn btn-danger" style="display: none;">
+        🗑️ Deletar Todos os Vídeos
+      </button>
+    </div>
   </div>
-  <div id="videosContainer"></div>
-
-  <!-- Botão só com engrenagem -->
-<div style="text-align: center; margin: 30px 0;">
+  
+  <!-- Botões de Ação -->
+  <div style="text-align: center; margin: 20px 0;">
   <button onclick="uploadToDrive()" id="uploadBtn" style="background: linear-gradient(45deg, #4285f4, #34a853); color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; cursor: pointer; margin-right: 10px;">
     ☁️ Upload to Google Drive
   </button>
-  <button onclick="toggleDriveSettings()" style="background: #666; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer;">
+  <button onclick="toggleDriveSettings()" style="background: #666; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; margin-right: 10px;">
     ⚙️
   </button>
+  <button onclick="abrirAIModal()" style="background: linear-gradient(45deg, #10a37f, #1a7f64); color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; cursor: pointer;">
+    🤖 Configurar IA
+  </button>
 </div>
+
+  <!-- Seção de Vídeos Cortados -->
+  <div id="videosContainer"></div>
+
+  <!-- Seção de Dublagem -->
+  <div id="dubbingSection" style="display: none; margin-top: 40px; padding: 20px; background: linear-gradient(135deg, #1a1a2e, #16213e); border-radius: 15px; border: 2px solid #00f7ff;">
+    <h2 style="color: #00f7ff; margin-bottom: 20px; text-shadow: 0 0 10px #00f7ff;">
+      🎤 Dublagem com Voz
+    </h2>
+    
+    <!-- Seleção de Voz -->
+    <div style="margin-bottom: 20px;">
+      <label style="color: #fff; font-size: 16px; margin-bottom: 10px; display: block;">
+        Selecione a Voz:
+      </label>
+      <select id="voiceSelector" style="background: #222; color: #fff; border: 1px solid #00f7ff; border-radius: 8px; padding: 10px; font-size: 14px; width: 100%; max-width: 400px;">
+        <option value="pt-BR-ValerioNeural">Valerio (Masculina - Grave)</option>
+        <option value="pt-BR-HumbertoNeural">Humberto (Masculina - Profissional)</option>
+        <option value="pt-BR-NicolauNeural">Nicolau (Masculina - Clara)</option>
+        <option value="pt-BR-LucianoNeural">Luciano (Masculina - Expressiva)</option>
+        <option value="pt-BR-FabioNeural">Fabio (Masculina - Suave)</option>
+        <option value="pt-BR-DanielNeural">Daniel (Masculina - Média)</option>
+        <option value="pt-BR-AntonioNeural">Antonio (Masculina - Padrão)</option>
+        <option value="pt-BR-FranciscaNeural">Francisca (Feminina - Natural)</option>
+        <option value="pt-BR-ElzaNeural">Elza (Feminina - Suave)</option>
+        <option value="pt-BR-GiovannaNeural">Giovanna (Feminina - Expressiva)</option>
+      </select>
+    </div>
+    
+    <!-- Botão de Dublagem -->
+    <button id="dubbingBtn" onclick="iniciarDublagem()" style="background: linear-gradient(45deg, #ff6b35, #f7931e); color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);">
+      🎤 Dublar com Voz Selecionada
+    </button>
+  </div>
+
+  <!-- Seção de Vídeos Dublados -->
+  <div id="dubbedVideosContainer" style="display: none; margin-top: 30px;">
+    <h2 style="color: #00f7ff; margin-bottom: 20px; text-shadow: 0 0 10px #00f7ff;">
+      🎬 Vídeos Dublados
+    </h2>
+    
+    <!-- Botão para gerar todos os metadados com IA -->
+    <div style="text-align: center; margin-bottom: 20px;">
+      <button onclick="gerarTodosMetadadosDublados()" class="btn-metadados" style="background: #ff6b35; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 16px; box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);">
+        🤖 Gerar Textos com IA
+      </button>
+    </div>
+    
+    <div id="dubbedVideosList"></div>
+  </div>
+
 
 <!-- Modal exato como era antes -->
 <div id="driveModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000;" onclick="fecharModal(event)">
@@ -452,6 +548,39 @@
   </div>
 </div>
 
+<!-- Modal Fazer Manualmente -->
+<div id="manualModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000;" onclick="fecharModalManual(event)">
+  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #161616; padding: 30px; border-radius: 12px; width: 600px; max-width: 90%;" onclick="event.stopPropagation()">
+    <h3 style="color: #00f7ff; margin-bottom: 20px;">✏️ Fazer Manualmente</h3>
+    
+    <div style="margin-bottom: 30px;">
+      <h4 style="color: #fff; margin-bottom: 15px;">1. Exportar Transcrições</h4>
+      <p style="color: #ccc; margin-bottom: 15px;">Baixe um arquivo Excel com as transcrições de todos os vídeos para editar no ChatGPT ou manualmente.</p>
+      <button onclick="exportarExcel()" style="background: #10a37f; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 14px;">
+        📊 Exportar Transcrições
+      </button>
+    </div>
+    
+    <div style="margin-bottom: 30px;">
+      <h4 style="color: #fff; margin-bottom: 15px;">2. Importar do ChatGPT</h4>
+      <p style="color: #ccc; margin-bottom: 15px;">Após editar no ChatGPT, importe o arquivo Excel com os novos metadados.</p>
+      <input type="file" id="importarFileManual" accept=".xlsx,.csv" style="display: none;" onchange="importarMetadadosManual()">
+      <button onclick="document.getElementById('importarFileManual').click()" style="background: #9c27b0; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 14px;">
+        📥 Importar do ChatGPT
+      </button>
+    </div>
+    
+    <div style="text-align: center;">
+      <button onclick="aplicarMetadadosManuais()" id="aplicarBtn" style="background: #ff6b35; color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; margin-right: 10px;" disabled>
+        ✅ Aplicar em Todos os Metadados
+      </button>
+      <button onclick="fecharModalManual()" style="background: #666; color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 16px;">
+        ❌ Cancelar
+      </button>
+    </div>
+  </div>
+</div>
+
   <!-- Formulário de Sugestões -->
   <div class="config-section" style="max-width: 600px; margin: 30px auto;">
     <h3 style="color: #00f7ff; text-align: center; margin-bottom: 20px;">💡 Sugestões e Feedback</h3>
@@ -471,6 +600,98 @@
       <button onclick="enviarSugestao()" style="background: #00f7ff; color: #000; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; cursor: pointer;">
         📤 Enviar Sugestão
       </button>
+    </div>
+  </div>
+
+  <!-- Modal de Configuração de IA -->
+  <div id="aiModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000;" onclick="fecharAIModal(event)">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #161616; padding: 30px; border-radius: 12px; width: 600px; max-width: 90%;" onclick="event.stopPropagation()">
+      <h3 style="color: #10a37f; margin-bottom: 20px;">🤖 Configuração de IA</h3>
+      
+      <div style="margin-bottom: 20px;">
+        <label style="color: #fff; display: block; margin-bottom: 10px;">Tipo de IA:</label>
+        <select id="aiType" style="width: 100%; padding: 10px; background: #222; border: 1px solid #10a37f; color: #fff; border-radius: 4px;" onchange="toggleAIConfig()">
+          <option value="ollama">🦙 Ollama Local (Recomendado)</option>
+          <option value="openai">🌐 OpenAI (Online)</option>
+        </select>
+      </div>
+      
+      <!-- Configuração Ollama -->
+      <div id="ollamaConfig" style="display: block;">
+        <p style="color: #fff; margin-bottom: 15px;">Configure o Ollama local para usar IA gratuita na sua máquina:</p>
+        
+        <div style="margin-bottom: 15px;">
+          <label style="color: #fff; display: block; margin-bottom: 10px;">Modelo Ollama:</label>
+          <select id="ollamaModel" style="width: 100%; padding: 10px; background: #222; border: 1px solid #10a37f; color: #fff; border-radius: 4px;">
+            <option value="">Carregando modelos...</option>
+          </select>
+          <button onclick="carregarModelosOllama()" style="background: #10a37f; color: white; border: none; padding: 8px 15px; border-radius: 4px; margin-top: 5px; cursor: pointer;">
+            🔄 Atualizar Modelos
+          </button>
+        </div>
+        
+        <p style="color: #ccc; font-size: 12px; margin-bottom: 20px;">
+          💡 Instale o Ollama em: <a href="https://ollama.ai" target="_blank" style="color: #10a37f;">ollama.ai</a><br>
+          📥 Execute: <code style="background: #333; padding: 2px 6px; border-radius: 3px;">ollama pull llama3.2</code>
+        </p>
+      </div>
+      
+      <!-- Configuração OpenAI -->
+      <div id="openaiConfig" style="display: none;">
+        <p style="color: #fff; margin-bottom: 15px;">Configure sua API key do OpenAI:</p>
+        
+        <div style="margin-bottom: 20px;">
+          <label style="color: #fff; display: block; margin-bottom: 10px;">API Key do OpenAI:</label>
+          <input type="password" id="openaiKey" placeholder="sk-..." style="width: 100%; padding: 10px; background: #222; border: 1px solid #10a37f; color: #fff; border-radius: 4px;" />
+        </div>
+        
+        <p style="color: #ccc; font-size: 12px; margin-bottom: 20px;">
+          💡 Obtenha sua API key em: <a href="https://platform.openai.com/api-keys" target="_blank" style="color: #10a37f;">platform.openai.com/api-keys</a>
+        </p>
+      </div>
+      
+      <div style="text-align: center;">
+        <button onclick="salvarConfigAI()" style="background: #10a37f; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; cursor: pointer; margin-right: 10px;">
+          💾 Salvar Configuração
+        </button>
+        <button onclick="fecharAIModal()" style="background: #666; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; cursor: pointer;">
+          ❌ Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Configuração Sequencial IA -->
+  <div id="sequencialModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000;" onclick="fecharSequencialModal(event)">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #2a2a2a; padding: 30px; border-radius: 12px; width: 90%; max-width: 500px; border: 1px solid #444;">
+      <h3 style="color: #00f7ff; margin-top: 0; text-align: center;">🤖 Processamento Sequencial com IA</h3>
+      
+      <div style="margin-bottom: 20px;">
+        <label style="color: #fff; display: block; margin-bottom: 8px;">Nicho do Canal/Página:</label>
+        <input type="text" id="nichoSequencial" placeholder="Ex: motivação e desenvolvimento pessoal" 
+               style="width: 100%; padding: 12px; border: 1px solid #555; border-radius: 6px; background: #333; color: #fff; font-size: 14px;"
+               value="motivação e desenvolvimento pessoal">
+      </div>
+      
+      <div style="background: #1a1a1a; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+        <h4 style="color: #00f7ff; margin-top: 0;">ℹ️ Como funciona:</h4>
+        <ul style="color: #ccc; margin: 0; padding-left: 20px;">
+          <li>Processa vídeos em <code>static/final</code> sequencialmente</li>
+          <li>Gera título, legenda e hashtags para cada vídeo</li>
+          <li>Renomeia arquivos com slug do título</li>
+          <li>Atualiza planilha <code>data/planilhas/publicar.xlsx</code></li>
+          <li>Pula vídeos já processados (idempotência)</li>
+        </ul>
+      </div>
+      
+      <div style="text-align: center;">
+        <button onclick="iniciarProcessamentoSequencial()" style="background: #10a37f; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; cursor: pointer; margin-right: 10px;">
+          🚀 Iniciar Processamento
+        </button>
+        <button onclick="fecharSequencialModal()" style="background: #666; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-size: 16px; cursor: pointer;">
+          ❌ Cancelar
+        </button>
+      </div>
     </div>
   </div>
 
@@ -680,8 +901,17 @@
 
     // Event listeners para os botões
     document.addEventListener("DOMContentLoaded", function() {
-      document.getElementById("deletar-todos-btn").addEventListener("click", deletarTodosVideos);
-      document.getElementById("limpar-antigos-btn").addEventListener("click", limparVideosAntigos);
+      document.getElementById("deletar-todos-btn").addEventListener("click", limpezaCompleta);
+      document.getElementById("limpar-antigos-btn").addEventListener("click", limpezaSuave);
+      
+      // Event listeners para botões de metadados
+      const btnProcessarSequencialIA = document.getElementById("btnProcessarSequencialIA");
+      const btnTraduzir = document.getElementById("btnTraduzirCortes");
+      const btnConfigAI = document.getElementById("btnConfigAI");
+      
+      if (btnProcessarSequencialIA) btnProcessarSequencialIA.addEventListener("click", abrirSequencialModal);
+      if (btnTraduzir) btnTraduzir.addEventListener("click", traduzirCortes);
+      if (btnConfigAI) btnConfigAI.addEventListener("click", abrirAIModal);
     });
 
     // Toggle do campo Tema
@@ -745,37 +975,425 @@
         }
         
         videos.forEach((video, index) => {
-          console.log(`📹 Vídeo ${index + 1}: ${video}`);
+          console.log(`📹 Vídeo ${index + 1}:`, video);
           const div = document.createElement("div");
           div.className = "video-item";
+          div.style.cssText = "background: #1a1a1a; border-radius: 12px; padding: 15px; margin-bottom: 20px; border: 1px solid #333;";
           
           // Se o vídeo já tem o caminho completo, usar diretamente, senão adicionar /static/final/
-          const videoSrc = video.startsWith('/static/final/') ? video : `/static/final/${video}`;
-          
-          // Extrair nome do arquivo para deletar
-          const nomeArquivo = video.split('/').pop();
+          const videoSrc = video.path || (video.startsWith('/static/final/') ? video : `/static/final/${video}`);
+          const nomeArquivo = video.filename || video.split('/').pop();
+          const metadata = video.metadata || { titulo: '', legenda: '', hashtags: '' };
           
           div.innerHTML = `
-            <div class="video-wrapper">
-              <video controls>
+            <div class="video-wrapper" style="margin-bottom: 15px;">
+              <video controls style="width: 100%; border-radius: 8px;">
                 <source src="${videoSrc}" type="video/mp4">
                 Seu navegador não suporta vídeos.
               </video>
             </div>
             <div class="video-info">
-              <p class="video-filename">
-                <button onclick="deletarVideoIndividual('${nomeArquivo}')" class="delete-btn" title="Deletar vídeo">
-                  🗑️
-                </button>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <p class="video-filename" style="margin: 0; color: #fff; font-weight: bold;">
                 ${nomeArquivo}
               </p>
+                <button onclick="deletarVideoIndividual('${nomeArquivo}')" class="delete-btn" title="Deletar vídeo" style="background: #ff4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                  🗑️
+                </button>
+              </div>
+              
+              <!-- Metadados -->
+              <div class="metadata-section" style="background: #0a0a0a; padding: 15px; border-radius: 8px; border: 1px solid #444;">
+                <h4 style="color: #00f7ff; margin-top: 0; margin-bottom: 15px;">📝 Metadados</h4>
+                
+                <div style="margin-bottom: 15px;">
+                  <label style="color: #fff; display: block; margin-bottom: 5px; font-weight: bold;">Título:</label>
+                  <input type="text" id="titulo_${index}" data-field="titulo" data-index="${index}" value="${metadata.titulo || ''}" 
+                         style="width: 100%; padding: 8px; background: #222; border: 1px solid #555; color: #fff; border-radius: 4px; font-size: 14px;"
+                         placeholder="Digite o título do vídeo">
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                  <label style="color: #fff; display: block; margin-bottom: 5px; font-weight: bold;">Legenda:</label>
+                  <textarea id="legenda_${index}" data-field="legenda" data-index="${index}" rows="3" 
+                            style="width: 100%; padding: 8px; background: #222; border: 1px solid #555; color: #fff; border-radius: 4px; font-size: 14px; resize: vertical;"
+                            placeholder="Digite a legenda do vídeo">${metadata.legenda || ''}</textarea>
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                  <label style="color: #fff; display: block; margin-bottom: 5px; font-weight: bold;">Hashtags:</label>
+                  <input type="text" id="hashtags_${index}" data-field="hashtags" data-index="${index}" value="${metadata.hashtags || ''}" 
+                         style="width: 100%; padding: 8px; background: #222; border: 1px solid #555; color: #fff; border-radius: 4px; font-size: 14px;"
+                         placeholder="#hashtag1 #hashtag2 #hashtag3">
+                </div>
+                
+                <div style="display: flex; gap: 10px;">
+                  <button onclick="gerarNovosMetadados('${nomeArquivo}', ${index})" 
+                          style="background: #ff6b35; color: #fff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                    🆕 Novo
+                  </button>
+                </div>
+              </div>
             </div>
           `;
           container.appendChild(div);
         });
         console.log("✅ Vídeos carregados com sucesso");
+        
+        // Recarregar contadores após carregar vídeos
+        carregarContadores();
+        
+        // Mostrar/ocultar botão de traduzir baseado nos cortes
+        verificarCortesParaTraducao();
+        
+        // Carregar vídeos dublados automaticamente
+        carregarVideosDublados();
       } catch (err) {
         console.error("Erro ao carregar vídeos:", err);
+      }
+    }
+
+    // Função para verificar se há cortes para tradução
+    async function verificarCortesParaTraducao() {
+      try {
+        const res = await fetch('/exists/cortes');
+        const data = await res.json();
+        const dubbingSection = document.getElementById('dubbingSection');
+        
+        if (data.count > 0) {
+          dubbingSection.style.display = 'block';
+        } else {
+          dubbingSection.style.display = 'none';
+        }
+      } catch (err) {
+        console.error('Erro ao verificar cortes:', err);
+      }
+    }
+
+    // Função para resetar botão travado
+    function resetarBotaoIA() {
+      const btn = document.querySelector('button[onclick="gerarTodosComIA()"]');
+      if (btn) {
+        btn.innerHTML = '🤖 Gerar Todos com IA';
+        btn.disabled = false;
+        console.log('✅ Botão IA resetado');
+      }
+    }
+
+    // Resetar botão ao carregar a página
+    document.addEventListener('DOMContentLoaded', function() {
+      resetarBotaoIA();
+    });
+
+    // Função para exportar Excel
+    function exportarExcel() {
+      window.open('/exportar_transcricoes', '_blank');
+    }
+    
+    // Função para importar metadados do ChatGPT
+    async function importarMetadados() {
+      const fileInput = document.getElementById('importarFile');
+      const file = fileInput.files[0];
+      
+      if (!file) {
+        return;
+      }
+      
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        const res = await fetch('/importar_metadados', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const data = await res.json();
+        
+        if (data.ok) {
+          alert('✅ ' + data.message);
+          // Recarregar vídeos para mostrar os novos metadados
+          carregarVideos();
+        } else {
+          alert('❌ Erro: ' + data.error);
+        }
+      } catch (err) {
+        console.error('Erro ao importar metadados:', err);
+        alert('❌ Erro ao importar metadados');
+      } finally {
+        // Limpar input
+        fileInput.value = '';
+      }
+    }
+    
+    // Função para gerar todos os vídeos com IA
+    async function gerarTodosComIA() {
+      const btn = document.querySelector('button[onclick="gerarTodosComIA()"]');
+      const textoOriginal = btn.innerHTML;
+      
+      try {
+        btn.innerHTML = '⏳ Gerando todos...';
+        btn.disabled = true;
+        
+        console.log('🤖 Iniciando processamento sequencial com IA...');
+        
+        // Processar todos os vídeos de uma vez
+        const res = await fetch('/processar_sequencial_ia', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nicho: 'motivação e desenvolvimento pessoal'
+          })
+        });
+        
+        const data = await res.json();
+        
+        if (!data.ok) {
+          throw new Error(data.error || 'Erro no processamento');
+        }
+        
+        console.log('✅ Processamento concluído:', data);
+        
+        const processados = data.resultados?.length || 0;
+        const erros = data.erros?.length || 0;
+        
+        // Mostrar resumo final
+        let mensagem = `🎉 Processamento concluído!\n\n`;
+        mensagem += `✅ Processados com sucesso: ${processados} vídeos\n`;
+        mensagem += `❌ Erros: ${erros} vídeos\n\n`;
+        
+        if (processados > 0) {
+          mensagem += `📝 Metadados salvos automaticamente para todos os vídeos processados.\n`;
+        }
+        
+        if (erros > 0) {
+          mensagem += `\n⚠️ Vídeos com erro:\n`;
+          data.erros?.forEach(erro => {
+            mensagem += `• ${erro}\n`;
+          });
+        }
+        
+        alert(mensagem);
+        
+        // Recarregar a página para mostrar os vídeos renomeados
+        location.reload();
+        
+      } catch (err) {
+        console.error('Erro ao gerar todos com IA:', err);
+        alert('❌ Erro: ' + err.message);
+      } finally {
+        // Restaurar botão
+        btn.innerHTML = '🤖 Gerar Todos com IA';
+        btn.disabled = false;
+      }
+    }
+
+    // Funções para metadados
+    async function gerarNovosMetadados(filename, index) {
+      try {
+        console.log(`🆕 Gerando novos metadados para: ${filename}`);
+        
+        // Atualizar botão para mostrar "Gerando..."
+        const botao = event.target;
+        const textoOriginal = botao.innerHTML;
+        botao.innerHTML = '⏳ Gerando...';
+        botao.disabled = true;
+        
+        // Buscar transcrição
+        const resTranscricao = await fetch('/buscar_transcricao', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename: filename })
+        });
+        
+        const dataTranscricao = await resTranscricao.json();
+        if (!dataTranscricao.ok) {
+          throw new Error("Transcrição não encontrada");
+        }
+        
+        // Gerar conteúdo com IA
+        const resIA = await fetch('/gerar_conteudo_individual', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            transcricao: dataTranscricao.transcricao,
+            nicho: 'motivação e desenvolvimento pessoal'
+          })
+        });
+        
+        const dataIA = await resIA.json();
+        if (!dataIA.ok) {
+          throw new Error(dataIA.error || 'Erro na geração IA');
+        }
+        
+        // Atualizar campos na interface
+        const tituloField = document.querySelector(`[data-field="titulo"][data-index="${index}"]`);
+        const legendaField = document.querySelector(`[data-field="legenda"][data-index="${index}"]`);
+        const hashtagsField = document.querySelector(`[data-field="hashtags"][data-index="${index}"]`);
+        
+        if (tituloField) tituloField.value = dataIA.titulo || '';
+        if (legendaField) legendaField.value = dataIA.legenda || '';
+        if (hashtagsField) hashtagsField.value = dataIA.hashtags || '';
+        
+        // Salvar automaticamente
+        await salvarMetadadosVideoSilencioso(filename, index);
+        
+        // Renomear o vídeo com o novo título
+        try {
+          const resRename = await fetch('/renomear_video', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              filename: filename,
+              novoTitulo: dataIA.titulo
+            })
+          });
+          
+          const dataRename = await resRename.json();
+          if (dataRename.ok) {
+            console.log(`✅ Vídeo renomeado: ${dataRename.novo_nome}`);
+            // Recarregar a página para mostrar o novo nome
+            setTimeout(() => location.reload(), 1000);
+          }
+        } catch (err) {
+          console.error('Erro ao renomear vídeo:', err);
+        }
+        
+        alert(`✅ Novos metadados gerados e vídeo renomeado para ${filename}`);
+        
+      } catch (err) {
+        console.error('Erro ao gerar novos metadados:', err);
+        alert('❌ Erro ao gerar novos metadados: ' + err.message);
+      } finally {
+        // Restaurar botão
+        if (typeof botao !== 'undefined' && typeof textoOriginal !== 'undefined') {
+          botao.innerHTML = textoOriginal;
+          botao.disabled = false;
+        }
+      }
+    }
+
+    async function salvarMetadadosVideo(filename, index) {
+      try {
+        const tituloField = document.querySelector(`[data-field="titulo"][data-index="${index}"]`);
+        const legendaField = document.querySelector(`[data-field="legenda"][data-index="${index}"]`);
+        const hashtagsField = document.querySelector(`[data-field="hashtags"][data-index="${index}"]`);
+        
+        const titulo = tituloField ? tituloField.value : '';
+        const legenda = legendaField ? legendaField.value : '';
+        const hashtags = hashtagsField ? hashtagsField.value : '';
+        
+        const res = await fetch('/salvar_metadados', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            filename: filename,
+            titulo: titulo,
+            legenda: legenda,
+            hashtags: hashtags
+          })
+        });
+        
+        const data = await res.json();
+        if (data.ok) {
+          alert('✅ Metadados salvos com sucesso!');
+        } else {
+          alert('❌ Erro ao salvar: ' + data.error);
+        }
+      } catch (err) {
+        console.error('Erro ao salvar metadados:', err);
+        alert('❌ Erro ao salvar metadados');
+      }
+    }
+
+    // Função para salvar metadados sem popup (usada durante processamento em lote)
+    async function salvarMetadadosVideoSilencioso(filename, index) {
+      try {
+        const tituloField = document.querySelector(`[data-field="titulo"][data-index="${index}"]`);
+        const legendaField = document.querySelector(`[data-field="legenda"][data-index="${index}"]`);
+        const hashtagsField = document.querySelector(`[data-field="hashtags"][data-index="${index}"]`);
+        
+        const titulo = tituloField ? tituloField.value : '';
+        const legenda = legendaField ? legendaField.value : '';
+        const hashtags = hashtagsField ? hashtagsField.value : '';
+        
+        const res = await fetch('/salvar_metadados', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            filename: filename,
+            titulo: titulo,
+            legenda: legenda,
+            hashtags: hashtags
+          })
+        });
+        
+        const data = await res.json();
+        if (data.ok) {
+          console.log(`✅ Metadados salvos para ${filename}`);
+        } else {
+          console.error(`❌ Erro ao salvar metadados para ${filename}: ${data.error}`);
+        }
+      } catch (err) {
+        console.error(`❌ Erro ao salvar metadados para ${filename}:`, err);
+      }
+    }
+    
+    async function gerarMetadadosIA(filename, index) {
+      try {
+        // Mostrar loading
+        const btn = event.target;
+        const textoOriginal = btn.innerHTML;
+        btn.innerHTML = '⏳ Gerando...';
+        btn.disabled = true;
+        
+        // Buscar transcrição do vídeo
+        const res = await fetch('/buscar_transcricao', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename: filename })
+        });
+        
+        const data = await res.json();
+        if (!data.ok) {
+          throw new Error(data.error || 'Erro ao buscar transcrição');
+        }
+        
+        const transcricao = data.transcricao;
+        if (!transcricao) {
+          throw new Error('Transcrição não encontrada');
+        }
+        
+        // Gerar conteúdo com IA
+        const resIA = await fetch('/gerar_conteudo_individual', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            transcricao: transcricao,
+            nicho: 'motivação e desenvolvimento pessoal'
+          })
+        });
+        
+        const dataIA = await resIA.json();
+        if (!dataIA.ok) {
+          throw new Error(dataIA.error || 'Erro ao gerar conteúdo');
+        }
+        
+        // Atualizar campos
+        document.getElementById(`titulo_${index}`).value = dataIA.titulo || '';
+        document.getElementById(`legenda_${index}`).value = dataIA.legenda || '';
+        document.getElementById(`hashtags_${index}`).value = dataIA.hashtags || '';
+        
+        alert('✅ Conteúdo gerado com IA!');
+        
+      } catch (err) {
+        console.error('Erro ao gerar metadados:', err);
+        alert('❌ Erro: ' + err.message);
+      } finally {
+        // Restaurar botão
+        const btn = event.target;
+        btn.innerHTML = '🤖 Gerar com IA';
+        btn.disabled = false;
       }
     }
 
@@ -917,6 +1535,486 @@
       document.getElementById('sugestao').value = '';
     }
 
+    // ==== FUNCIONALIDADES DE PÓS-CORTE ====
+    
+    // Variáveis globais para contadores
+    let countCortes = 0;
+    let countFinal = 0;
+
+    // Carregar contadores de existência
+    async function carregarContadores() {
+      try {
+        const [resCortes, resFinal] = await Promise.all([
+          fetch('/exists/cortes'),
+          fetch('/exists/final')
+        ]);
+        
+        const dataCortes = await resCortes.json();
+        const dataFinal = await resFinal.json();
+        
+        countCortes = dataCortes.count || 0;
+        countFinal = dataFinal.count || 0;
+        
+        atualizarVisibilidadeBotoes();
+      } catch (err) {
+        console.error('Erro ao carregar contadores:', err);
+      }
+    }
+
+    // Atualizar visibilidade dos botões baseado nos contadores
+    function atualizarVisibilidadeBotoes() {
+      const btnProcessarSequencialIA = document.getElementById('btnProcessarSequencialIA');
+      const btnTraduzir = document.getElementById('btnTraduzirCortes');
+      const btnDeletarTodos = document.getElementById('deletar-todos-btn');
+      
+      // Botão de processamento sequencial IA: aparece se houver vídeos finais
+      if (btnProcessarSequencialIA) {
+        btnProcessarSequencialIA.style.display = countFinal > 0 ? 'block' : 'none';
+        btnProcessarSequencialIA.disabled = countFinal === 0;
+        btnProcessarSequencialIA.title = countFinal === 0 ? 'Nenhum vídeo disponível' : 'Processar vídeos sequencialmente com IA';
+      }
+      
+      // Botão de tradução: aparece se houver cortes
+      if (btnTraduzir) {
+        btnTraduzir.style.display = countCortes > 0 ? 'block' : 'none';
+        btnTraduzir.disabled = countCortes === 0;
+        btnTraduzir.title = countCortes === 0 ? 'Nenhum corte disponível' : 'Traduzir e gerar nova voz';
+      }
+      
+      // Botão deletar todos: aparece se houver qualquer vídeo
+      if (btnDeletarTodos) {
+        btnDeletarTodos.style.display = (countCortes > 0 || countFinal > 0) ? 'block' : 'none';
+      }
+    }
+
+
+    // Traduzir e gerar nova voz (stub)
+    async function traduzirCortes() {
+      const btn = document.getElementById('btnTraduzirCortes');
+      btn.disabled = true;
+      btn.textContent = '⏳ Processando...';
+      
+      try {
+        const res = await fetch('/voz/gerar_para_cortes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lang_target: 'pt', voice: 'piper' })
+        });
+        
+        const data = await res.json();
+        
+        if (data.ok) {
+          alert(`✅ ${data.message}`);
+        } else {
+          alert('❌ Erro: ' + data.error);
+        }
+      } catch (err) {
+        console.error('Erro ao traduzir cortes:', err);
+        alert('❌ Erro ao traduzir cortes');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🌍 Traduzir & Nova Voz';
+      }
+    }
+
+    // Funções para nova seção de dublagem
+    function toggleDubbingSection() {
+      // Função removida - seção de dublagem não pode ser fechada
+      // Ela aparece automaticamente quando há vídeos cortados
+    }
+
+    async function iniciarDublagem() {
+      const btn = document.getElementById('dubbingBtn');
+      const voiceSelector = document.getElementById('voiceSelector');
+      const selectedVoice = voiceSelector.value;
+      
+      btn.disabled = true;
+      btn.textContent = '⏳ Dublando...';
+      
+      try {
+        const res = await fetch('/voz/gerar_para_cortes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            lang_target: 'pt', 
+            voice: selectedVoice 
+          })
+        });
+        
+        const data = await res.json();
+        
+        if (data.ok) {
+          alert(`✅ ${data.message}`);
+          carregarVideosDublados();
+        } else {
+          alert('❌ Erro: ' + data.error);
+        }
+      } catch (err) {
+        console.error('Erro ao dublar:', err);
+        alert('❌ Erro ao dublar vídeos');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🎤 Dublar com Voz Selecionada';
+      }
+    }
+
+    async function carregarVideosDublados() {
+      try {
+        const res = await fetch('/videos/dublados');
+        const data = await res.json();
+        
+        const container = document.getElementById('dubbedVideosContainer');
+        const list = document.getElementById('dubbedVideosList');
+        
+        if (data.ok && data.videos && data.videos.length > 0) {
+          container.style.display = 'block';
+          list.innerHTML = '';
+          
+          // Aplicar grid layout igual aos vídeos cortados
+          list.style.cssText = `
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+          `;
+          
+          data.videos.forEach((video, index) => {
+            const div = document.createElement('div');
+            div.className = 'video-item';
+            div.style.cssText = `
+              background: linear-gradient(135deg, #1a1a2e, #16213e);
+              border: 1px solid #00f7ff;
+              border-radius: 12px;
+              padding: 20px;
+              box-shadow: 0 4px 20px rgba(0, 247, 255, 0.3);
+              position: relative;
+            `;
+            
+            // Extrair nome base sem extensão
+            const nomeBase = video.nome.replace('.mp4', '');
+            
+            // Usar metadados carregados do servidor
+            const metadata = video.metadados || {
+              titulo: '',
+              legenda: '',
+              hashtags: ''
+            };
+            
+            div.innerHTML = `
+              <div class="video-wrapper" style="margin-bottom: 15px;">
+                <video controls style="width: 100%; border-radius: 8px;">
+                  <source src="/static/dublados/${video.nome}" type="video/mp4">
+                  Seu navegador não suporta vídeos.
+                </video>
+              </div>
+              <div class="video-info">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <p class="video-filename" style="margin: 0; color: #fff; font-weight: bold;">
+                    ${nomeBase}
+                  </p>
+                  <button onclick="deletarVideoDublado('${video.nome}')" class="delete-btn" title="Deletar vídeo" style="background: #ff4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                    🗑️
+                  </button>
+                </div>
+                
+                <!-- Metadados -->
+                <div class="metadata-section" style="background: #0a0a0a; padding: 15px; border-radius: 8px; border: 1px solid #444;">
+                  <h4 style="color: #00f7ff; margin-top: 0; margin-bottom: 15px;">📝 Metadados</h4>
+                  
+                  <div style="margin-bottom: 15px;">
+                    <label style="color: #fff; display: block; margin-bottom: 5px; font-weight: bold;">Título:</label>
+                    <input type="text" id="titulo_dublado_${index}" data-field="titulo" data-index="${index}" value="${metadata.titulo}" 
+                           style="width: 100%; padding: 8px; background: #222; border: 1px solid #555; color: #fff; border-radius: 4px; font-size: 14px;"
+                           placeholder="Digite o título do vídeo">
+                  </div>
+                  
+                  <div style="margin-bottom: 15px;">
+                    <label style="color: #fff; display: block; margin-bottom: 5px; font-weight: bold;">Legenda:</label>
+                    <textarea id="legenda_dublado_${index}" data-field="legenda" data-index="${index}" 
+                              style="width: 100%; padding: 8px; background: #222; border: 1px solid #555; color: #fff; border-radius: 4px; font-size: 14px; resize: vertical; min-height: 60px;"
+                              placeholder="Digite a legenda do vídeo">${metadata.legenda}</textarea>
+                  </div>
+                  
+                  <div style="margin-bottom: 15px;">
+                    <label style="color: #fff; display: block; margin-bottom: 5px; font-weight: bold;">Hashtags:</label>
+                    <input type="text" id="hashtags_dublado_${index}" data-field="hashtags" data-index="${index}" value="${metadata.hashtags}" 
+                           style="width: 100%; padding: 8px; background: #222; border: 1px solid #555; color: #fff; border-radius: 4px; font-size: 14px;"
+                           placeholder="Digite as hashtags do vídeo">
+                  </div>
+                  
+                  <div style="text-align: center;">
+                    <button onclick="gerarNovosMetadadosDublado('${video.nome}', ${index})" class="btn-metadados" style="background: #ff6b35; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 14px;">
+                      ✨ Novo
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `;
+            
+            list.appendChild(div);
+          });
+        } else {
+          container.style.display = 'none';
+        }
+      } catch (err) {
+        console.error('Erro ao carregar vídeos dublados:', err);
+      }
+    }
+
+    // Funções para metadata dos vídeos dublados
+    async function gerarNovosMetadadosDublado(filename, index) {
+      const botao = event.target;
+      const originalText = botao.textContent;
+      
+      try {
+        botao.innerHTML = '⏳ Gerando...';
+        botao.disabled = true;
+        
+        // Buscar transcrição do vídeo dublado
+        const res = await fetch('/buscar_transcricao_dublado', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename: filename })
+        });
+        
+        const data = await res.json();
+        let transcricao = '';
+        
+        if (data.ok && data.transcricao) {
+          transcricao = data.transcricao;
+        } else {
+          // Fallback: usar nome do arquivo
+          transcricao = filename.replace('.mp4', '').replace(/_/g, ' ').replace(/-/g, ' ');
+        }
+        
+        // Gerar conteúdo com IA
+        const resIA = await fetch('/gerar_conteudo_individual', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            transcricao: transcricao,
+            tipo: 'dublado'
+          })
+        });
+        
+        const dataIA = await resIA.json();
+        
+        if (dataIA.ok) {
+          // Preencher campos
+          document.getElementById(`titulo_dublado_${index}`).value = dataIA.titulo || '';
+          document.getElementById(`legenda_dublado_${index}`).value = dataIA.legenda || '';
+          document.getElementById(`hashtags_dublado_${index}`).value = dataIA.hashtags || '';
+          
+          // Salvar automaticamente
+          await salvarMetadadosDublado(filename, index);
+          
+          alert('✅ Metadados gerados e salvos!');
+        } else {
+          alert('❌ Erro ao gerar metadados: ' + dataIA.error);
+        }
+        
+      } catch (err) {
+        console.error('Erro ao gerar metadados:', err);
+        alert('❌ Erro ao gerar metadados');
+      } finally {
+        botao.innerHTML = originalText;
+        botao.disabled = false;
+      }
+    }
+
+    async function salvarMetadadosDublado(filename, index) {
+      try {
+        const titulo = document.getElementById(`titulo_dublado_${index}`).value;
+        const legenda = document.getElementById(`legenda_dublado_${index}`).value;
+        const hashtags = document.getElementById(`hashtags_dublado_${index}`).value;
+        
+        const res = await fetch('/salvar_metadados_dublado', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            filename: filename,
+            titulo: titulo,
+            legenda: legenda,
+            hashtags: hashtags
+          })
+        });
+        
+        const data = await res.json();
+        
+        if (data.ok) {
+          console.log('Metadados salvos para vídeo dublado:', filename);
+        } else {
+          console.error('Erro ao salvar metadados:', data.error);
+        }
+        
+      } catch (err) {
+        console.error('Erro ao salvar metadados:', err);
+      }
+    }
+
+    async function deletarVideoDublado(nome) {
+      if (!confirm(`Deletar o vídeo dublado "${nome}"?`)) return;
+      
+      try {
+        const res = await fetch(`/videos/dublados/${nome}`, {
+          method: 'DELETE'
+        });
+        
+        const data = await res.json();
+        
+        if (data.ok) {
+          alert('✅ Vídeo dublado deletado!');
+          carregarVideosDublados();
+        } else {
+          alert('❌ Erro: ' + data.error);
+        }
+      } catch (err) {
+        console.error('Erro ao deletar vídeo dublado:', err);
+        alert('❌ Erro ao deletar vídeo');
+      }
+    }
+
+    async function gerarTodosMetadadosDublados() {
+      const btn = document.querySelector('button[onclick="gerarTodosMetadadosDublados()"]');
+      const originalText = btn.textContent;
+      
+      try {
+        btn.innerHTML = '⏳ Gerando todos...';
+        btn.disabled = true;
+        
+        // Buscar todos os vídeos dublados
+        const res = await fetch('/videos/dublados');
+        const data = await res.json();
+        
+        if (!data.ok || !data.videos || data.videos.length === 0) {
+          alert('❌ Nenhum vídeo dublado encontrado');
+          return;
+        }
+        
+        let sucessos = 0;
+        let erros = 0;
+        
+        // Processar cada vídeo
+        for (let i = 0; i < data.videos.length; i++) {
+          const video = data.videos[i];
+          
+          try {
+            // Buscar transcrição do vídeo dublado
+            const resTranscricao = await fetch('/buscar_transcricao_dublado', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ filename: video.nome })
+            });
+            
+            const dataTranscricao = await resTranscricao.json();
+            let transcricao = '';
+            
+            if (dataTranscricao.ok && dataTranscricao.transcricao) {
+              transcricao = dataTranscricao.transcricao;
+            } else {
+              // Fallback: usar nome do arquivo
+              transcricao = video.nome.replace('.mp4', '').replace(/_/g, ' ').replace(/-/g, ' ');
+            }
+            
+            // Gerar conteúdo com IA
+            const resIA = await fetch('/gerar_conteudo_individual', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ 
+                transcricao: transcricao,
+                tipo: 'dublado'
+              })
+            });
+            
+            const dataIA = await resIA.json();
+            
+            if (dataIA.ok) {
+              // Preencher campos
+              document.getElementById(`titulo_dublado_${i}`).value = dataIA.titulo || '';
+              document.getElementById(`legenda_dublado_${i}`).value = dataIA.legenda || '';
+              document.getElementById(`hashtags_dublado_${i}`).value = dataIA.hashtags || '';
+              
+              // Salvar automaticamente
+              await salvarMetadadosDublado(video.nome, i);
+              
+              sucessos++;
+            } else {
+              console.error(`Erro ao gerar metadados para ${video.nome}:`, dataIA.error);
+              erros++;
+            }
+            
+          } catch (err) {
+            console.error(`Erro ao processar ${video.nome}:`, err);
+            erros++;
+          }
+        }
+        
+        // Mostrar resultado
+        if (sucessos > 0) {
+          alert(`✅ Metadados gerados com sucesso!\n\nSucessos: ${sucessos}\nErros: ${erros}`);
+        } else {
+          alert(`❌ Nenhum metadado foi gerado com sucesso.\n\nErros: ${erros}`);
+        }
+        
+      } catch (err) {
+        console.error('Erro ao gerar todos os metadados:', err);
+        alert('❌ Erro ao gerar metadados');
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    // Limpeza suave (exceto static/final)
+    async function limpezaSuave() {
+      if (!confirm('Limpar todos os vídeos antigos (exceto os finais)?')) return;
+      
+      try {
+        const res = await fetch('/cleanup/soft', { method: 'POST' });
+        const data = await res.json();
+        
+        if (data.ok) {
+          alert(`✅ Limpeza concluída! ${data.deletados.length} arquivos removidos.`);
+          carregarContadores();
+          carregarVideos();
+        } else {
+          alert('❌ Erro: ' + data.error);
+        }
+      } catch (err) {
+        console.error('Erro na limpeza:', err);
+        alert('❌ Erro na limpeza');
+      }
+    }
+
+    // Limpeza completa (incluindo static/final)
+    async function limpezaCompleta() {
+      const confirmacao = prompt('Digite DELETE para confirmar a remoção de TODOS os vídeos:');
+      if (confirmacao !== 'DELETE') {
+        alert('❌ Operação cancelada');
+        return;
+      }
+      
+      try {
+        const res = await fetch('/cleanup/hard', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ confirm: 'DELETE' })
+        });
+        const data = await res.json();
+        
+        if (data.ok) {
+          alert(`✅ Limpeza completa! ${data.deletados.length} arquivos removidos.`);
+          carregarContadores();
+          carregarVideos();
+        } else {
+          alert('❌ Erro: ' + data.error);
+        }
+      } catch (err) {
+        console.error('Erro na limpeza completa:', err);
+        alert('❌ Erro na limpeza completa');
+      }
+    }
+
     // Carregar dados salvos ao inicializar
     window.addEventListener('load', function() {
       const comentarioSalvo = localStorage.getItem('ultimoComentario');
@@ -932,7 +2030,284 @@
             document.getElementById('pastaId').value = data.pasta_id;
           }
         });
+      
+      // Carregar contadores de existência
+      carregarContadores();
     });
+
+    // ==== FUNÇÕES DE CONFIGURAÇÃO DE IA ====
+    
+    function abrirAIModal() {
+      document.getElementById('aiModal').style.display = 'block';
+      carregarModelosOllama(); // Carregar modelos ao abrir modal
+    }
+
+    function fecharAIModal(event) {
+      if (event.target.id === 'aiModal') {
+        document.getElementById('aiModal').style.display = 'none';
+      }
+    }
+
+    function toggleAIConfig() {
+      const aiType = document.getElementById('aiType').value;
+      const ollamaConfig = document.getElementById('ollamaConfig');
+      const openaiConfig = document.getElementById('openaiConfig');
+      
+      if (aiType === 'ollama') {
+        ollamaConfig.style.display = 'block';
+        openaiConfig.style.display = 'none';
+      } else {
+        ollamaConfig.style.display = 'none';
+        openaiConfig.style.display = 'block';
+      }
+    }
+
+    async function salvarConfigAI() {
+      const aiType = document.getElementById('aiType').value;
+      
+      if (aiType === 'ollama') {
+        const model = document.getElementById('ollamaModel').value;
+        
+        try {
+          const res = await fetch('/config/ai', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ai_type: 'ollama', model: model })
+          });
+          
+          const data = await res.json();
+          
+          if (data.ok) {
+            alert('✅ Ollama configurado com sucesso!\n\nModelo: ' + model + '\n\nAgora a IA local será usada para gerar títulos e legendas.');
+            document.getElementById('aiModal').style.display = 'none';
+          } else {
+            alert('❌ Erro: ' + data.error);
+          }
+        } catch (err) {
+          console.error('Erro ao configurar Ollama:', err);
+          alert('❌ Erro ao configurar Ollama');
+        }
+      } else {
+        const apiKey = document.getElementById('openaiKey').value.trim();
+        
+        if (!apiKey) {
+          alert('⚠️ Digite sua API key do OpenAI');
+          return;
+        }
+        
+        try {
+          const res = await fetch('/config/ai', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ai_type: 'openai', openai_key: apiKey })
+          });
+          
+          const data = await res.json();
+          
+          if (data.ok) {
+            alert('✅ API key configurada com sucesso!\n\nAgora a IA será usada para gerar títulos e legendas mais inteligentes.');
+            document.getElementById('aiModal').style.display = 'none';
+            document.getElementById('openaiKey').value = '';
+          } else {
+            alert('❌ Erro: ' + data.error);
+          }
+        } catch (err) {
+          console.error('Erro ao configurar IA:', err);
+          alert('❌ Erro ao configurar IA');
+        }
+      }
+    }
+
+    async function carregarModelosOllama() {
+      const select = document.getElementById('ollamaModel');
+      select.innerHTML = '<option value="">Carregando modelos...</option>';
+      
+      try {
+        const res = await fetch('/config/ai/models');
+        const data = await res.json();
+        
+        if (data.ok && data.models.length > 0) {
+          select.innerHTML = '';
+          data.models.forEach(model => {
+            const option = document.createElement('option');
+            option.value = model.name;
+            option.textContent = model.display;
+            select.appendChild(option);
+          });
+          
+          // Selecionar primeiro modelo por padrão
+          if (data.models.length > 0) {
+            select.value = data.models[0].name;
+          }
+        } else {
+          select.innerHTML = '<option value="">Nenhum modelo encontrado</option>';
+          console.error('Erro ao carregar modelos:', data.error);
+        }
+      } catch (err) {
+        select.innerHTML = '<option value="">Erro ao carregar modelos</option>';
+        console.error('Erro ao carregar modelos:', err);
+      }
+    }
+
+    // ==== FUNCIONALIDADES DO MODAL MANUAL ====
+    
+    function abrirModalManual() {
+      document.getElementById('manualModal').style.display = 'block';
+    }
+
+    function fecharModalManual(event) {
+      if (event.target.id === 'manualModal') {
+        document.getElementById('manualModal').style.display = 'none';
+      }
+    }
+
+    async function importarMetadadosManual() {
+      const file = document.getElementById('importarFileManual').files[0];
+      if (!file) return;
+
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const res = await fetch('/importar_metadados', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await res.json();
+
+        if (data.ok) {
+          // Habilitar botão de aplicar
+          document.getElementById('aplicarBtn').disabled = false;
+          document.getElementById('aplicarBtn').style.background = '#ff6b35';
+          
+          // Armazenar dados para aplicar depois
+          window.metadadosImportados = data.metadados;
+          
+          alert(`✅ Arquivo importado com sucesso!\n\n${data.metadados.length} vídeos encontrados.\n\nClique em "Aplicar em Todos os Metadados" para atualizar.`);
+        } else {
+          alert('❌ Erro ao importar: ' + data.error);
+        }
+      } catch (err) {
+        console.error('Erro ao importar:', err);
+        alert('❌ Erro ao importar arquivo');
+      }
+    }
+
+    async function aplicarMetadadosManuais() {
+      if (!window.metadadosImportados || window.metadadosImportados.length === 0) {
+        alert('❌ Nenhum metadado importado. Importe um arquivo primeiro.');
+        return;
+      }
+
+      try {
+        const res = await fetch('/aplicar_metadados_manuais', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ metadados: window.metadadosImportados })
+        });
+
+        const data = await res.json();
+
+        if (data.ok) {
+          alert(`✅ Metadados aplicados com sucesso!\n\n${data.aplicados} vídeos atualizados.`);
+          
+          // Recarregar vídeos para mostrar as mudanças
+          carregarVideos();
+          
+          // Fechar modal
+          fecharModalManual();
+          
+          // Limpar dados
+          window.metadadosImportados = null;
+          document.getElementById('aplicarBtn').disabled = true;
+          document.getElementById('aplicarBtn').style.background = '#666';
+        } else {
+          alert('❌ Erro ao aplicar metadados: ' + data.error);
+        }
+      } catch (err) {
+        console.error('Erro ao aplicar metadados:', err);
+        alert('❌ Erro ao aplicar metadados');
+      }
+    }
+
+    // ==== FUNCIONALIDADES DO PROCESSAMENTO SEQUENCIAL IA ====
+    
+    function abrirSequencialModal() {
+      document.getElementById('sequencialModal').style.display = 'block';
+    }
+
+    function fecharSequencialModal(event) {
+      if (event.target.id === 'sequencialModal') {
+        document.getElementById('sequencialModal').style.display = 'none';
+      }
+    }
+
+    async function iniciarProcessamentoSequencial() {
+      const nicho = document.getElementById('nichoSequencial').value.trim();
+      
+      if (!nicho) {
+        alert('⚠️ Digite o nicho do canal/página');
+        return;
+      }
+      
+      // Fechar modal
+      document.getElementById('sequencialModal').style.display = 'none';
+      
+      // Mostrar loading
+      const btn = document.getElementById('btnProcessarSequencialIA');
+      const textoOriginal = btn.innerHTML;
+      btn.innerHTML = '⏳ Processando...';
+      btn.disabled = true;
+      
+      try {
+        const res = await fetch('/processar_sequencial_ia', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            nicho: nicho
+          })
+        });
+        
+        const data = await res.json();
+        
+        if (data.ok) {
+          let mensagem = `✅ Processamento concluído!\n\n`;
+          mensagem += `📊 Processados: ${data.processados} vídeos\n`;
+          mensagem += `❌ Erros: ${data.erros} vídeos\n\n`;
+          
+          if (data.resultados && data.resultados.length > 0) {
+            mensagem += `📝 Resultados:\n`;
+            data.resultados.forEach((resultado, index) => {
+              mensagem += `${index + 1}. ${resultado.arquivo_original} → ${resultado.arquivo_novo}\n`;
+              mensagem += `   Título: ${resultado.titulo}\n\n`;
+            });
+          }
+          
+          if (data.erros_detalhes && data.erros_detalhes.length > 0) {
+            mensagem += `❌ Erros:\n`;
+            data.erros_detalhes.forEach(erro => {
+              mensagem += `• ${erro}\n`;
+            });
+          }
+          
+          alert(mensagem);
+          
+          // Recarregar vídeos e contadores
+          carregarVideos();
+          carregarContadores();
+        } else {
+          alert('❌ Erro: ' + data.error);
+        }
+      } catch (err) {
+        console.error('Erro no processamento sequencial:', err);
+        alert('❌ Erro no processamento sequencial');
+      } finally {
+        // Restaurar botão
+        btn.innerHTML = textoOriginal;
+        btn.disabled = false;
+      }
+    }
   </script>
 
 </body>
