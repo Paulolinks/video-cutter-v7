@@ -31,7 +31,11 @@ from googleapiclient.http import MediaFileUpload
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
 # Se alterar o escopo, delete o token.json para re-autenticar
-SCOPES = ['https://www.googleapis.com/auth/drive.file']
+SCOPES = [
+    'https://www.googleapis.com/auth/drive.file',
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/gmail.send'
+]
 
 # ==== Utils para salvar/ler pasta no Drive (ajuste se não usar) ====
 def salvar_pasta_id(folder_id: str):
@@ -71,10 +75,12 @@ def get_drive_service():
     if os.path.exists('token.json'):
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
     if not creds or not creds.valid or not creds.refresh_token:
+        print("🔐 Re-autorizando com Google para incluir Google Sheets e Gmail...")
         flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
         creds = flow.run_local_server(port=5501, access_type='offline', prompt='consent')
         with open('token.json', 'w', encoding='utf-8') as token_file:
             token_file.write(creds.to_json())
+        print("✅ Autorização atualizada com sucesso!")
     return build('drive', 'v3', credentials=creds)
 
 
@@ -86,93 +92,325 @@ def salvar_id():
     salvar_pasta_id(folder_id)
     return jsonify({"success": True})
 
-def atualizar_excel_drive(service, folder_id, uploaded_data):
-    """Atualiza o Excel no Google Drive com os IDs dos vídeos e metadados"""
+@app.route("/reauth_google", methods=["POST"])
+def reauth_google():
+    """Força re-autorização com Google para incluir todas as permissões"""
     try:
-        # Buscar arquivo Excel na pasta
-        results = service.files().list(
-            q=f"'{folder_id}' in parents and name contains '.xlsx' and trashed=false",
-            fields="files(id, name)"
-        ).execute()
+        # Deletar token existente para forçar re-autorização
+        if os.path.exists('token.json'):
+            os.remove('token.json')
+            print("🗑️ Token anterior removido")
         
-        excel_files = results.get('files', [])
-        if not excel_files:
-            print("Nenhum arquivo Excel encontrado na pasta do Drive")
-            return
+        # Forçar nova autorização
+        print("🔐 Iniciando re-autorização com Google...")
+        flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+        creds = flow.run_local_server(port=5501, access_type='offline', prompt='consent')
         
-        # Usar o primeiro arquivo Excel encontrado
-        excel_file = excel_files[0]
-        excel_id = excel_file['id']
+        # Salvar novo token
+        with open('token.json', 'w', encoding='utf-8') as token_file:
+            token_file.write(creds.to_json())
         
-        # Baixar o arquivo Excel atual
-        request_download = service.files().get_media(fileId=excel_id)
-        excel_content = request_download.execute()
-        
-        # Salvar temporariamente
-        temp_excel_path = "temp_drive_excel.xlsx"
-        with open(temp_excel_path, 'wb') as f:
-            f.write(excel_content)
-        
-        # Carregar e atualizar o Excel
-        df = pd.read_excel(temp_excel_path)
-        
-        # Adicionar colunas se não existirem
-        if 'video_id' not in df.columns:
-            df['video_id'] = ''
-        if 'tipo' not in df.columns:
-            df['tipo'] = 'Legendado'  # Padrão para vídeos cortados
-        if 'postado' not in df.columns:
-            df['postado'] = 'Não'
-        
-        # Atualizar dados dos vídeos enviados
-        for data in uploaded_data:
-            arquivo = data['arquivo']
-            video_id = data['video_id']
-            metadados = data['metadados']
-            tipo_video = data.get('tipo', 'Legendado')
-            
-            # Procurar linha do arquivo
-            mask = df['arquivo_novo'] == arquivo
-            if mask.any():
-                df.loc[mask, 'video_id'] = video_id
-                df.loc[mask, 'tipo'] = tipo_video
-                if metadados:
-                    df.loc[mask, 'titulo'] = metadados.get('titulo', df.loc[mask, 'titulo'].iloc[0])
-                    df.loc[mask, 'legenda'] = metadados.get('legenda', df.loc[mask, 'legenda'].iloc[0])
-                    df.loc[mask, 'hashtags'] = metadados.get('hashtags', df.loc[mask, 'hashtags'].iloc[0])
-                    df.loc[mask, 'duracao'] = metadados.get('duracao', df.loc[mask, 'duracao'].iloc[0])
-            else:
-                # Adicionar nova linha se não existir
-                nova_linha = {
-                    'arquivo_antigo': arquivo,
-                    'arquivo_novo': arquivo,
-                    'titulo': metadados.get('titulo', ''),
-                    'legenda': metadados.get('legenda', ''),
-                    'hashtags': metadados.get('hashtags', ''),
-                    'duracao': metadados.get('duracao', ''),
-                    'origem': metadados.get('origem', tipo_video.lower()),
-                    'idioma': metadados.get('idioma', 'pt'),
-                    'video_id': video_id,
-                    'tipo': tipo_video,
-                    'postado': 'Não'
-                }
-                df = pd.concat([df, pd.DataFrame([nova_linha])], ignore_index=True)
-        
-        # Salvar Excel atualizado
-        df.to_excel(temp_excel_path, index=False)
-        
-        # Upload do Excel atualizado
-        file_metadata = {'name': excel_file['name']}
-        media = MediaFileUpload(temp_excel_path, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        service.files().update(fileId=excel_id, body=file_metadata, media_body=media).execute()
-        
-        # Limpar arquivo temporário
-        os.remove(temp_excel_path)
-        
-        print(f"✅ Excel atualizado no Drive com {len(uploaded_data)} vídeos")
+        print("✅ Re-autorização concluída com sucesso!")
+        return jsonify({
+            "success": True, 
+            "message": "Re-autorização concluída! Agora você tem acesso ao Google Drive, Google Sheets e Gmail."
+        })
         
     except Exception as e:
-        print(f"❌ Erro ao atualizar Excel no Drive: {e}")
+        print(f"❌ Erro na re-autorização: {e}")
+        return jsonify({"success": False, "message": f"Erro na re-autorização: {str(e)}"})
+
+@app.route("/check_permissions", methods=["GET"])
+def check_permissions():
+    """Verifica se as permissões do Google estão completas"""
+    try:
+        # Testar credenciais
+        if not os.path.exists('credentials.json'):
+            return jsonify({"success": False, "message": "Arquivo credentials.json não encontrado"})
+        
+        # Testar conexão com Google Drive
+        service = get_drive_service()
+        if not service:
+            return jsonify({"success": False, "message": "Erro ao conectar com Google Drive"})
+        
+        # Testar acesso ao Google Sheets se ID da planilha estiver configurado
+        spreadsheet_id = carregar_planilha_id()
+        sheets_ok = True
+        sheets_message = ""
+        
+        if spreadsheet_id:
+            try:
+                # Testar acesso ao Google Sheets
+                sheets_service = build('sheets', 'v4', credentials=service._http.credentials)
+                test_result = sheets_service.spreadsheets().values().get(
+                    spreadsheetId=spreadsheet_id,
+                    range='A1:Z1'
+                ).execute()
+                sheets_message = "Google Sheets: OK"
+            except Exception as e:
+                sheets_ok = False
+                if "permission" in str(e).lower() or "forbidden" in str(e).lower():
+                    sheets_message = "Google Sheets: Permissão insuficiente - precisa re-autorizar"
+                else:
+                    sheets_message = f"Google Sheets: Erro - {str(e)}"
+        else:
+            sheets_message = "Google Sheets: Não configurado"
+        
+        return jsonify({
+            "success": True, 
+            "sheets_ok": sheets_ok,
+            "sheets_message": sheets_message,
+            "needs_reauth": not sheets_ok and spreadsheet_id
+        })
+        
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
+
+@app.route("/reset_google_config", methods=["POST"])
+def reset_google_config():
+    """Reseta completamente a configuração do Google e força nova autorização"""
+    try:
+        print("🗑️ Iniciando reset completo da configuração Google...")
+        
+        # 1. Deletar token de autorização
+        if os.path.exists('token.json'):
+            os.remove('token.json')
+            print("✅ Token de autorização removido")
+        
+        # 2. Deletar configurações salvas
+        config_files = [
+            'drive_folder_id.txt',
+            'planilha_config.json',
+            'ai_config.json'
+        ]
+        
+        for config_file in config_files:
+            if os.path.exists(config_file):
+                os.remove(config_file)
+                print(f"✅ {config_file} removido")
+        
+        # 3. Verificar se credentials.json existe
+        if not os.path.exists('credentials.json'):
+            return jsonify({
+                "success": False, 
+                "message": "Arquivo credentials.json não encontrado. Baixe o arquivo de credenciais primeiro."
+            })
+        
+        # 4. Forçar nova autorização completa
+        print("🔐 Iniciando nova autorização completa...")
+        flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+        creds = flow.run_local_server(port=5501, access_type='offline', prompt='consent')
+        
+        # 5. Salvar novo token
+        with open('token.json', 'w', encoding='utf-8') as token_file:
+            token_file.write(creds.to_json())
+        
+        # 6. Tentar converter arquivo Excel se existir ID da planilha
+        planilha_id = carregar_planilha_id()
+        if planilha_id:
+            print("🔄 Tentando converter arquivo Excel para Google Sheet...")
+            drive_service = get_drive_service()
+            if drive_service:
+                is_sheets, file_id = verificar_google_sheets(drive_service, planilha_id)
+                if not is_sheets:
+                    success, new_file_id, new_name = converter_excel_para_google_sheets(drive_service, file_id)
+                    if success:
+                        salvar_planilha_id(new_file_id)
+                        print(f"✅ Arquivo convertido automaticamente: {new_name}")
+        
+        print("✅ Reset completo concluído!")
+        return jsonify({
+            "success": True, 
+            "message": "✅ Reset completo concluído!\n\n• Todas as configurações foram deletadas\n• Nova autorização realizada com sucesso\n• Agora você tem acesso completo ao Google Drive, Sheets e Gmail\n\nA página será recarregada automaticamente."
+        })
+        
+    except Exception as e:
+        print(f"❌ Erro no reset: {e}")
+        return jsonify({
+            "success": False, 
+            "message": f"❌ Erro no reset: {str(e)}"
+        })
+
+@app.route("/convert_to_sheets", methods=["POST"])
+def convert_to_sheets():
+    """Converte arquivo Excel para Google Sheet nativo"""
+    try:
+        data = request.get_json()
+        file_id = data.get('file_id', '').strip()
+        
+        if not file_id:
+            return jsonify({"success": False, "message": "ID do arquivo é obrigatório"})
+        
+        # Conectar com Google Drive
+        service = get_drive_service()
+        if not service:
+            return jsonify({"success": False, "message": "Erro ao conectar com Google Drive"})
+        
+        # Verificar tipo do arquivo
+        is_sheets, file_id = verificar_google_sheets(service, file_id)
+        
+        if is_sheets:
+            return jsonify({
+                "success": True, 
+                "message": "Arquivo já é um Google Sheet nativo",
+                "file_id": file_id
+            })
+        
+        # Converter para Google Sheet
+        success, new_file_id, new_name = converter_excel_para_google_sheets(service, file_id)
+        
+        if success:
+            # Salvar novo ID
+            salvar_planilha_id(new_file_id)
+            
+            return jsonify({
+                "success": True, 
+                "message": f"✅ Arquivo convertido com sucesso!\n\nNome: {new_name}\nID: {new_file_id}\n\nO novo ID foi salvo automaticamente.",
+                "file_id": new_file_id,
+                "file_name": new_name
+            })
+        else:
+            return jsonify({
+                "success": False, 
+                "message": "❌ Erro ao converter arquivo. Verifique as permissões."
+            })
+        
+    except Exception as e:
+        print(f"❌ Erro na conversão: {e}")
+        return jsonify({
+            "success": False, 
+            "message": f"❌ Erro na conversão: {str(e)}"
+        })
+
+def verificar_google_sheets(service, file_id):
+    """Verifica se o arquivo foi convertido para Google Sheets"""
+    try:
+        # Usar o serviço correto do Google Drive
+        drive_service = get_drive_service()
+        if not drive_service:
+            print("❌ Erro: Não foi possível conectar com Google Drive")
+            return False, file_id
+            
+        file_info = drive_service.files().get(fileId=file_id, fields='mimeType,name').execute()
+        mime_type = file_info.get('mimeType', '')
+        file_name = file_info.get('name', '')
+        
+        print(f"📄 Arquivo: {file_name}, Tipo: {mime_type}")
+        
+        if mime_type == 'application/vnd.google-apps.spreadsheet':
+            print("✅ Arquivo é um Google Sheets nativo")
+            return True, file_id
+        elif mime_type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+            print("⚠️ Arquivo é Excel (.xlsx) - precisa ser convertido para Google Sheets")
+            return False, file_id
+        else:
+            print(f"❌ Tipo de arquivo não suportado: {mime_type}")
+            return False, file_id
+    except Exception as e:
+        print(f"❌ Erro ao verificar arquivo: {e}")
+        return False, file_id
+
+def converter_excel_para_google_sheets(service, file_id):
+    """Converte arquivo Excel para Google Sheet nativo"""
+    try:
+        print(f"🔄 Convertendo arquivo Excel para Google Sheet...")
+        
+        # Usar o serviço correto do Google Drive
+        drive_service = get_drive_service()
+        if not drive_service:
+            print("❌ Erro: Não foi possível conectar com Google Drive")
+            return False, None, None
+        
+        # Primeiro, obter informações do arquivo original
+        file_info = drive_service.files().get(fileId=file_id, fields='name,parents').execute()
+        original_name = file_info.get('name', 'metadados')
+        parents = file_info.get('parents', [])
+        
+        # Criar cópia do arquivo Excel como Google Sheet
+        file_metadata = {
+            'name': f'{original_name}_convertido_para_sheets',
+            'mimeType': 'application/vnd.google-apps.spreadsheet'
+        }
+        
+        # Se o arquivo tem pasta pai, manter na mesma pasta
+        if parents:
+            file_metadata['parents'] = parents
+        
+        # Fazer cópia do arquivo
+        copied_file = drive_service.files().copy(
+            fileId=file_id,
+            body=file_metadata
+        ).execute()
+        
+        new_file_id = copied_file.get('id')
+        new_file_name = copied_file.get('name')
+        
+        print(f"✅ Arquivo convertido com sucesso!")
+        print(f"📄 Novo ID: {new_file_id}")
+        print(f"📄 Novo nome: {new_file_name}")
+        
+        # Aguardar um pouco para garantir que a conversão seja processada
+        import time
+        time.sleep(2)
+        
+        return True, new_file_id, new_file_name
+        
+    except Exception as e:
+        print(f"❌ Erro ao converter arquivo: {e}")
+        return False, None, None
+
+def sincronizar_com_google_sheets_continuar(service, spreadsheet_id, dados):
+    """Continua a sincronização após conversão bem-sucedida"""
+    try:
+        print(f"🔄 Continuando sincronização com planilha convertida: {spreadsheet_id}")
+        
+        # Implementar lógica Append/Update igual ao N8n
+        try:
+            # Primeiro, verificar se já existem dados na planilha
+            existing_data = service.spreadsheets().values().get(
+                spreadsheetId=spreadsheet_id,
+                range='A:Z'
+            ).execute()
+            
+            existing_values = existing_data.get('values', [])
+            
+            # SEMPRE USAR APPEND - NUNCA UPDATE (manter histórico completo)
+            print("📝 Modo Append: Adicionando novos dados sem modificar existentes")
+            # Determinar range baseado no número de colunas
+            num_colunas = len(dados[0]) if dados else 5
+            col_final = chr(ord('A') + num_colunas - 1)  # A, B, C, D, E, F...
+            
+            result = service.spreadsheets().values().append(
+                spreadsheetId=spreadsheet_id,
+                range=f'A:{col_final}',  # Range dinâmico baseado no número de colunas
+                valueInputOption='RAW',
+                insertDataOption='INSERT_ROWS',
+                body={'values': dados[1:]}  # Pular cabeçalho
+            ).execute()
+            
+            print(f"✅ Planilha sincronizada: {result.get('updatedCells', 0)} células atualizadas, {result.get('appendedRows', 0)} linhas adicionadas")
+            
+            return {
+                "success": True, 
+                "message": f"✅ Arquivo convertido e sincronizado com sucesso!\n\n{result.get('updatedCells', 0)} células atualizadas, {result.get('appendedRows', 0)} linhas adicionadas"
+            }
+            
+        except Exception as e:
+            print(f"❌ Erro ao sincronizar planilha convertida: {e}")
+            return {
+                "success": False,
+                "message": f"Erro ao sincronizar planilha convertida: {str(e)}"
+            }
+        
+    except Exception as e:
+        print(f"❌ Erro na sincronização: {e}")
+        return {
+            "success": False,
+            "message": f"Erro na sincronização: {str(e)}"
+        }
+
+# Função removida - não é mais necessária
+# A sincronização agora é feita diretamente com Google Sheets via sincronizar_com_google_sheets()
 
 def salvar_metadados_mp4(caminho_video, titulo, legenda, hashtags, tipo_video="Legendado"):
     """Salva metadados diretamente no arquivo MP4 usando FFmpeg"""
@@ -413,18 +651,436 @@ def salvar_metadados_local(nome_arquivo, metadados, tipo_video):
         print(f"Erro ao salvar metadados locais: {e}")
 
 @app.route("/upload", methods=["POST"])
+def upload_to_drive_route():
+    """Rota principal para upload de vídeos para o Google Drive"""
+    try:
+        # Fazer upload dos vídeos
+        upload_result = upload_to_drive()
+        
+        if upload_result.get_json().get("success"):
+            uploaded_data = upload_result.get_json().get("uploaded_data", [])
+            # Dados recebidos para sincronização
+            
+            # Salvar IDs no Excel local
+            salvar_ids_drive_no_excel(uploaded_data)
+            
+            # Função atualizar_excel_drive removida - sincronização agora é feita via Google Sheets
+            
+            # Sincronizar com Google Sheets automaticamente
+            # Sincronizando com Google Sheets
+            sync_result = sincronizar_com_google_sheets(uploaded_data)
+            
+            return jsonify({
+                "success": True,
+                "message": f"Upload concluído! {len(uploaded_data)} vídeos enviados.",
+                "uploaded_data": uploaded_data,
+                "sync_result": sync_result
+            })
+        else:
+            return upload_result
+            
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
+
+def salvar_ids_drive_no_excel(uploaded_data):
+    """Salva os IDs do Google Drive no Excel após upload"""
+    try:
+        import pandas as pd
+        
+        # Caminhos das planilhas
+        planilha_path = "data/planilhas/publicar.xlsx"
+        csv_path = "data/planilhas/publicar.csv"
+        
+        # Carregar planilha existente
+        if os.path.exists(planilha_path):
+            df = pd.read_excel(planilha_path)
+        elif os.path.exists(csv_path):
+            df = pd.read_csv(csv_path)
+        else:
+            print("⚠️ Planilha não encontrada, criando nova...")
+            df = pd.DataFrame(columns=["arquivo_antigo", "arquivo_novo", "titulo", "legenda", "hashtags", "duracao", "origem", "idioma", "video_id", "tipo", "postado"])
+        
+        # Garantir que as colunas existem
+        if 'video_id' not in df.columns:
+            df['video_id'] = ''
+        if 'tipo' not in df.columns:
+            df['tipo'] = ''
+        if 'postado' not in df.columns:
+            df['postado'] = 'Não'
+        
+        # Atualizar com IDs do Google Drive
+        for video_data in uploaded_data:
+            arquivo_nome = video_data['arquivo']
+            video_id = video_data['video_id']
+            tipo = video_data['tipo']
+            
+            # Procurar linha existente pelo nome do arquivo
+            mask = df['arquivo_novo'] == arquivo_nome
+            if mask.any():
+                # Atualizar linha existente
+                df.loc[mask, 'video_id'] = video_id
+                df.loc[mask, 'tipo'] = tipo
+                df.loc[mask, 'postado'] = 'Sim'
+                print(f"✅ Atualizado: {arquivo_nome} -> ID: {video_id}")
+            else:
+                # Adicionar nova linha
+                nova_linha = {
+                    "arquivo_antigo": arquivo_nome,
+                    "arquivo_novo": arquivo_nome,
+                    "titulo": video_data.get('metadados', {}).get('titulo', ''),
+                    "legenda": video_data.get('metadados', {}).get('legenda', ''),
+                    "hashtags": video_data.get('metadados', {}).get('hashtags', ''),
+                    "duracao": video_data.get('metadados', {}).get('duracao', ''),
+                    "origem": "google_drive",
+                    "idioma": "pt",
+                    "video_id": video_id,
+                    "tipo": tipo,
+                    "postado": "Sim"
+                }
+                df = pd.concat([df, pd.DataFrame([nova_linha])], ignore_index=True)
+                print(f"✅ Adicionado: {arquivo_nome} -> ID: {video_id}")
+        
+        # Salvar planilha atualizada
+        df.to_excel(planilha_path, index=False)
+        df.to_csv(csv_path, index=False)
+        
+        print(f"✅ {len(uploaded_data)} IDs salvos no Excel")
+        
+    except Exception as e:
+        print(f"❌ Erro ao salvar IDs no Excel: {e}")
+
+def sincronizar_com_google_sheets(uploaded_data=None):
+    """Sincroniza planilha local com Google Sheets"""
+    try:
+        # Iniciando sincronização com Google Sheets
+        from googleapiclient.discovery import build
+        import pandas as pd
+        
+        # Carregar credenciais
+        creds = carregar_credenciais()
+        if not creds:
+            return {"success": False, "message": "Credenciais não encontradas"}
+        
+        # Construir serviço do Google Sheets
+        service = build('sheets', 'v4', credentials=creds)
+        
+        # ID da planilha no Google Drive
+        spreadsheet_id = carregar_planilha_id()
+        
+        if not spreadsheet_id:
+            return {"success": True, "message": "IDs salvos no Excel local. Configure o ID da planilha Google Sheets para sincronização automática."}
+        
+        # Carregar dados locais - procurar por diferentes formatos
+        planilha_paths = [
+            "data/planilhas/publicar.xlsx",
+            "metadados/videos.xlsx",  # Arquivo principal de metadados
+            "data/planilhas/metadados.xlsx", 
+            "data/planilhas/metadados.xlsh",
+            "data/planilhas/publicar.csv",
+            "data/planilhas/metadados.csv"
+        ]
+        
+        df = None
+        for path in planilha_paths:
+            if os.path.exists(path):
+                try:
+                    if path.endswith('.csv'):
+                        df = pd.read_csv(path)
+                    else:
+                        df = pd.read_excel(path)
+                    print(f"✅ Planilha carregada para sincronização: {path}")
+                    break
+                except Exception as e:
+                    print(f"⚠️ Erro ao carregar {path}: {e}")
+                    continue
+        
+        if df is None:
+            return {"success": False, "message": "Nenhuma planilha local encontrada para sincronização"}
+        
+        # FILTRAR APENAS OS VÍDEOS ENVIADOS (se uploaded_data for fornecido)
+        if uploaded_data:
+            # Filtrando apenas os vídeos enviados
+            arquivos_enviados = [video['arquivo'] for video in uploaded_data]
+            
+            # Filtrar DataFrame pelos arquivos enviados
+            if 'arquivo_novo' in df.columns:
+                df = df[df['arquivo_novo'].isin(arquivos_enviados)]
+            elif 'arquivo_antigo' in df.columns:
+                df = df[df['arquivo_antigo'].isin(arquivos_enviados)]
+            else:
+                return {"success": False, "message": "Nenhuma coluna de arquivo encontrada para filtrar"}
+        
+        # Mapear colunas antigas para novas estrutura da planilha Google Sheets
+        
+        df['Arquivo'] = df.get('arquivo_novo', df.get('arquivo_antigo', ''))
+        df['Transcrição'] = df.get('transcricao', df.get('legenda', ''))  # transcricao ou legenda -> Transcrição
+        df['Título'] = df.get('titulo_gerado', df.get('titulo', ''))  # titulo_gerado ou titulo -> Título
+        df['Hashtag'] = df.get('hashtags_geradas', df.get('hashtags', ''))  # hashtags_geradas ou hashtags -> Hashtag
+        df['Tipo'] = df.get('tipo', 'Legendado')  # tipo -> Tipo
+        
+        # Dados mapeados para sincronização
+        
+        # ADICIONAR VIDEO_ID se uploaded_data for fornecido
+        if uploaded_data:
+            # Criar dicionário de video_id por arquivo
+            video_ids = {video['arquivo']: video['video_id'] for video in uploaded_data}
+            
+            # Adicionar video_id ao DataFrame
+            df['Video_ID'] = df['Arquivo'].map(video_ids).fillna('')
+        
+        # Limpar valores NaN e nulos antes de enviar para Google Sheets
+        df = df.fillna('')  # Substituir NaN por string vazia
+        df = df.replace([None], '')  # Substituir None por string vazia
+        
+        # Selecionar apenas as colunas necessárias para a nova planilha
+        colunas_finais = ['Arquivo', 'Transcrição', 'Título', 'Hashtag', 'Tipo']
+        if 'Video_ID' in df.columns:
+            colunas_finais.append('Video_ID')
+        
+        df_final = df[colunas_finais].copy()
+        
+        # Converter DataFrame para lista de listas
+        dados = [df_final.columns.tolist()] + df_final.values.tolist()
+        
+        # APENAS ADICIONAR - NÃO DELETAR NADA (manter histórico completo)
+        print("📝 Modo Append: Adicionando novos dados sem deletar existentes")
+        
+        # Verificar se a planilha existe e é acessível
+        try:
+            # Primeiro, tentar ler a planilha para verificar se é acessível
+            test_range = 'A1:Z1'
+            test_result = service.spreadsheets().values().get(
+                spreadsheetId=spreadsheet_id,
+                range=test_range
+            ).execute()
+            print(f"✅ Planilha acessível: {spreadsheet_id}")
+        except Exception as e:
+            error_msg = str(e)
+            print(f"❌ Erro ao acessar planilha: {error_msg}")
+            
+            # Verificar se é erro de permissão
+            if "permission" in error_msg.lower() or "forbidden" in error_msg.lower() or "unauthorized" in error_msg.lower():
+                return {
+                    "success": False, 
+                    "message": "❌ Permissão insuficiente para Google Sheets. Clique em '🔐 Re-autorizar Google' na configuração de IA para incluir todas as permissões necessárias.",
+                    "needs_reauth": True
+                }
+            elif "This operation is not supported for this document" in error_msg:
+                # Arquivo não é um Google Sheet nativo - tentar converter automaticamente
+                print("🔄 Detectado arquivo Excel - tentando converter automaticamente...")
+                
+                # Usar serviço do Google Drive para verificar e converter
+                drive_service = get_drive_service()
+                if not drive_service:
+                    return {
+                        "success": False, 
+                        "message": "❌ Erro: Não foi possível conectar com Google Drive para conversão."
+                    }
+                
+                # Verificar se é realmente um arquivo Excel
+                is_sheets, file_id = verificar_google_sheets(drive_service, spreadsheet_id)
+                
+                if not is_sheets:
+                    # Converter para Google Sheet
+                    success, new_file_id, new_name = converter_excel_para_google_sheets(drive_service, file_id)
+                    
+                    if success:
+                        # Salvar novo ID da planilha convertida
+                        salvar_planilha_id(new_file_id)
+                        print(f"✅ Arquivo convertido automaticamente: {new_name}")
+                        print(f"✅ Novo ID salvo: {new_file_id}")
+                        
+                        # Tentar novamente com o novo ID
+                        try:
+                            test_result = service.spreadsheets().values().get(
+                                spreadsheetId=new_file_id,
+                                range=test_range
+                            ).execute()
+                            print(f"✅ Planilha convertida acessível: {new_file_id}")
+                            spreadsheet_id = new_file_id  # Usar o novo ID
+                            
+                            # Continuar com a sincronização usando o novo ID
+                            return sincronizar_com_google_sheets_continuar(service, spreadsheet_id, dados)
+                            
+                        except Exception as e2:
+                            return {
+                                "success": False, 
+                                "message": f"❌ Erro após conversão: {str(e2)}\n\nTente converter manualmente:\n1. Abra o arquivo Excel no Google Drive\n2. Clique em 'Abrir com' → 'Planilhas Google'\n3. Copie o novo ID da planilha"
+                            }
+                    else:
+                        return {
+                            "success": False, 
+                            "message": "❌ Não foi possível converter automaticamente.\n\nPara sincronizar com Google Sheets:\n\n1. Abra o arquivo Excel no Google Drive\n2. Clique em 'Abrir com' → 'Planilhas Google'\n3. Copie o novo ID da planilha convertida\n4. Cole o novo ID na configuração"
+                        }
+                else:
+                    return {
+                        "success": False, 
+                        "message": f"Erro ao acessar planilha: {error_msg}. Verifique se o arquivo foi convertido para Google Sheets."
+                    }
+            else:
+                return {
+                    "success": False, 
+                    "message": f"Erro ao acessar planilha: {error_msg}. Verifique se o arquivo foi convertido para Google Sheets."
+                }
+        
+        # Implementar lógica Append/Update igual ao N8n
+        try:
+            # Primeiro, verificar se já existem dados na planilha
+            existing_data = service.spreadsheets().values().get(
+                spreadsheetId=spreadsheet_id,
+                range='A:Z'
+            ).execute()
+            
+            existing_values = existing_data.get('values', [])
+            
+            # SEMPRE USAR APPEND - NUNCA UPDATE (manter histórico completo)
+            print("📝 Modo Append: Adicionando novos dados sem modificar existentes")
+            # Determinar range baseado no número de colunas
+            num_colunas = len(dados[0]) if dados else 5
+            col_final = chr(ord('A') + num_colunas - 1)  # A, B, C, D, E, F...
+            
+            result = service.spreadsheets().values().append(
+                spreadsheetId=spreadsheet_id,
+                range=f'A:{col_final}',  # Range dinâmico baseado no número de colunas
+                valueInputOption='RAW',
+                insertDataOption='INSERT_ROWS',
+                body={'values': dados[1:]}  # Pular cabeçalho
+            ).execute()
+            
+            print(f"✅ Planilha atualizada: {result.get('updatedCells', 0)} células atualizadas, {result.get('appendedRows', 0)} linhas adicionadas")
+            
+            return {
+                "success": True, 
+                "message": f"Planilha sincronizada! {result.get('updatedCells', 0)} células atualizadas, {result.get('appendedRows', 0)} linhas adicionadas"
+            }
+            
+        except Exception as e:
+            print(f"❌ Erro ao atualizar planilha: {e}")
+            return {
+                "success": False,
+                "message": f"Erro ao atualizar planilha: {str(e)}"
+            }
+        
+    except Exception as e:
+        error_msg = str(e)
+        print(f"❌ Erro na sincronização: {error_msg}")
+        
+        # Tratar erros específicos
+        if "not found" in error_msg.lower():
+            return {"success": False, "message": "Planilha não encontrada. Verifique se o ID da planilha está correto."}
+        elif "permission" in error_msg.lower():
+            return {"success": False, "message": "Sem permissão para acessar a planilha. Verifique as credenciais."}
+        elif "quota" in error_msg.lower():
+            return {"success": False, "message": "Limite de requisições excedido. Tente novamente em alguns minutos."}
+        else:
+            return {"success": False, "message": f"Erro na sincronização: {error_msg}"}
+
+def carregar_credenciais():
+    """Carrega credenciais do Google Drive"""
+    try:
+        from google.auth.transport.requests import Request
+        from google.oauth2.credentials import Credentials
+        from google_auth_oauthlib.flow import InstalledAppFlow
+        
+        SCOPES = [
+    'https://www.googleapis.com/auth/drive.file',
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/gmail.send'
+]
+        creds = None
+        
+        # Verificar se existe token.json
+        if os.path.exists('token.json'):
+            creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+        
+        # Se não há credenciais válidas, retornar None
+        if not creds or not creds.valid:
+            return None
+            
+        return creds
+    except Exception as e:
+        print(f"❌ Erro ao carregar credenciais: {e}")
+        return None
+
+def carregar_planilha_id():
+    """Carrega ID da planilha Google Sheets do arquivo de configuração"""
+    try:
+        if os.path.exists("planilha_config.json"):
+            with open("planilha_config.json", "r") as f:
+                config = json.load(f)
+                return config.get("spreadsheet_id")
+        return None
+    except:
+        return None
+
+# Função removida - não é mais necessária
+# Agora usamos apenas o spreadsheet_id para sincronização com Google Sheets
+
+def salvar_planilha_id(spreadsheet_id):
+    """Salva ID da planilha Google Sheets"""
+    try:
+        config = {}
+        if os.path.exists("planilha_config.json"):
+            with open("planilha_config.json", "r") as f:
+                config = json.load(f)
+        
+        config["spreadsheet_id"] = spreadsheet_id
+        with open("planilha_config.json", "w") as f:
+            json.dump(config, f)
+        print(f"✅ ID da planilha salvo: {spreadsheet_id}")
+        return True
+    except Exception as e:
+        print(f"❌ Erro ao salvar ID da planilha: {e}")
+        return False
+
+def salvar_excel_id(excel_file_id):
+    """Salva ID do arquivo Excel no Google Drive"""
+    try:
+        config = {}
+        if os.path.exists("planilha_config.json"):
+            with open("planilha_config.json", "r") as f:
+                config = json.load(f)
+        
+        config["excel_file_id"] = excel_file_id
+        with open("planilha_config.json", "w") as f:
+            json.dump(config, f)
+        print(f"✅ ID do arquivo Excel salvo: {excel_file_id}")
+        return True
+    except Exception as e:
+        print(f"❌ Erro ao salvar ID do arquivo Excel: {e}")
+        return False
+
 def upload_to_drive():
     try:
-        service = get_drive_service()
+        print("🚀 Iniciando upload para Google Drive...")
+        
+        # Verificar credenciais
+        if not os.path.exists('credentials.json'):
+            return jsonify({"success": False, "message": "Arquivo credentials.json não encontrado. Configure as credenciais do Google Drive primeiro."})
+        
+        # Obter serviço do Google Drive
+        try:
+            service = get_drive_service()
+            print("✅ Serviço Google Drive conectado")
+        except Exception as e:
+            print(f"❌ Erro ao conectar com Google Drive: {e}")
+            return jsonify({"success": False, "message": f"Erro ao conectar com Google Drive: {str(e)}"})
+        
+        # Verificar ID da pasta
         target_folder_id = carregar_pasta_id()
         if not target_folder_id:
-            return jsonify({"success": False, "message": "ID da pasta não configurado."})
+            return jsonify({"success": False, "message": "ID da pasta não configurado. Configure o ID da pasta do Google Drive primeiro."})
         
+        print(f"📁 Pasta de destino: {target_folder_id}")
         uploaded_data = []
         
-        # 1. PROCESSAR VÍDEOS LEGENDADOS (static/final)
-        pasta_videos_legendados = Path("static/final")
-        arquivos_legendados = list(pasta_videos_legendados.glob("*.mp4"))
+        # 1. PROCESSAR VÍDEOS LEGENDADOS (data/final)
+        pasta_videos_legendados = Path("data/final")
+        if not pasta_videos_legendados.exists():
+            print("⚠️ Pasta data/final não encontrada")
+        else:
+            arquivos_legendados = list(pasta_videos_legendados.glob("*.mp4"))
+            print(f"📁 Encontrados {len(arquivos_legendados)} vídeos legendados em data/final")
         
         if arquivos_legendados:
             print(f"📹 Processando {len(arquivos_legendados)} vídeos legendados...")
@@ -442,31 +1098,8 @@ def upload_to_drive():
                     salvar_metadados_local(arquivo.name, metadados, "Legendado")
                 
                 # Upload do vídeo
-            file_metadata = {'name': arquivo.name, 'parents': [target_folder_id]}
-            media = MediaFileUpload(str(arquivo), mimetype='video/mp4')
-            gfile = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
-            video_id = gfile.get('id')
-            
-            uploaded_data.append({
-                    'arquivo': arquivo.name,
-                    'video_id': video_id,
-                    'metadados': metadados,
-                    'tipo': 'Legendado'
-                })
-        
-        # 2. PROCESSAR VÍDEOS DUBLADOS (data/cortes_dublado)
-        pasta_videos_dublados = Path("data/cortes_dublado")
-        if pasta_videos_dublados.exists():
-            arquivos_dublados = list(pasta_videos_dublados.glob("*.mp4"))
-            
-            if arquivos_dublados:
-                print(f"🎤 Processando {len(arquivos_dublados)} vídeos dublados...")
-                
-                for arquivo in arquivos_dublados:
-                    # Gerar metadados para vídeo dublado
-                    metadados = gerar_metadados_para_video(arquivo.name, "Dublado")
-                    
-                    # Upload do vídeo
+                try:
+                    print(f"📤 Enviando {arquivo.name}...")
                     file_metadata = {'name': arquivo.name, 'parents': [target_folder_id]}
                     media = MediaFileUpload(str(arquivo), mimetype='video/mp4')
                     gfile = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
@@ -476,14 +1109,54 @@ def upload_to_drive():
                         'arquivo': arquivo.name,
                         'video_id': video_id,
                         'metadados': metadados,
-                        'tipo': 'Dublado'
+                        'tipo': 'Legendado'
                     })
+                    print(f"✅ {arquivo.name} enviado com sucesso - ID: {video_id}")
+                except Exception as e:
+                    print(f"❌ Erro ao enviar {arquivo.name}: {e}")
+                    continue
+        
+        # 2. PROCESSAR VÍDEOS DUBLADOS (data/cortes_dublado)
+        pasta_videos_dublados = Path("data/cortes_dublado")
+        if not pasta_videos_dublados.exists():
+            print("⚠️ Pasta data/cortes_dublado não encontrada")
+            arquivos_dublados = []
+        else:
+            arquivos_dublados = list(pasta_videos_dublados.glob("*.mp4"))
+            print(f"📁 Encontrados {len(arquivos_dublados)} vídeos dublados em data/cortes_dublado")
+            
+            if arquivos_dublados:
+                print(f"🎤 Processando {len(arquivos_dublados)} vídeos dublados...")
+                
+                for arquivo in arquivos_dublados:
+                    # Gerar metadados para vídeo dublado
+                    metadados = gerar_metadados_para_video(arquivo.name, "Dublado")
+                    
+                    # Upload do vídeo
+                    try:
+                        print(f"📤 Enviando {arquivo.name}...")
+                        file_metadata = {'name': arquivo.name, 'parents': [target_folder_id]}
+                        media = MediaFileUpload(str(arquivo), mimetype='video/mp4')
+                        gfile = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+                        video_id = gfile.get('id')
+                        
+                        uploaded_data.append({
+                            'arquivo': arquivo.name,
+                            'video_id': video_id,
+                            'metadados': metadados,
+                            'tipo': 'Dublado'
+                        })
+                        print(f"✅ {arquivo.name} enviado com sucesso - ID: {video_id}")
+                    except Exception as e:
+                        print(f"❌ Erro ao enviar {arquivo.name}: {e}")
+                        continue
         
         if not uploaded_data:
             return jsonify({"success": False, "message": "Nenhum vídeo encontrado para upload."})
         
-        # Metadados já estão salvos no MP4, não precisa atualizar Excel no Drive
-        print("✅ Metadados salvos diretamente nos arquivos MP4")
+        # Salvar IDs do Google Drive no Excel
+        salvar_ids_drive_no_excel(uploaded_data)
+        print("✅ IDs do Google Drive salvos no Excel")
         
         return jsonify({
             "success": True, 
@@ -504,6 +1177,220 @@ def upload_credencial():
             print("⚠️ Credencial anterior será substituída.")
         arquivo.save(caminho)
         return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
+
+@app.route("/config/planilha", methods=["POST"])
+def configurar_planilha():
+    """Configura ID da planilha Google Sheets"""
+    try:
+        data = request.get_json()
+        spreadsheet_id = data.get("spreadsheet_id", "").strip()
+        
+        if not spreadsheet_id:
+            return jsonify({"success": False, "message": "ID da planilha não fornecido"})
+        
+        if salvar_planilha_id(spreadsheet_id):
+            return jsonify({"success": True, "message": "ID da planilha configurado com sucesso!"})
+        else:
+            return jsonify({"success": False, "message": "Erro ao salvar configuração"})
+            
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
+
+@app.route("/config/excel", methods=["POST"])
+def configurar_excel():
+    """Configura ID do arquivo Excel no Google Drive"""
+    try:
+        data = request.get_json()
+        excel_file_id = data.get("excel_file_id", "").strip()
+        
+        if not excel_file_id:
+            return jsonify({"success": False, "message": "ID do arquivo Excel não fornecido"})
+        
+        if salvar_excel_id(excel_file_id):
+            return jsonify({"success": True, "message": "ID do arquivo Excel configurado com sucesso!"})
+        else:
+            return jsonify({"success": False, "message": "Erro ao salvar configuração"})
+            
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
+
+@app.route("/sync/sheets", methods=["POST"])
+def sincronizar_sheets():
+    """Sincroniza planilha local com Google Sheets"""
+    try:
+        # Esta rota não deve ser usada - a sincronização é automática no upload
+        return jsonify({"success": False, "message": "Use a rota de upload para sincronização automática"})
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
+
+@app.route("/sync/auto", methods=["POST"])
+def sincronizacao_automatica():
+    """Sincronização automática após upload para Google Drive"""
+    try:
+        # Primeiro faz o upload normal
+        upload_result = upload_to_drive()
+        
+        if upload_result.get_json().get("success"):
+            # A sincronização já é feita automaticamente na rota principal de upload
+            # Não precisa chamar novamente aqui para evitar duplicação
+            return jsonify({
+                "success": True,
+                "upload": upload_result.get_json(),
+                "message": "Upload concluído! A sincronização foi feita automaticamente."
+            })
+        else:
+            return upload_result
+            
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
+
+@app.route("/upload/metadados", methods=["POST"])
+def upload_metadados_completos():
+    """Upload de metadados completos para Google Drive após upload dos vídeos"""
+    try:
+        # Carregar metadados da planilha local
+        import pandas as pd
+        
+        # Procurar por diferentes formatos de planilha
+        planilha_paths = [
+            "data/planilhas/publicar.xlsx",
+            "metadados/videos.xlsx",  # Arquivo principal de metadados
+            "data/planilhas/metadados.xlsx", 
+            "data/planilhas/metadados.xlsh",
+            "data/planilhas/publicar.csv",
+            "data/planilhas/metadados.csv"
+        ]
+        
+        df = None
+        for path in planilha_paths:
+            if os.path.exists(path):
+                try:
+                    if path.endswith('.csv'):
+                        df = pd.read_csv(path)
+                    else:
+                        df = pd.read_excel(path)
+                    print(f"✅ Planilha carregada: {path}")
+                    break
+                except Exception as e:
+                    print(f"⚠️ Erro ao carregar {path}: {e}")
+                    continue
+        
+        if df is None:
+            return jsonify({"success": False, "message": "Nenhuma planilha encontrada. Procurou em: " + ", ".join(planilha_paths)})
+        
+        # Verificar quais vídeos realmente existem no sistema
+        cortes_path = 'data/final'
+        dublados_path = 'data/cortes_dublado'
+        
+        # Listar vídeos que realmente existem
+        videos_existentes = []
+        if os.path.exists(cortes_path):
+            videos_existentes.extend([f for f in os.listdir(cortes_path) if f.endswith('.mp4')])
+        if os.path.exists(dublados_path):
+            videos_existentes.extend([f for f in os.listdir(dublados_path) if f.endswith('.mp4')])
+        
+        print(f"📁 Vídeos existentes no sistema: {len(videos_existentes)}")
+        
+        # Filtrar apenas vídeos que existem e têm IDs
+        df_filtrado = df[
+            (df['video_id'].notna()) & 
+            (df['video_id'] != '') & 
+            (df['arquivo_novo'].isin(videos_existentes))
+        ]
+        
+        if df_filtrado.empty:
+            return jsonify({"success": False, "message": "Nenhum vídeo existente com ID encontrado"})
+        
+        print(f"📊 Vídeos com ID encontrados: {len(df_filtrado)}")
+        
+        # Atualizar Excel no Google Drive
+        service = get_drive_service()
+        target_folder_id = carregar_pasta_id()
+        
+        if not service or not target_folder_id:
+            return jsonify({"success": False, "message": "Serviço Google Drive não configurado"})
+        
+        # Converter DataFrame para formato esperado
+        uploaded_data = []
+        for _, row in df_filtrado.iterrows():
+            uploaded_data.append({
+                'arquivo': row['arquivo_novo'],
+                'video_id': row['video_id'],
+                'tipo': row.get('tipo', 'Legendado'),
+                'metadados': {
+                    'titulo': row.get('titulo', ''),
+                    'legenda': row.get('legenda', ''),
+                    'hashtags': row.get('hashtags', ''),
+                    'duracao': row.get('duracao', ''),
+                    'origem': row.get('origem', 'Legendado'),
+                    'idioma': row.get('idioma', 'pt')
+                }
+            })
+        
+        # Função atualizar_excel_drive removida - sincronização agora é feita via Google Sheets
+        
+        return jsonify({
+            "success": True,
+            "message": f"Metadados completos enviados para {len(uploaded_data)} vídeos!",
+            "videos_atualizados": len(uploaded_data)
+        })
+        
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
+
+@app.route("/test/setup", methods=["GET"])
+def testar_setup():
+    """Testa se todas as configurações estão funcionando"""
+    try:
+        resultados = {}
+        
+        # Testar spaCy
+        try:
+            import spacy
+            nlp = spacy.load("pt_core_news_sm")
+            resultados["spacy"] = "✅ Funcionando"
+        except Exception as e:
+            resultados["spacy"] = f"❌ Erro: {str(e)}"
+        
+        # Testar Ollama
+        try:
+            import ollama
+            client = ollama.Client()
+            models = client.list()
+            if models and hasattr(models, 'models'):
+                resultados["ollama"] = f"✅ Funcionando - {len(models.models)} modelos"
+            else:
+                resultados["ollama"] = "⚠️ Conectado mas sem modelos"
+        except Exception as e:
+            resultados["ollama"] = f"❌ Erro: {str(e)}"
+        
+        # Testar Google Drive
+        try:
+            creds = carregar_credenciais()
+            if creds:
+                resultados["google_drive"] = "✅ Credenciais encontradas"
+            else:
+                resultados["google_drive"] = "⚠️ Credenciais não configuradas"
+        except Exception as e:
+            resultados["google_drive"] = f"❌ Erro: {str(e)}"
+        
+        # Testar planilha local
+        try:
+            if os.path.exists("data/planilhas/publicar.xlsx"):
+                df = pd.read_excel("data/planilhas/publicar.xlsx")
+                resultados["planilha_local"] = f"✅ Funcionando - {len(df)} registros"
+            else:
+                resultados["planilha_local"] = "⚠️ Planilha não encontrada"
+        except Exception as e:
+            resultados["planilha_local"] = f"❌ Erro: {str(e)}"
+        
+        return jsonify({
+            "success": True,
+            "resultados": resultados
+        })
+        
     except Exception as e:
         return jsonify({"success": False, "message": str(e)})
 
@@ -2635,8 +3522,7 @@ def exportar_transcricoes():
         df_export = pd.DataFrame(dados_exportacao)
         
         # Salvar arquivo
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        nome_arquivo = f"transcricoes_para_chatgpt_{timestamp}.xlsx"
+        nome_arquivo = "transcricoes_para_chatgpt.xlsx"
         caminho_arquivo = os.path.join("data/planilhas", nome_arquivo)
         
         # Garantir que a pasta existe
@@ -2883,8 +3769,18 @@ def configurar_ai():
             import json
             json.dump(config, f)
         
+        print(f"✅ Configuração de IA salva: {config}")
         return jsonify({"ok": True, "message": f"IA {ai_type} configurada com sucesso!"})
             
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)})
+
+@app.route("/config/ai/load", methods=["GET"])
+def carregar_config_ai_route():
+    """Carrega configuração de IA salva"""
+    try:
+        config = carregar_config_ai()
+        return jsonify({"ok": True, "config": config})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)})
 
@@ -2894,37 +3790,60 @@ def listar_modelos_ollama():
     try:
         try:
             import ollama
+            print("✅ Ollama importado com sucesso")
         except ImportError:
+            print("❌ Ollama não instalado")
             return jsonify({"ok": False, "error": "Ollama não instalado", "models": []})
         
         # Tentar conectar com Ollama
-        client = ollama.Client()
-        models_response = client.list()
+        try:
+            client = ollama.Client()
+            print("✅ Cliente Ollama criado")
+            models_response = client.list()
+            print(f"✅ Resposta do Ollama: {models_response}")
+        except Exception as e:
+            print(f"❌ Erro ao conectar com Ollama: {e}")
+            return jsonify({"ok": False, "error": f"Erro ao conectar com Ollama: {str(e)}", "models": []})
         
-        if models_response and 'models' in models_response:
+        # Verificar se a resposta tem modelos
+        models_list = []
+        if hasattr(models_response, 'models'):
+            models_list = models_response.models
+        elif isinstance(models_response, dict) and 'models' in models_response:
+            models_list = models_response['models']
+        elif isinstance(models_response, list):
+            models_list = models_response
+        
+        if models_list:
             models = []
-            for model in models_response['models']:
-                # Ollama retorna modelos com estrutura diferente
-                if hasattr(model, 'model'):
-                    model_name = model.model
-                elif 'model' in model:
-                    model_name = model['model']
-                else:
-                    model_name = str(model)
+            print(f"✅ Encontrados {len(models_list)} modelos")
+            for model in models_list:
+                # Extrair nome do modelo de diferentes estruturas possíveis
+                model_name = None
+                if hasattr(model, 'name'):
+                    model_name = model.name
+                elif isinstance(model, dict) and 'name' in model:
+                    model_name = model['name']
+                elif isinstance(model, str):
+                    model_name = model
                 
                 if model_name:
-                        models.append({
-                            "name": model_name,
-                            "display": model_name.replace(':', ' - ').title()
-                        })
+                    models.append({
+                        "name": model_name,
+                        "display": model_name.replace(':', ' - ').title()
+                    })
+                    print(f"✅ Modelo encontrado: {model_name}")
             
             return jsonify({"ok": True, "models": models})
         else:
+            print("❌ Nenhum modelo encontrado na resposta")
             return jsonify({"ok": False, "error": "Nenhum modelo encontrado", "models": []})
             
     except ImportError:
+        print("❌ ImportError no Ollama")
         return jsonify({"ok": False, "error": "Ollama não instalado", "models": []})
     except Exception as e:
+        print(f"❌ Erro geral: {e}")
         return jsonify({"ok": False, "error": f"Erro ao conectar com Ollama: {str(e)}", "models": []})
 
 def carregar_config_ai():
@@ -2944,28 +3863,30 @@ def gerar_titulo_com_ollama(transcricao):
         print("Ollama não instalado - usando análise local")
         return None
         
-        # Verificar se Ollama está disponível
-        try:
-            client = ollama.Client()
-            models = client.list()
-            
-            if not models['models']:
-                print("Nenhum modelo Ollama disponível - usando análise local")
+    # Verificar se Ollama está disponível
+    try:
+        client = ollama.Client()
+        models = client.list()
+        
+        if not models or not hasattr(models, 'models') or not models.models:
+            print("Nenhum modelo Ollama disponível - usando análise local")
             return None
         
-                # Usar primeiro modelo disponível
-            first_model = models['models'][0]
-            if hasattr(first_model, 'model'):
-                model_name = first_model.model
-            elif 'model' in first_model:
-                model_name = first_model['model']
-            else:
-                model_name = str(first_model)
-            print(f"Usando modelo Ollama: {model_name}")
-            
-        except Exception as e:
-            print(f"Ollama não disponível: {e} - usando análise local")
-            return None
+        # Usar primeiro modelo disponível
+        first_model = models.models[0]
+        if hasattr(first_model, 'name'):
+            model_name = first_model.name
+        elif hasattr(first_model, 'model'):
+            model_name = first_model.model
+        elif 'model' in first_model:
+            model_name = first_model['model']
+        else:
+            model_name = str(first_model)
+        print(f"Usando modelo Ollama: {model_name}")
+        
+    except Exception as e:
+        print(f"Ollama não disponível: {e} - usando análise local")
+        return None
         
         prompt = f"""
         Você é um especialista em marketing digital e criação de conteúdo para redes sociais.
@@ -3504,5 +4425,31 @@ def aplicar_metadados_manuais():
         return jsonify({"ok": False, "error": str(e)})
 
 
+def find_free_port(start_port=5500, max_port=5600):
+    """Encontra uma porta livre começando de start_port"""
+    import socket
+    for port in range(start_port, max_port):
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.bind(('localhost', port))
+                return port
+        except OSError:
+            continue
+    return None
+
 if __name__ == "__main__":
-    app.run(port=5500)
+    # Tentar encontrar uma porta livre
+    port = find_free_port()
+    if port is None:
+        print("❌ Nenhuma porta livre encontrada entre 5500-5600")
+        port = 5500  # Fallback
+    
+    print(f"🚀 Iniciando servidor na porta {port}")
+    try:
+        app.run(port=port, debug=False)
+    except OSError as e:
+        if "10048" in str(e):
+            print(f"❌ Porta {port} já está em uso. Tente fechar outros processos ou reiniciar o computador.")
+            print("💡 Dica: Verifique se há outras instâncias do aplicativo rodando.")
+        else:
+            print(f"❌ Erro ao iniciar servidor: {e}")
