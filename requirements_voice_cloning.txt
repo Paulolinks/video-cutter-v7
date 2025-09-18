@@ -1,0 +1,19 @@
+# ===== DEPENDÊNCIAS PARA VOZES CLONADAS =====
+
+# Coqui TTS - Sistema principal de clonagem de voz
+TTS==0.22.0
+
+# Edge TTS - Fallback para vozes Microsoft
+edge-tts==6.1.11
+
+# Processamento de áudio
+torchaudio==2.0.2
+librosa==0.10.1
+soundfile==0.12.1
+
+# Dependências adicionais para processamento de voz
+scipy==1.11.4
+numba==0.58.1
+
+# Para instalar, execute:
+# pip install -r requirements_voice_cloning.txt

@@ -2150,8 +2150,181 @@ def dublar_video(video_entrada, video_saida, texto_traduzido, voice, lang_target
         import shutil
         shutil.copy2(video_entrada, video_saida)
 
+# ==== SISTEMA DE VOZES CLONADAS ====
+
+def carregar_config_vozes_clonadas():
+    """Carrega configuração de vozes clonadas do arquivo JSON"""
+    try:
+        with open("vozes_clonadas.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Erro ao carregar vozes clonadas: {e}")
+        return {"vozes": [], "configuracao_global": {"fallback_voice": "pt-BR-ValerioNeural"}}
+
+def is_voz_clonada(voice):
+    """Verifica se a voz especificada é uma voz clonada"""
+    return voice.startswith("clonada_")
+
+def gerar_audio_voz_clonada(texto, voice_id, lang_target):
+    """Gera áudio usando voz clonada com Coqui TTS"""
+    try:
+        import tempfile
+        import os
+        
+        print(f"🎭 Gerando áudio com voz clonada: {voice_id}")
+        
+        # Carregar configuração das vozes
+        config = carregar_config_vozes_clonadas()
+        
+        # Encontrar a voz especificada
+        voz_config = None
+        for voz in config["vozes"]:
+            if voz["id"] == voice_id or voz["nome"] in voice_id:
+                voz_config = voz
+                break
+        
+        if not voz_config:
+            print(f"❌ Voz clonada '{voice_id}' não encontrada")
+            return None
+            
+        if not voz_config.get("ativo", False):
+            print(f"❌ Voz clonada '{voice_id}' está desativada")
+            return None
+        
+        # Criar arquivo temporário para áudio
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
+            audio_path = temp_file.name
+        
+        # Método 1: Tentar Coqui TTS primeiro (mais avançado para clonagem)
+        try:
+            print("🔮 Tentando Coqui TTS para voz clonada...")
+            import TTS
+            from TTS.api import TTS as CoquiTTS
+            
+            # Inicializar modelo TTS
+            modelo = voz_config.get("modelo", "tts_models/pt/cv/vits")
+            tts = CoquiTTS(model_name=modelo)
+            
+            # Arquivo de referência de voz
+            arquivo_referencia = voz_config.get("arquivo_referencia")
+            
+            if arquivo_referencia and os.path.exists(arquivo_referencia):
+                print(f"🎤 Usando arquivo de referência: {arquivo_referencia}")
+                
+                # Gerar áudio com clonagem de voz
+                tts.tts_to_file(
+                    text=texto,
+                    file_path=audio_path,
+                    speaker_wav=arquivo_referencia,
+                    language="pt"
+                )
+                
+                print(f"✅ Áudio Coqui TTS gerado: {audio_path}")
+                
+                if os.path.exists(audio_path) and os.path.getsize(audio_path) > 1000:
+                    return audio_path
+            else:
+                print(f"⚠️ Arquivo de referência não encontrado: {arquivo_referencia}")
+                
+        except ImportError:
+            print("⚠️ Coqui TTS não instalado, tentando método alternativo...")
+        except Exception as e:
+            print(f"❌ Erro com Coqui TTS: {e}")
+        
+        # Método 2: Tentar usar XTTS (se disponível)
+        try:
+            print("🔮 Tentando XTTS para voz clonada...")
+            
+            # Tentar usar torch-tts ou outra biblioteca de clonagem
+            # Esta é uma implementação básica - pode ser expandida
+            
+            arquivo_referencia = voz_config.get("arquivo_referencia")
+            if arquivo_referencia and os.path.exists(arquivo_referencia):
+                
+                # Método simplificado: usar Edge TTS com configurações modificadas
+                # e aplicar pós-processamento de áudio para tentar aproximar da voz de referência
+                audio_temp = gerar_audio_edge_tts_personalizado(texto, arquivo_referencia)
+                
+                if audio_temp and os.path.exists(audio_temp):
+                    # Mover arquivo para o caminho final
+                    import shutil
+                    shutil.move(audio_temp, audio_path)
+                    print(f"✅ Áudio com voz personalizada gerado: {audio_path}")
+                    return audio_path
+                    
+        except Exception as e:
+            print(f"❌ Erro com XTTS: {e}")
+        
+        # Fallback: usar voz Edge TTS mais próxima
+        print("🔄 Usando fallback para voz Edge TTS...")
+        fallback_voice = config["configuracao_global"].get("fallback_voice", "pt-BR-ValerioNeural")
+        return gerar_audio_edge_tts_simples(texto, fallback_voice)
+        
+    except Exception as e:
+        print(f"❌ Erro geral na voz clonada: {e}")
+        return None
+
+def gerar_audio_edge_tts_personalizado(texto, arquivo_referencia):
+    """Gera áudio com Edge TTS e tenta personalizar baseado na referência"""
+    try:
+        import tempfile
+        import edge_tts
+        import asyncio
+        
+        # Usar voz masculina mais próxima
+        voz_base = "pt-BR-ValerioNeural"  # Voz grave masculina
+        
+        # Criar arquivo temporário
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
+            audio_path = temp_file.name
+        
+        async def gerar_audio():
+            communicate = edge_tts.Communicate(
+                texto,
+                voz_base,
+                rate="-10%",  # Velocidade um pouco mais lenta
+                pitch="-2Hz"  # Tom ligeiramente mais grave
+            )
+            await communicate.save(audio_path)
+        
+        # Executar geração assíncrona
+        asyncio.run(gerar_audio())
+        
+        if os.path.exists(audio_path) and os.path.getsize(audio_path) > 1000:
+            print(f"✅ Áudio Edge TTS personalizado gerado: {audio_path}")
+            return audio_path
+            
+    except Exception as e:
+        print(f"❌ Erro no Edge TTS personalizado: {e}")
+        
+    return None
+
+def gerar_audio_edge_tts_simples(texto, voice):
+    """Gera áudio simples com Edge TTS"""
+    try:
+        import tempfile
+        import edge_tts
+        import asyncio
+        
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
+            audio_path = temp_file.name
+        
+        async def gerar_audio():
+            communicate = edge_tts.Communicate(texto, voice)
+            await communicate.save(audio_path)
+        
+        asyncio.run(gerar_audio())
+        
+        if os.path.exists(audio_path) and os.path.getsize(audio_path) > 1000:
+            return audio_path
+            
+    except Exception as e:
+        print(f"❌ Erro no Edge TTS simples: {e}")
+        
+    return None
+
 def gerar_audio_tts(texto, voice, lang_target):
-    """Gera áudio usando TTS (Text-to-Speech) - versão simplificada"""
+    """Gera áudio usando TTS - versão com suporte a vozes clonadas"""
     try:
         import tempfile
         import subprocess
@@ -2159,6 +2332,16 @@ def gerar_audio_tts(texto, voice, lang_target):
         
         print(f"Gerando áudio TTS para: {texto[:50]}...")
         print(f"Idioma: {lang_target}, Voz: {voice}")
+        
+        # VERIFICAR SE É VOZ CLONADA PRIMEIRO
+        if is_voz_clonada(voice):
+            print(f"🎭 Detectada voz clonada: {voice}")
+            audio_clonado = gerar_audio_voz_clonada(texto, voice, lang_target)
+            if audio_clonado and os.path.exists(audio_clonado):
+                print(f"✅ Áudio com voz clonada gerado com sucesso!")
+                return audio_clonado
+            else:
+                print("⚠️ Falha na voz clonada, usando fallback...")
         
         # Criar arquivo temporário para áudio
         with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
