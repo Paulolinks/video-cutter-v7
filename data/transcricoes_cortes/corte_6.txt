@@ -1,10 +1,133 @@
 TRANSCRIÇÃO DO CORTE: corte_6.mp4
-INÍCIO: 456.00s
-FIM: 515.00s
-DURAÇÃO: 59.00s
+INÍCIO: 439.00s
+FIM: 462.00s
+DURAÇÃO: 23.00s
 
 TEXTO:
-people struggle to do things alone.  And the path of the exceptional person is one of an exception  which means that you are not with other people.  And rather than fighting that or bemoaning it,  see it as an indicator that you're on the right path.  Because if everyone else were cheering you on,  then it means you're not in the right place.  Because it means you're just like everyone else and that's not where you want to be.  Life isn't fair at all. At all.  So what are you going to do about it?  I knew that no one was coming back to help me.  No one was going to miracle me to be somebody special.  So, mentality is the only thing that gets us through life.  I was an underdog.  We are all underdogs in life.  Even the baddest person in the world should think that way.  So you should always have, I've never arrived mentality.  And the can't hurt me mentality is no matter where you come from,  the sewer or wherever you think you're from.
+I think as early on I realized, you know, one of the things you have to understand about  life is everything changes and everything ends.  And that kind of sounds heavy on the front end, but it's a truth.  If everything changes and everything ends, number one, it should make you appreciate what  you have right now.  And then my view is what's next is always better.  If I make it so, it's my job to make it so.
 
 TEXTO_TRADUZIDO:
-[Tradução será adicionada automaticamente]
+Acho que, no início, percebi, uma das coisas que você precisa entender sobre a vida é tudo muda e tudo termina.  E isso parece pesado no front -end, mas é uma verdade.  Se tudo mudar e tudo terminar, número um, deve fazer você apreciar o que você tem agora.  E então minha opinião é o que vem a seguir é sempre melhor.  Se eu fizer assim, é meu trabalho fazê -lo.
+
+TIMESTAMPS_DETALHADOS:
+[
+  {
+    "indice": 1,
+    "inicio": 0,
+    "fim": 5.0,
+    "duracao": 5.0,
+    "texto": "I think as early on I realized, you know, one of the things you have to understand about"
+  },
+  {
+    "indice": 2,
+    "inicio": 5.0,
+    "fim": 8.0,
+    "duracao": 3.0,
+    "texto": "life is everything changes and everything ends."
+  },
+  {
+    "indice": 3,
+    "inicio": 8.0,
+    "fim": 12.0,
+    "duracao": 4.0,
+    "texto": "And that kind of sounds heavy on the front end, but it's a truth."
+  },
+  {
+    "indice": 4,
+    "inicio": 12.0,
+    "fim": 16.0,
+    "duracao": 4.0,
+    "texto": "If everything changes and everything ends, number one, it should make you appreciate what"
+  },
+  {
+    "indice": 5,
+    "inicio": 16.0,
+    "fim": 17.0,
+    "duracao": 1.0,
+    "texto": "you have right now."
+  },
+  {
+    "indice": 6,
+    "inicio": 17.0,
+    "fim": 20.0,
+    "duracao": 3.0,
+    "texto": "And then my view is what's next is always better."
+  },
+  {
+    "indice": 7,
+    "inicio": 20.0,
+    "fim": 23.0,
+    "duracao": 3.0,
+    "texto": "If I make it so, it's my job to make it so."
+  }
+]
+
+PAUSAS_DETECTADAS:
+[]
+
+SEGMENTOS_LEGENDA:
+[
+  {
+    "indice": 1,
+    "inicio": 0,
+    "fim": 5.0,
+    "duracao": 5.0,
+    "texto_original": "I think as early on I realized, you know, one of the things you have to understand about",
+    "texto_traduzido": "Acho que, no início, percebi, uma das coisas que você precisa entender sobre a vida é tudo muda e tudo termina"
+  },
+  {
+    "indice": 2,
+    "inicio": 5.0,
+    "fim": 8.0,
+    "duracao": 3.0,
+    "texto_original": "life is everything changes and everything ends.",
+    "texto_traduzido": "E isso parece pesado no front -end, mas é uma verdade"
+  },
+  {
+    "indice": 3,
+    "inicio": 8.0,
+    "fim": 12.0,
+    "duracao": 4.0,
+    "texto_original": "And that kind of sounds heavy on the front end, but it's a truth.",
+    "texto_traduzido": "Se tudo mudar e tudo terminar, número um, deve fazer você apreciar o que você tem agora"
+  },
+  {
+    "indice": 4,
+    "inicio": 12.0,
+    "fim": 16.0,
+    "duracao": 4.0,
+    "texto_original": "If everything changes and everything ends, number one, it should make you appreciate what",
+    "texto_traduzido": "E então minha opinião é o que vem a seguir é sempre melhor"
+  },
+  {
+    "indice": 5,
+    "inicio": 16.0,
+    "fim": 17.0,
+    "duracao": 1.0,
+    "texto_original": "you have right now.",
+    "texto_traduzido": "Se eu fizer assim, é meu trabalho fazê -lo"
+  },
+  {
+    "indice": 6,
+    "inicio": 17.0,
+    "fim": 20.0,
+    "duracao": 3.0,
+    "texto_original": "And then my view is what's next is always better.",
+    "texto_traduzido": "And then my view is what's next is always better."
+  },
+  {
+    "indice": 7,
+    "inicio": 20.0,
+    "fim": 23.0,
+    "duracao": 3.0,
+    "texto_original": "If I make it so, it's my job to make it so.",
+    "texto_traduzido": "If I make it so, it's my job to make it so."
+  }
+]
+
+METADADOS_DUBLAGEM:
+- Timestamps extraídos do Whisper: 7 segmentos
+- Pausas detectadas: 0 pausas
+- Segmentos de legenda: 7 segmentos
+- Fonte dos dados: Whisper (mais preciso que FFmpeg)
+- Status: Pronto para dublagem otimizada

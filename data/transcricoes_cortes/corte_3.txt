@@ -1,10 +1,133 @@
 TRANSCRIÇÃO DO CORTE: corte_3.mp4
-INÍCIO: 0.00s
-FIM: 59.00s
-DURAÇÃO: 59.00s
+INÍCIO: 382.00s
+FIM: 404.00s
+DURAÇÃO: 22.00s
 
 TEXTO:
-This ain't you, bro.  This ain't you. You weren't born like this.  You won't die, and if you do die, you won't care.  Because you'll be dead.  Best case you win, worst case, it won't matter.  There's no luck in this game, man.  It may be a little bit luck, but the luck happens after you bust your ass.  And you put yourself in that lucky situation.  Luck doesn't happen.  You put yourself in that situation where luck might fucking happen.  And that's what people don't know.  If you believe it, if you really believe that you could be something,  if you have that little voice in your head saying,  Hey, you got talent?  You could do this.  Then follow that voice.  Fuck your motivation.  Fuck your motivation.  You need discipline.  Because motivation's not there every day.  I'm missing motivation most days.  Yeah, sometimes I got motivation.  Sometimes I'm like fuck yeah, today I feel good.  I can't wait to get to the gym.
+Justin remembering that he's Batman.  He then takes the actions to fight his way out.  Look, I know it's a cartoon, but that has always resonated with me.  And whenever I'm feeling anxious about something, I always tell myself, remember who you are.  But you're really talking about the most important concept in lasting change.  Identity.  We all define ourselves in certain ways.
 
 TEXTO_TRADUZIDO:
-[Tradução será adicionada automaticamente]
+Justin lembrando que ele é Batman.  Ele então toma as ações para lutar.  Olha, eu sei que é um desenho animado, mas isso sempre ressoou comigo.  E sempre que estou ansioso por algo, sempre digo a mim mesmo, lembre -se de quem você é.  Mas você está realmente falando sobre o conceito mais importante na mudança duradoura.  Identidade.  Todos nós nos definimos de certas maneiras.
+
+TIMESTAMPS_DETALHADOS:
+[
+  {
+    "indice": 1,
+    "inicio": 0,
+    "fim": 3.0,
+    "duracao": 3.0,
+    "texto": "Justin remembering that he's Batman."
+  },
+  {
+    "indice": 2,
+    "inicio": 3.0,
+    "fim": 5.0,
+    "duracao": 2.0,
+    "texto": "He then takes the actions to fight his way out."
+  },
+  {
+    "indice": 3,
+    "inicio": 5.0,
+    "fim": 9.0,
+    "duracao": 4.0,
+    "texto": "Look, I know it's a cartoon, but that has always resonated with me."
+  },
+  {
+    "indice": 4,
+    "inicio": 9.0,
+    "fim": 14.0,
+    "duracao": 5.0,
+    "texto": "And whenever I'm feeling anxious about something, I always tell myself, remember who you are."
+  },
+  {
+    "indice": 5,
+    "inicio": 14.0,
+    "fim": 18.0,
+    "duracao": 4.0,
+    "texto": "But you're really talking about the most important concept in lasting change."
+  },
+  {
+    "indice": 6,
+    "inicio": 18.0,
+    "fim": 19.0,
+    "duracao": 1.0,
+    "texto": "Identity."
+  },
+  {
+    "indice": 7,
+    "inicio": 19.0,
+    "fim": 22.0,
+    "duracao": 3.0,
+    "texto": "We all define ourselves in certain ways."
+  }
+]
+
+PAUSAS_DETECTADAS:
+[]
+
+SEGMENTOS_LEGENDA:
+[
+  {
+    "indice": 1,
+    "inicio": 0,
+    "fim": 3.0,
+    "duracao": 3.0,
+    "texto_original": "Justin remembering that he's Batman.",
+    "texto_traduzido": "Justin lembrando que ele é Batman"
+  },
+  {
+    "indice": 2,
+    "inicio": 3.0,
+    "fim": 5.0,
+    "duracao": 2.0,
+    "texto_original": "He then takes the actions to fight his way out.",
+    "texto_traduzido": "Ele então toma as ações para lutar"
+  },
+  {
+    "indice": 3,
+    "inicio": 5.0,
+    "fim": 9.0,
+    "duracao": 4.0,
+    "texto_original": "Look, I know it's a cartoon, but that has always resonated with me.",
+    "texto_traduzido": "Olha, eu sei que é um desenho animado, mas isso sempre ressoou comigo"
+  },
+  {
+    "indice": 4,
+    "inicio": 9.0,
+    "fim": 14.0,
+    "duracao": 5.0,
+    "texto_original": "And whenever I'm feeling anxious about something, I always tell myself, remember who you are.",
+    "texto_traduzido": "E sempre que estou ansioso por algo, sempre digo a mim mesmo, lembre -se de quem você é"
+  },
+  {
+    "indice": 5,
+    "inicio": 14.0,
+    "fim": 18.0,
+    "duracao": 4.0,
+    "texto_original": "But you're really talking about the most important concept in lasting change.",
+    "texto_traduzido": "Mas você está realmente falando sobre o conceito mais importante na mudança duradoura"
+  },
+  {
+    "indice": 6,
+    "inicio": 18.0,
+    "fim": 19.0,
+    "duracao": 1.0,
+    "texto_original": "Identity.",
+    "texto_traduzido": "Identidade"
+  },
+  {
+    "indice": 7,
+    "inicio": 19.0,
+    "fim": 22.0,
+    "duracao": 3.0,
+    "texto_original": "We all define ourselves in certain ways.",
+    "texto_traduzido": "Todos nós nos definimos de certas maneiras"
+  }
+]
+
+METADADOS_DUBLAGEM:
+- Timestamps extraídos do Whisper: 7 segmentos
+- Pausas detectadas: 0 pausas
+- Segmentos de legenda: 7 segmentos
+- Fonte dos dados: Whisper (mais preciso que FFmpeg)
+- Status: Pronto para dublagem otimizada

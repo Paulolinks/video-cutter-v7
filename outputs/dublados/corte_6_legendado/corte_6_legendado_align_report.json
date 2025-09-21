@@ -1,0 +1,110 @@
+[
+  {
+    "index": 0,
+    "text": "Sobre a vida é tudo muda e tudo termina",
+    "target_sec": 3.0,
+    "fit_dur_sec": 3.0,
+    "ratio": 0.8620689655172414,
+    "start": 0.0,
+    "end": 3.0
+  },
+  {
+    "index": 1,
+    "text": "E isso parece pesado no front -end, mas é uma verdade",
+    "target_sec": 4.0,
+    "fit_dur_sec": 4.0,
+    "ratio": 1.015228426395939,
+    "start": 3.0,
+    "end": 7.0
+  },
+  {
+    "index": 2,
+    "text": "Se tudo mudar e tudo terminar, número um, deve fazer você apreciar o que você tem agora",
+    "target_sec": 4.0,
+    "fit_dur_sec": 4.0,
+    "ratio": 0.5012531328320802,
+    "start": 7.0,
+    "end": 11.0
+  },
+  {
+    "index": 3,
+    "text": "E então minha opinião é o que vem a seguir é sempre melhor",
+    "target_sec": 1.0,
+    "fit_dur_sec": 1.0,
+    "ratio": 0.2222222222222222,
+    "start": 11.0,
+    "end": 12.0
+  },
+  {
+    "index": 4,
+    "text": "Se eu fizer assim, é meu trabalho fazê -lo",
+    "target_sec": 3.0,
+    "fit_dur_sec": 3.0,
+    "ratio": 0.9677419354838709,
+    "start": 12.0,
+    "end": 15.0
+  },
+  {
+    "index": 5,
+    "text": "E acho que é assim que temos para navegar",
+    "target_sec": 3.0,
+    "fit_dur_sec": 2.99,
+    "ratio": 1.1363636363636362,
+    "start": 15.0,
+    "end": 18.0
+  },
+  {
+    "index": 6,
+    "text": "Mas a maioria de nós, a maioria de nós, temos que navegar",
+    "target_sec": 3.0,
+    "fit_dur_sec": 3.0,
+    "ratio": 0.6880733944954128,
+    "start": 18.0,
+    "end": 21.0
+  },
+  {
+    "index": 7,
+    "text": "A maioria de nós foi condicionada a não correr um risco",
+    "target_sec": 3.0,
+    "fit_dur_sec": 3.0,
+    "ratio": 0.6960556844547564,
+    "start": 21.0,
+    "end": 24.0
+  },
+  {
+    "index": 8,
+    "text": "As pessoas me perguntam o tempo todo, o que é preciso para ser feliz",
+    "target_sec": 3.0,
+    "fit_dur_sec": 3.0,
+    "ratio": 0.6224066390041494,
+    "start": 24.0,
+    "end": 27.0
+  },
+  {
+    "index": 9,
+    "text": "E eu sempre pensei que era realmente simples",
+    "target_sec": 4.0,
+    "fit_dur_sec": 4.0,
+    "ratio": 1.2698412698412698,
+    "start": 27.0,
+    "end": 31.0
+  },
+  {
+    "index": 10,
+    "text": "Uma palavra, progresso",
+    "target_sec": 2.0,
+    "fit_dur_sec": 2.0,
+    "ratio": 0.8474576271186441,
+    "start": 31.0,
+    "end": 33.0
+  },
+  {
+    "index": 11,
+    "text": "One word, progress.",
+    "target_sec": 2.0,
+    "fit_dur_sec": 2.0,
+    "ratio": 1.0,
+    "start": 33.0,
+    "end": 35.0
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "corte_id": "corte_2",
+  "sentenças_processadas": 13,
+  "duração_total": 58.0,
+  "arquivos_gerados": [
+    "data\\cortes_dublado\\corte_2_work\\sent_000.wav",
+    "data\\cortes_dublado\\corte_2_work\\sent_001.wav",
+    "data\\cortes_dublado\\corte_2_work\\sent_002.wav",
+    "data\\cortes_dublado\\corte_2_work\\sent_003.wav",
+    "data\\cortes_dublado\\corte_2_work\\sent_004.wav",
+    "data\\cortes_dublado\\corte_2_work\\sent_005.wav",
+    "data\\cortes_dublado\\corte_2_work\\sent_006.wav",
+    "data\\cortes_dublado\\corte_2_work\\sent_007.wav",
+    "data\\cortes_dublado\\corte_2_work\\sent_008.wav",
+    "data\\cortes_dublado\\corte_2_work\\sent_009.wav",
+    "data\\cortes_dublado\\corte_2_work\\sent_010.wav",
+    "data\\cortes_dublado\\corte_2_work\\sent_011.wav",
+    "data\\cortes_dublado\\corte_2_work\\sent_012.wav"
+  ],
+  "arquivo_final": "data\\cortes_dublado\\corte_2_dublado.wav"
+}

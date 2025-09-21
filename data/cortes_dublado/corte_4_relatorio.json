@@ -1,0 +1,15 @@
+{
+  "corte_id": "corte_4",
+  "sentenças_processadas": 7,
+  "duração_total": 25.0,
+  "arquivos_gerados": [
+    "data\\cortes_dublado\\corte_4_work\\sent_000.wav",
+    "data\\cortes_dublado\\corte_4_work\\sent_001.wav",
+    "data\\cortes_dublado\\corte_4_work\\sent_002.wav",
+    "data\\cortes_dublado\\corte_4_work\\sent_003.wav",
+    "data\\cortes_dublado\\corte_4_work\\sent_004.wav",
+    "data\\cortes_dublado\\corte_4_work\\sent_005.wav",
+    "data\\cortes_dublado\\corte_4_work\\sent_006.wav"
+  ],
+  "arquivo_final": "data\\cortes_dublado\\corte_4_dublado.wav"
+}

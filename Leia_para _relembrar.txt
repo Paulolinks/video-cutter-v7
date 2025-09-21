@@ -49,6 +49,10 @@ venv\Scripts\activate
 Para desarivar:
 deactivate
 
+---------FALA e ESCREVER -------------
+windows + H
+--------------------------------------
+
 
 Rodar Programa pela interface -> python main.py
 Rodar Programa -> python main.py https://www.youtube.com/watch?v=jBT4_Cx5ihs

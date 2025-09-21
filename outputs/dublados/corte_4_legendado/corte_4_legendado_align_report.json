@@ -1,0 +1,65 @@
+[
+  {
+    "index": 0,
+    "text": "A idéia de lembrar quem você é é algo incrivelmente poderoso",
+    "target_sec": 5.0,
+    "fit_dur_sec": 5.0,
+    "ratio": 1.016260162601626,
+    "start": 0.0,
+    "end": 5.0
+  },
+  {
+    "index": 1,
+    "text": "Havia um desenho animado do Batman onde ele recebe amnésia e ele é colocado como um acampamento basicamente",
+    "target_sec": 9.0,
+    "fit_dur_sec": 9.0,
+    "ratio": 1.0428736964078793,
+    "start": 5.0,
+    "end": 14.0
+  },
+  {
+    "index": 2,
+    "text": "Um acampamento de trabalho e ele não pode sair",
+    "target_sec": 2.0,
+    "fit_dur_sec": 2.0,
+    "ratio": 0.591715976331361,
+    "start": 14.0,
+    "end": 16.0
+  },
+  {
+    "index": 3,
+    "text": "E ele se sente preso e fraco e você sabe com medo",
+    "target_sec": 3.0,
+    "fit_dur_sec": 3.0,
+    "ratio": 0.6802721088435374,
+    "start": 16.0,
+    "end": 19.0
+  },
+  {
+    "index": 4,
+    "text": "E então algo acontece",
+    "target_sec": 2.0,
+    "fit_dur_sec": 2.0,
+    "ratio": 0.8474576271186441,
+    "start": 19.0,
+    "end": 21.0
+  },
+  {
+    "index": 5,
+    "text": "Não me lembro do que desencadeia a memória",
+    "target_sec": 2.0,
+    "fit_dur_sec": 2.0,
+    "ratio": 0.6644518272425249,
+    "start": 21.0,
+    "end": 23.0
+  },
+  {
+    "index": 6,
+    "text": "E ele se lembra de que é Batman",
+    "target_sec": 2.0,
+    "fit_dur_sec": 2.0,
+    "ratio": 0.5988023952095809,
+    "start": 23.0,
+    "end": 25.0
+  }
+]

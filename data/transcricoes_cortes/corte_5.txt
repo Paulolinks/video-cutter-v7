@@ -1,10 +1,133 @@
 TRANSCRIÇÃO DO CORTE: corte_5.mp4
-INÍCIO: 226.00s
-FIM: 275.00s
-DURAÇÃO: 49.00s
+INÍCIO: 357.00s
+FIM: 381.00s
+DURAÇÃO: 24.00s
 
 TEXTO:
-There's a moment when every boy realizes no one's coming to save him.  And that's when he becomes a man.  And some boys never get there and stay children forever.  You should be a monster.  He said you should be a monster.  You should be ruthlessly ambitious and then learn how to control it.  And it's that old expression.  It's better to be a warrior in a garden than a gardener in a war.  Okay, how good you are in anything.  You don't have discipline.  You ain't nobody.  Right.  Nothing of discipline.  Because you give up under the slightest struggle without discipline.  100%.  Tell me discipline is doing what you hate to do.  But do it like you love it.  Ah.  Doing what you hate to do, but do it like you love it.  That is a great quote.  I'm gonna have setbacks, I know.
+The idea of remembering who you are is something incredibly powerful.  There was a Batman cartoon where he gets amnesia and he gets put in like a camp basically.  A work camp and he can't get out.  And he feels stuck and weak and you know afraid.  And then something happens.  I don't remember what triggers the memory.  And he remembers that he's Batman.
 
 TEXTO_TRADUZIDO:
-[Tradução será adicionada automaticamente]
+A idéia de lembrar quem você é é algo incrivelmente poderoso.  Havia um desenho animado do Batman onde ele recebe amnésia e ele é colocado como um acampamento basicamente.  Um acampamento de trabalho e ele não pode sair.  E ele se sente preso e fraco e você sabe com medo.  E então algo acontece.  Não me lembro do que desencadeia a memória.  E ele se lembra de que é Batman.
+
+TIMESTAMPS_DETALHADOS:
+[
+  {
+    "indice": 1,
+    "inicio": 0,
+    "fim": 4.0,
+    "duracao": 4.0,
+    "texto": "The idea of remembering who you are is something incredibly powerful."
+  },
+  {
+    "indice": 2,
+    "inicio": 4.0,
+    "fim": 13.0,
+    "duracao": 9.0,
+    "texto": "There was a Batman cartoon where he gets amnesia and he gets put in like a camp basically."
+  },
+  {
+    "indice": 3,
+    "inicio": 13.0,
+    "fim": 15.0,
+    "duracao": 2.0,
+    "texto": "A work camp and he can't get out."
+  },
+  {
+    "indice": 4,
+    "inicio": 15.0,
+    "fim": 18.0,
+    "duracao": 3.0,
+    "texto": "And he feels stuck and weak and you know afraid."
+  },
+  {
+    "indice": 5,
+    "inicio": 18.0,
+    "fim": 20.0,
+    "duracao": 2.0,
+    "texto": "And then something happens."
+  },
+  {
+    "indice": 6,
+    "inicio": 20.0,
+    "fim": 22.0,
+    "duracao": 2.0,
+    "texto": "I don't remember what triggers the memory."
+  },
+  {
+    "indice": 7,
+    "inicio": 22.0,
+    "fim": 24.0,
+    "duracao": 2.0,
+    "texto": "And he remembers that he's Batman."
+  }
+]
+
+PAUSAS_DETECTADAS:
+[]
+
+SEGMENTOS_LEGENDA:
+[
+  {
+    "indice": 1,
+    "inicio": 0,
+    "fim": 4.0,
+    "duracao": 4.0,
+    "texto_original": "The idea of remembering who you are is something incredibly powerful.",
+    "texto_traduzido": "A idéia de lembrar quem você é é algo incrivelmente poderoso"
+  },
+  {
+    "indice": 2,
+    "inicio": 4.0,
+    "fim": 13.0,
+    "duracao": 9.0,
+    "texto_original": "There was a Batman cartoon where he gets amnesia and he gets put in like a camp basically.",
+    "texto_traduzido": "Havia um desenho animado do Batman onde ele recebe amnésia e ele é colocado como um acampamento basicamente"
+  },
+  {
+    "indice": 3,
+    "inicio": 13.0,
+    "fim": 15.0,
+    "duracao": 2.0,
+    "texto_original": "A work camp and he can't get out.",
+    "texto_traduzido": "Um acampamento de trabalho e ele não pode sair"
+  },
+  {
+    "indice": 4,
+    "inicio": 15.0,
+    "fim": 18.0,
+    "duracao": 3.0,
+    "texto_original": "And he feels stuck and weak and you know afraid.",
+    "texto_traduzido": "E ele se sente preso e fraco e você sabe com medo"
+  },
+  {
+    "indice": 5,
+    "inicio": 18.0,
+    "fim": 20.0,
+    "duracao": 2.0,
+    "texto_original": "And then something happens.",
+    "texto_traduzido": "E então algo acontece"
+  },
+  {
+    "indice": 6,
+    "inicio": 20.0,
+    "fim": 22.0,
+    "duracao": 2.0,
+    "texto_original": "I don't remember what triggers the memory.",
+    "texto_traduzido": "Não me lembro do que desencadeia a memória"
+  },
+  {
+    "indice": 7,
+    "inicio": 22.0,
+    "fim": 24.0,
+    "duracao": 2.0,
+    "texto_original": "And he remembers that he's Batman.",
+    "texto_traduzido": "E ele se lembra de que é Batman"
+  }
+]
+
+METADADOS_DUBLAGEM:
+- Timestamps extraídos do Whisper: 7 segmentos
+- Pausas detectadas: 0 pausas
+- Segmentos de legenda: 7 segmentos
+- Fonte dos dados: Whisper (mais preciso que FFmpeg)
+- Status: Pronto para dublagem otimizada

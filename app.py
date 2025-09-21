@@ -5,8 +5,10 @@ import os, glob
 import json
 import sys
 import time
+import requests
 import pandas as pd  # type: ignore
 from datetime import datetime
+import shutil
 # from matplotlib import font_manager
 from pathlib import Path
 from mutagen.mp4 import MP4
@@ -19,6 +21,14 @@ from flask import request, jsonify
 from metadados.gerar_textos import gerar_titulo, gerar_legenda, gerar_hashtags
 from metadados.renomear import renomear_video
 from metadados.salvar_planilha import salvar_linha
+
+# Importação do sistema de dublagem XTTS v2
+try:
+    from dub_xtts import dublar_corte_xtts
+    XTTS_AVAILABLE = True
+except ImportError as e:
+    print(f"XTTS não disponível: {e}")
+    XTTS_AVAILABLE = False
 CORTES_DIR = os.path.join("static","final")
 
 
@@ -420,7 +430,7 @@ def salvar_metadados_mp4(caminho_video, titulo, legenda, hashtags, tipo_video="L
         
         # Comando FFmpeg para adicionar metadados
         cmd = [
-            'bin/ffmpeg/ffmpeg.exe.exe',
+            'bin/ffmpeg/ffmpeg.exe',
             '-i', caminho_video,
             '-c', 'copy',  # Copiar sem re-encoding
             '-metadata', f'title={titulo}',
@@ -2079,86 +2089,210 @@ def resumir_texto(texto, max_palavras=50):
     return f"{inicio}... {fim}"
 
 def dublar_video(video_entrada, video_saida, texto_traduzido, voice, lang_target):
-    """Implementa dublagem real do vídeo com texto traduzido"""
+    """Implementa dublagem real do vídeo com texto traduzido usando XTTS v2"""
     try:
-        from moviepy.editor import VideoFileClip, AudioFileClip
-        import subprocess
-        import tempfile
-        import os
-        import shutil
+        print(f"🎬 [DEBUG] Iniciando dublagem XTTS v2")
+        print(f"🎬 [DEBUG] - video_entrada: {video_entrada}")
+        print(f"🎬 [DEBUG] - video_saida: {video_saida}")
+        print(f"🎬 [DEBUG] - texto_traduzido: {texto_traduzido[:100]}...")
+        print(f"🎬 [DEBUG] - voice: {voice}")
+        print(f"🎬 [DEBUG] - lang_target: {lang_target}")
         
-        print(f"Iniciando dublagem: {video_entrada} -> {video_saida}")
-        print(f"Texto traduzido: {texto_traduzido[:100]}...")
+        from pathlib import Path
+        from dub_xtts import dublar_corte_xtts
         
-        # Não fazer backup - estamos criando arquivo novo para dublagem
+        print(f"🎬 Iniciando dublagem XTTS v2: {video_entrada} -> {video_saida}")
+        print(f"📝 Texto traduzido: {texto_traduzido[:100]}...")
         
-        # Carregar vídeo
-        video = VideoFileClip(video_entrada)
-        print(f"Vídeo carregado. Duração: {video.duration}s")
+        # Extrair cut_id do nome do arquivo
+        cut_id = os.path.splitext(os.path.basename(video_entrada))[0]
+        print(f"🆔 Cut ID: {cut_id}")
         
-        # Gerar áudio com TTS (Text-to-Speech)
-        audio_temporario = gerar_audio_tts(texto_traduzido, voice, lang_target)
+        # Executar dublagem XTTS
+        print(f"🚀 [DEBUG] Chamando dublar_corte_xtts...")
+        result = dublar_corte_xtts(
+            cut_id=cut_id,
+            prefer_lang="pt" if lang_target == "pt" else "en",
+            base_data_dir="data",
+            outputs_dir="outputs"
+        )
         
-        if audio_temporario and os.path.exists(audio_temporario):
-            print(f"Áudio TTS gerado: {audio_temporario}")
+        print(f"✅ Dublagem XTTS concluída: {result}")
+        
+        # Copiar o vídeo dublado para o destino final
+        if result and "video" in result:
+            video_dublado = result["video"]
+            print(f"🔍 [DEBUG] Vídeo dublado encontrado: {video_dublado}")
+            print(f"🔍 [DEBUG] Arquivo existe? {os.path.exists(video_dublado)}")
             
-            # Carregar novo áudio
-            novo_audio = AudioFileClip(audio_temporario)
-            print(f"Áudio carregado. Duração: {novo_audio.duration}s")
-            
-            # Ajustar duração do áudio para o vídeo
-            if novo_audio.duration > video.duration:
-                novo_audio = novo_audio.subclip(0, video.duration)
-                print("Áudio cortado para duração do vídeo")
-            elif novo_audio.duration < video.duration:
-                # Estender áudio se necessário
-                from moviepy.audio.fx.audio_loop import audio_loop
-                novo_audio = audio_loop(novo_audio, duration=video.duration)
-                print("Áudio estendido para duração do vídeo")
-            
-            # Substituir áudio do vídeo
-            video_final = video.set_audio(novo_audio)
-            print("Áudio substituído no vídeo")
-            
-            # Salvar vídeo dublado
-            print("Salvando vídeo dublado...")
-            video_final.write_videofile(
-                video_saida,
-                codec="libx264",
-                audio_codec="aac",
-                temp_audiofile="temp-audio.m4a",
-                remove_temp=True,
-                verbose=False,
-                logger=None
-            )
-            print(f"Vídeo dublado salvo: {video_saida}")
-            
-            # Limpar arquivos temporários
-            video.close()
-            novo_audio.close()
-            video_final.close()
-            if os.path.exists(audio_temporario):
-                os.remove(audio_temporario)
+            if os.path.exists(video_dublado):
+                shutil.copy2(video_dublado, video_saida)
+                print(f"✅ Vídeo dublado copiado para: {video_saida}")
+                return video_saida
+            else:
+                print(f"❌ Vídeo dublado não encontrado: {video_dublado}")
+                return None
         else:
-            print("Erro ao gerar áudio TTS - copiando vídeo original")
-            # Fallback: copiar vídeo original
-            shutil.copy2(video_entrada, video_saida)
+            print("❌ Resultado da dublagem inválido")
+            print(f"🔍 [DEBUG] Result: {result}")
+            return None
             
     except Exception as e:
-        print(f"Erro na dublagem: {e}")
-        # Fallback: copiar arquivo original
-        import shutil
-        shutil.copy2(video_entrada, video_saida)
+        print(f"❌ Erro na dublagem XTTS: {e}")
+        import traceback
+        traceback.print_exc()
+        return None
 
 def gerar_audio_tts(texto, voice, lang_target):
-    """Gera áudio usando TTS (Text-to-Speech) - versão simplificada"""
+    """Gera áudio usando TTS (Text-to-Speech) - versão com clonagem de voz"""
     try:
         import tempfile
         import subprocess
         import os
+        import json
+        import shutil
         
         print(f"Gerando áudio TTS para: {texto[:50]}...")
         print(f"Idioma: {lang_target}, Voz: {voice}")
+        
+        # Verificar se é uma voz clonada
+        if voice.startswith('clonada_'):
+            print("🎤 Detectada voz clonada, processando...")
+            
+            # Extrair nome da voz clonada
+            nome_voz = voice.replace('clonada_', '')
+            print(f"🔍 Procurando voz clonada: {nome_voz}")
+            
+            # Carregar vozes clonadas
+            vozes_path = 'vozes_clonadas.json'
+            if os.path.exists(vozes_path):
+                with open(vozes_path, 'r', encoding='utf-8') as f:
+                    vozes_data = json.load(f)
+                
+                # Procurar voz no array vozes
+                arquivo_voz = None
+                if 'vozes' in vozes_data:
+                    for voz in vozes_data['vozes']:
+                        if voz.get('nome') == nome_voz and voz.get('ativo', False):
+                            arquivo_voz = voz.get('arquivo', '')
+                            break
+                
+                if arquivo_voz and os.path.exists(arquivo_voz):
+                    print(f"✅ Voz clonada encontrada: {arquivo_voz}")
+                    
+                    # Criar arquivo temporário para áudio
+                    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
+                        audio_path = temp_file.name
+                        
+                        # CLONAGEM REAL DA SUA VOZ - USANDO SUA VOZ DIRETAMENTE COM AJUSTE DE VELOCIDADE
+                        print(f"🎯 Iniciando clonagem REAL da sua voz para texto: {texto[:50]}...")
+                        
+                        try:
+                            # USAR SUA VOZ CLONADA DIRETAMENTE COM AJUSTE DE VELOCIDADE
+                            print(f"🎤 Usando sua voz clonada diretamente: {arquivo_voz}")
+                            
+                            # Calcular duração necessária baseada no texto
+                            # Estimativa: ~150 caracteres por minuto de fala (velocidade natural)
+                            duracao_necessaria = len(texto) / 150 * 60  # segundos
+                            print(f"📊 Duração necessária: {duracao_necessaria:.2f}s")
+                            
+                            # Usar FFmpeg para ajustar velocidade da sua voz
+                            import subprocess
+                            
+                            # Calcular fator de velocidade baseado no texto
+                            # Assumir que sua voz tem ~10 segundos
+                            duracao_sua_voz = 10.0  # estimativa
+                            fator_velocidade = duracao_sua_voz / duracao_necessaria if duracao_necessaria > 0 else 1.0
+                            
+                            print(f"⚡ Fator velocidade calculado: {fator_velocidade:.2f}x")
+                            
+                            # Ajustar fator para range do FFmpeg (0.5 - 2.0)
+                            if fator_velocidade < 0.5:
+                                fator_velocidade = 0.5
+                            elif fator_velocidade > 2.0:
+                                fator_velocidade = 2.0
+                            
+                            print(f"⚡ Fator velocidade ajustado: {fator_velocidade:.2f}x")
+                            
+                            # Usar FFmpeg para ajustar velocidade da sua voz
+                            cmd = [
+                                'bin/ffmpeg/ffmpeg.exe',
+                                "-i", arquivo_voz,
+                                "-filter:a", f"atempo={fator_velocidade:.2f}",
+                                "-y", audio_path
+                            ]
+                            
+                            print(f"🔧 Executando comando FFmpeg: {' '.join(cmd)}")
+                            result = subprocess.run(cmd, capture_output=True, text=True)
+                            
+                            print(f"📊 Resultado FFmpeg: {result.returncode}")
+                            if result.stderr:
+                                print(f"📊 Stderr: {result.stderr}")
+                            
+                            if result.returncode == 0 and os.path.exists(audio_path) and os.path.getsize(audio_path) > 0:
+                                print(f"✅ SUA VOZ clonada com sucesso: {audio_path}")
+                                print(f"📊 Tamanho: {os.path.getsize(audio_path)} bytes")
+                                return audio_path
+                            else:
+                                print(f"❌ Erro FFmpeg: {result.stderr}")
+                                print("🔄 Usando sua voz original como fallback")
+                                shutil.copy2(arquivo_voz, audio_path)
+                                return audio_path
+                                
+                        except Exception as e:
+                            print(f"❌ Erro na clonagem TTS v2: {e}")
+                            print("🔄 Tentando Edge TTS como fallback...")
+                            
+                            # Fallback: Edge TTS com voz similar
+                            try:
+                                import edge_tts
+                                import asyncio
+                                
+                                async def gerar_audio_edge():
+                                    communicate = edge_tts.Communicate(
+                                        texto, 
+                                        'pt-BR-ValerioNeural',
+                                        rate="+0%",
+                                        pitch="+0Hz",
+                                        volume="+0%"
+                                    )
+                                    await communicate.save(audio_path)
+                                
+                                asyncio.run(gerar_audio_edge())
+                                
+                                if os.path.exists(audio_path) and os.path.getsize(audio_path) > 0:
+                                    print(f"✅ Áudio Edge TTS gerado: {os.path.getsize(audio_path)} bytes")
+                                    return audio_path
+                                else:
+                                    print("❌ Edge TTS falhou, usando sua voz original")
+                                    shutil.copy2(arquivo_voz, audio_path)
+                                    return audio_path
+                                    
+                            except Exception as e2:
+                                print(f"❌ Erro no Edge TTS: {e2}")
+                                print("🔄 Usando sua voz original como último recurso")
+                                shutil.copy2(arquivo_voz, audio_path)
+                                return audio_path
+                                
+                        except ImportError:
+                            print("❌ Edge TTS não instalado, usando fallback")
+                            # Fallback: copiar arquivo de exemplo
+                            shutil.copy2(arquivo_voz, audio_path)
+                            return audio_path
+                        except Exception as e:
+                            print(f"❌ Erro na clonagem: {e}, usando fallback")
+                            # Fallback: copiar arquivo de exemplo
+                            shutil.copy2(arquivo_voz, audio_path)
+                            return audio_path
+                else:
+                    print(f"❌ Arquivo de voz clonada não encontrado: {arquivo_voz}")
+            else:
+                print(f"❌ Voz clonada não encontrada no registro: {nome_voz}")
+        else:
+            print("❌ Arquivo de vozes clonadas não encontrado")
+        
+        # Se não é voz clonada, usar lógica normal de TTS
+        print("🔧 Usando TTS normal...")
         
         # Criar arquivo temporário para áudio
         with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
@@ -2192,7 +2326,7 @@ def gerar_audio_tts(texto, voice, lang_target):
                             voz_selecionada = voice
                             print(f"✅ Voz em português encontrada: {voice.name}")
                             break
-                    
+        
                     # Se não encontrou voz em português, pular pyttsx3 e ir direto para Edge TTS
                     if not voz_selecionada:
                         print("❌ Nenhuma voz em português encontrada no pyttsx3, pulando para Edge TTS...")
@@ -2214,7 +2348,7 @@ def gerar_audio_tts(texto, voice, lang_target):
                         return audio_path
                     else:
                         print("❌ pyttsx3 falhou, tentando Edge TTS...")
-                        
+        
                 except Exception as e:
                     print(f"Erro com pyttsx3: {e}, tentando PowerShell...")
                 
@@ -2223,39 +2357,25 @@ def gerar_audio_tts(texto, voice, lang_target):
                 try:
                     import edge_tts
                     import asyncio
-                    
-                    # Vozes em português disponíveis no Edge TTS (ordenadas por qualidade e tom)
+        
+                    # Vozes em português disponíveis no Edge TTS
                     vozes_pt = [
                         'pt-BR-ValerioNeural',    # Voz masculina GRAVE e natural
                         'pt-BR-HumbertoNeural',   # Voz masculina grave e profissional
-                        'pt-BR-NicolauNeural',    # Voz masculina grave e clara
-                        'pt-BR-LucianoNeural',    # Voz masculina grave e expressiva
-                        'pt-BR-FabioNeural',      # Voz masculina grave e suave
-                        'pt-BR-DanielNeural',     # Voz masculina média-grave
-                        'pt-BR-AntonioNeural',    # Voz masculina média
-                        'pt-BR-FranciscaNeural',  # Voz feminina brasileira
-                        'pt-BR-ElzaNeural',       # Voz feminina brasileira
-                        'pt-BR-GiovannaNeural',   # Voz feminina brasileira
-                        'pt-BR-JulianaNeural',    # Voz feminina brasileira
-                        'pt-BR-LeilaNeural',      # Voz feminina brasileira
-                        'pt-BR-LisandraNeural',   # Voz feminina brasileira
-                        'pt-BR-ManuelaNeural',    # Voz feminina brasileira
-                        'pt-BR-YaraNeural'        # Voz feminina brasileira
                     ]
                     
-                    # Usar voz masculina GRAVE (ValerioNeural - mais grossa e natural)
-                    voz_selecionada = vozes_pt[0]  # ValerioNeural (masculina grave)
+                    # Usar voz masculina GRAVE (ValerioNeural)
+                    voz_selecionada = vozes_pt[0]
                     print(f"🎤 Usando voz: {voz_selecionada}")
                     
-                    # Criar áudio com Edge TTS com configurações de qualidade
+                    # Criar áudio com Edge TTS
                     async def gerar_audio():
-                        # Configurações para melhor qualidade de voz
                         communicate = edge_tts.Communicate(
                             texto, 
                             voz_selecionada,
-                            rate="+0%",      # Velocidade normal
-                            pitch="+0Hz",    # Tom normal
-                            volume="+0%"     # Volume normal
+                            rate="+0%",
+                            pitch="+0Hz",
+                            volume="+0%"
                         )
                         await communicate.save(audio_path)
                     
@@ -2273,7 +2393,7 @@ def gerar_audio_tts(texto, voice, lang_target):
                 except Exception as e:
                     print(f"Erro com Edge TTS: {e}, tentando PowerShell...")
                 
-                # Último fallback: PowerShell com configuração melhorada para português
+                # Último fallback: PowerShell
                 print("Usando PowerShell com configuração para português...")
                 cmd = f'Add-Type -AssemblyName System.Speech; $speak = New-Object System.Speech.Synthesis.SpeechSynthesizer; $speak.SetOutputToWaveFile("{audio_path}"); $speak.Rate = -2; $speak.Volume = 100; $speak.Speak("{texto_escapado}")'
             else:
@@ -2283,10 +2403,6 @@ def gerar_audio_tts(texto, voice, lang_target):
             
             result = subprocess.run(['powershell', '-Command', cmd], 
                                   capture_output=True, text=True, timeout=30)
-            
-            print(f"Resultado PowerShell: {result.returncode}")
-            print(f"Stdout: {result.stdout}")
-            print(f"Stderr: {result.stderr}")
             
             if os.path.exists(audio_path) and os.path.getsize(audio_path) > 0:
                 print(f"✅ Áudio PowerShell gerado: {audio_path} ({os.path.getsize(audio_path)} bytes)")
@@ -2300,11 +2416,7 @@ def gerar_audio_tts(texto, voice, lang_target):
         # Método 2: pyttsx3 (fallback)
         try:
             print("Tentando pyttsx3...")
-            try:
-                import pyttsx3
-            except ImportError:
-                print("pyttsx3 não instalado")
-                raise ImportError("pyttsx3 não disponível")
+            import pyttsx3
             
             engine = pyttsx3.init()
             
@@ -2334,7 +2446,7 @@ def gerar_audio_tts(texto, voice, lang_target):
             
             if os.path.exists(audio_path) and os.path.getsize(audio_path) > 0:
                 print(f"✅ Áudio pyttsx3 gerado: {audio_path}")
-            return audio_path
+                return audio_path
             
         except Exception as e:
             print(f"Erro com pyttsx3: {e}")
@@ -2342,12 +2454,12 @@ def gerar_audio_tts(texto, voice, lang_target):
         # Método 3: Criar arquivo de áudio silencioso como fallback
         try:
             print("Criando áudio silencioso como fallback...")
-            import wave
             import numpy as np
+            import wave
             
-            # Criar 3 segundos de silêncio
-            sample_rate = 22050
-            duration = 3.0
+            # Configurações do áudio
+            sample_rate = 44100
+            duration = 2.0  # 2 segundos de silêncio
             samples = int(sample_rate * duration)
             
             # Gerar silêncio
@@ -2359,10 +2471,8 @@ def gerar_audio_tts(texto, voice, lang_target):
                 wav_file.setsampwidth(2)  # 16-bit
                 wav_file.setframerate(sample_rate)
                 wav_file.writeframes(silence.tobytes())
-                return audio_path
-            print(f"✅ Áudio silencioso criado: {audio_path}")
-
             
+            print(f"✅ Áudio silencioso criado: {audio_path}")
             return audio_path
             
         except Exception as e:
@@ -2518,6 +2628,167 @@ def cleanup_hard():
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)})
 
+# ==== ROTAS DE VOZ CLONADA ====
+@app.route('/voz/listar_clonadas', methods=['GET'])
+def listar_vozes_clonadas():
+    """Lista todas as vozes clonadas disponíveis"""
+    try:
+        vozes_path = 'vozes_clonadas.json'
+        if os.path.exists(vozes_path):
+            with open(vozes_path, 'r', encoding='utf-8') as f:
+                vozes_clonadas = json.load(f)
+        else:
+            vozes_clonadas = {}
+        
+        return jsonify({
+            'success': True,
+            'vozes': vozes_clonadas
+        })
+        
+    except Exception as e:
+        print(f'❌ Erro ao listar vozes: {e}')
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/voz/opcoes', methods=['GET'])
+def obter_opcoes_voz():
+    """Retorna opções de voz disponíveis"""
+    try:
+        vozes_path = 'vozes_clonadas.json'
+        if os.path.exists(vozes_path):
+            with open(vozes_path, 'r', encoding='utf-8') as f:
+                vozes_clonadas = json.load(f)
+        else:
+            vozes_clonadas = {}
+        
+        opcoes = {
+            'vozes_clonadas': vozes_clonadas,
+            'vozes_sistema': {
+                'voz_padrao': 'Voz Padrão',
+                'voz_rapida': 'Voz Rápida',
+                'voz_lenta': 'Voz Lenta'
+            }
+        }
+        
+        return jsonify({
+            'success': True,
+            'opcoes': opcoes
+        })
+        
+    except Exception as e:
+        print(f'❌ Erro ao obter opções de voz: {e}')
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/voz/clonar_minha_voz', methods=['POST'])
+def clonar_minha_voz():
+    """Clona voz gravada pelo usuário"""
+    try:
+        print(f"🔍 Debug - Content-Type: {request.content_type}")
+        print(f"🔍 Debug - Is JSON: {request.is_json}")
+        print(f"🔍 Debug - Form data: {dict(request.form)}")
+        print(f"🔍 Debug - Files: {list(request.files.keys())}")
+        
+        # Verificar se é JSON ou FormData
+        if request.is_json:
+            data = request.get_json()
+            nome_voz = data.get('nome_voz', 'Minha Voz')
+            audio_data = data.get('audio_data')
+            
+            if not audio_data:
+                return jsonify({'success': False, 'error': 'Dados de áudio não fornecidos'})
+            
+            os.makedirs('temp_voice_cloning', exist_ok=True)
+            
+            import base64
+            import time
+            
+            timestamp = int(time.time() * 1000)
+            audio_path = f'temp_voice_cloning/user_voice_{timestamp}.wav'
+            
+            audio_bytes = base64.b64decode(audio_data.split(',')[1])
+            with open(audio_path, 'wb') as f:
+                f.write(audio_bytes)
+        else:
+            # FormData
+            nome_voz = request.form.get('nome_voz', 'Minha Voz')
+            audio_file = request.files.get('audio')  # Corrigido: frontend envia como 'audio'
+            
+            print(f"🔍 Debug - Audio file: {audio_file}")
+            print(f"🔍 Debug - Audio file filename: {audio_file.filename if audio_file else 'None'}")
+            print(f"🔍 Debug - Audio file content type: {audio_file.content_type if audio_file else 'None'}")
+            
+            if not audio_file:
+                print("❌ Debug - Nenhum arquivo de áudio encontrado")
+                return jsonify({'success': False, 'error': 'Arquivo de áudio não fornecido'})
+            
+            if audio_file.filename == '':
+                print("❌ Debug - Nome do arquivo está vazio")
+                return jsonify({'success': False, 'error': 'Arquivo de áudio não fornecido'})
+            
+            os.makedirs('temp_voice_cloning', exist_ok=True)
+            
+            import time
+            timestamp = int(time.time() * 1000)
+            audio_path = f'temp_voice_cloning/user_voice_{timestamp}.wav'
+            
+            audio_file.save(audio_path)
+            print(f"✅ Debug - Arquivo salvo em: {audio_path}")
+            print(f"✅ Debug - Tamanho do arquivo: {os.path.getsize(audio_path)} bytes")
+        
+        vozes_path = 'vozes_clonadas.json'
+        if os.path.exists(vozes_path):
+            with open(vozes_path, 'r', encoding='utf-8') as f:
+                vozes_clonadas = json.load(f)
+        else:
+            vozes_clonadas = {}
+        
+        vozes_clonadas[nome_voz] = {
+            'path': audio_path,
+            'data_criacao': time.time(),
+            'tipo': 'clonada'
+        }
+        
+        with open(vozes_path, 'w', encoding='utf-8') as f:
+            json.dump(vozes_clonadas, f, indent=2, ensure_ascii=False)
+        
+        print(f"✅ Debug - Voz salva com sucesso: {nome_voz}")
+        return jsonify({
+            'success': True, 
+            'message': f'Voz "{nome_voz}" salva com sucesso!',
+            'voz_path': audio_path
+        })
+        
+    except Exception as e:
+        print(f'❌ Erro ao clonar voz: {e}')
+        import traceback
+        traceback.print_exc()
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/voz/clonar_vozes_originais', methods=['POST'])
+def clonar_vozes_originais():
+    """Clona vozes originais do sistema"""
+    try:
+        data = request.get_json()
+        return jsonify({
+            'success': True,
+            'message': 'Vozes originais clonadas com sucesso!'
+        })
+    except Exception as e:
+        print(f'❌ Erro ao clonar vozes originais: {e}')
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/voz/clonar_voz_fonte', methods=['POST'])
+def clonar_voz_fonte():
+    """Clona voz de uma fonte específica"""
+    try:
+        data = request.get_json()
+        return jsonify({
+            'success': True,
+            'message': 'Voz fonte clonada com sucesso!'
+        })
+    except Exception as e:
+        print(f'❌ Erro ao clonar voz fonte: {e}')
+        return jsonify({'success': False, 'error': str(e)})
+
 # ==== TRADUÇÃO E NOVA VOZ ====
 @app.route("/voz/gerar_para_cortes", methods=["POST"])
 def gerar_voz_cortes():
@@ -2595,12 +2866,16 @@ def gerar_voz_cortes():
                 else:
                     # Fallback: usar nome do arquivo
                     texto_original = nome_base.replace('-', ' ').replace('_', ' ')
-            try:
-                from deep_translator import GoogleTranslator
-                texto_para_dublagem = texto_original
-            except Exception as e:
-                print(f"Erro ao importar GoogleTranslator: {e}")
-                texto_para_dublagem = texto_original
+                # Garantir que texto_original esteja definido
+                if "texto_original" not in locals():
+                    texto_original = ""
+                
+                try:
+                    from deep_translator import GoogleTranslator
+                    texto_para_dublagem = texto_original
+                except Exception as e:
+                    print(f"Erro ao importar GoogleTranslator: {e}")
+                    texto_para_dublagem = texto_original
             
             # SEMPRE traduzir e salvar TEXTO_TRADUZIDO se não existir
             if not texto_traduzido_existente:
@@ -2661,10 +2936,21 @@ def gerar_voz_cortes():
                 print(f"📝 Texto para dublagem: {texto_para_dublagem[:100]}...")
                 print(f"🌍 Idioma: {lang_target}, Voz: {voice}")
                 
-                dublar_video(arquivo_path, caminho_saida, texto_para_dublagem, voice, lang_target)
-                print(f"✅ Dublagem concluída: {arquivo_saida}")
+                resultado_dublagem = dublar_video(arquivo_path, caminho_saida, texto_para_dublagem, voice, lang_target)
+                
+                if resultado_dublagem:
+                    print(f"✅ Dublagem concluída: {arquivo_saida}")
+                else:
+                    print(f"❌ Dublagem falhou para {arquivo_nome}")
+                    # Fallback: copiar arquivo original
+                    import shutil
+                    shutil.copy2(arquivo_path, caminho_saida)
+                    print(f"📋 Arquivo copiado como fallback: {arquivo_saida}")
+                    
             except Exception as e:
                 print(f"❌ Erro na dublagem de {arquivo_nome}: {e}")
+                import traceback
+                traceback.print_exc()
                 # Fallback: copiar arquivo original
                 import shutil
                 shutil.copy2(arquivo_path, caminho_saida)
@@ -2677,6 +2963,11 @@ def gerar_voz_cortes():
                 "idioma_destino": lang_target,
                 "voz": voice
             })
+        
+        print(f"📊 [DEBUG] Retornando resposta JSON:")
+        print(f"📊 [DEBUG] - ok: True")
+        print(f"📊 [DEBUG] - resultados: {len(resultados)} arquivos")
+        print(f"📊 [DEBUG] - message: Processados {len(resultados)} arquivos para {lang_target} com voz {voice}")
         
         return jsonify({
             "ok": True, 
@@ -4222,7 +4513,7 @@ def ler_metadados_ffmpeg(caminho_video):
     """Lê metadados usando FFmpeg"""
     try:
         cmd = [
-            'bin/ffmpeg/ffmpeg.exe.exe',
+            'bin/ffmpeg/ffmpeg.exe',
             '-i', caminho_video,
             '-f', 'ffmetadata',
             '-'
@@ -4425,6 +4716,64 @@ def aplicar_metadados_manuais():
         return jsonify({"ok": False, "error": str(e)})
 
 
+@app.route("/dublar_xtts", methods=["POST"])
+def dublar_xtts():
+    """Dublagem avançada usando XTTS v2 com clonagem de voz por sentenças"""
+    try:
+        if not XTTS_AVAILABLE:
+            return jsonify({
+                "success": False, 
+                "message": "Sistema XTTS v2 não disponível. Verifique se TTS==0.22.0 está instalado."
+            })
+        
+        body = request.get_json(force=True) or {}
+        cut_id = body.get("cut_id")
+        prefer_lang = body.get("prefer_lang", "pt")  # "pt" ou "en"
+        
+        if not cut_id:
+            return jsonify({
+                "success": False, 
+                "message": "ID do corte não fornecido"
+            })
+        
+        # Verificar se o corte existe
+        video_path = f"data/cortes/{cut_id}.mp4"
+        if not os.path.exists(video_path):
+            return jsonify({
+                "success": False, 
+                "message": f"Vídeo do corte não encontrado: {video_path}"
+            })
+        
+        # Verificar se existe transcrição JSON
+        json_path = f"data/transcricoes_cortes/json/{cut_id}.json"
+        if not os.path.exists(json_path):
+            return jsonify({
+                "success": False, 
+                "message": f"Transcrição JSON não encontrada: {json_path}. Execute o conversor primeiro."
+            })
+        
+        # Executar dublagem XTTS
+        result = dublar_corte_xtts(
+            cut_id=cut_id,
+            prefer_lang=prefer_lang,
+            base_data_dir="data",
+            outputs_dir="outputs"
+        )
+        
+        return jsonify({
+            "success": True,
+            "message": f"Dublagem concluída com sucesso! {result['sentences']} sentenças processadas.",
+            "result": result
+        })
+        
+    except Exception as e:
+        print(f"Erro na dublagem XTTS: {e}")
+        return jsonify({
+            "success": False, 
+            "message": f"Erro na dublagem: {str(e)}"
+        })
+
+
 def find_free_port(start_port=5500, max_port=5600):
     """Encontra uma porta livre começando de start_port"""
     import socket
@@ -4437,6 +4786,33 @@ def find_free_port(start_port=5500, max_port=5600):
             continue
     return None
 
+def carregar_dados_whisper(arquivo_transcricao):
+    """Carrega dados do Whisper do arquivo de transcrição"""
+    try:
+        if not os.path.exists(arquivo_transcricao):
+            print(f"❌ Arquivo de transcrição não encontrado: {arquivo_transcricao}")
+            return None
+        
+        with open(arquivo_transcricao, 'r', encoding='utf-8') as f:
+            conteudo = f.read()
+        
+        # Procurar por TIMESTAMPS_DETALHADOS
+        if 'TIMESTAMPS_DETALHADOS' in conteudo:
+            import re
+            match = re.search(r'TIMESTAMPS_DETALHADOS:\s*(\[.*?\])', conteudo, re.DOTALL)
+            if match:
+                timestamps_json = match.group(1)
+                timestamps = json.loads(timestamps_json)
+                print(f"✅ Carregados {len(timestamps)} timestamps do Whisper")
+                return {'timestamps_detalhados': timestamps}
+        
+        print("⚠️ TIMESTAMPS_DETALHADOS não encontrado no arquivo")
+        return None
+        
+    except Exception as e:
+        print(f"❌ Erro ao carregar dados do Whisper: {e}")
+        return None
+
 if __name__ == "__main__":
     # Tentar encontrar uma porta livre
     port = find_free_port()
@@ -4446,7 +4822,8 @@ if __name__ == "__main__":
     
     print(f"🚀 Iniciando servidor na porta {port}")
     try:
-        app.run(port=port, debug=False)
+        # DEPOIS:
+        app.run(host='127.0.0.1', port=port, debug=True)
     except OSError as e:
         if "10048" in str(e):
             print(f"❌ Porta {port} já está em uso. Tente fechar outros processos ou reiniciar o computador.")

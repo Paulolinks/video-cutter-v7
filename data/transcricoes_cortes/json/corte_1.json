@@ -1,0 +1,113 @@
+{
+  "sentences": [
+    {
+      "start": 0,
+      "end": 5.0,
+      "text": "You need to be good at pattern recognition and that's what gets somebody strong at anything.",
+      "text_en": "You need to be good at pattern recognition and that's what gets somebody strong at anything.",
+      "text_pt": "Você precisa ser bom em reconhecimento de padrões e é isso que torna alguém forte em qualquer coisa",
+      "duration": 5.0
+    },
+    {
+      "start": 5.0,
+      "end": 9.0,
+      "text": "I mean, look at, you know, why is Amazon doing so well?",
+      "text_en": "I mean, look at, you know, why is Amazon doing so well?",
+      "text_pt": "Quero dizer, olhe, você sabe, por que a Amazon está indo tão bem",
+      "duration": 4.0
+    },
+    {
+      "start": 9.0,
+      "end": 13.0,
+      "text": "You realize one pattern was valued over anything else, convenience, right?",
+      "text_en": "You realize one pattern was valued over anything else, convenience, right?",
+      "text_pt": "Você percebe que um padrão foi valorizado sobre qualquer outra coisa, conveniência, certo",
+      "duration": 4.0
+    },
+    {
+      "start": 13.0,
+      "end": 16.0,
+      "text": "If you look at Tom Brady friend of mine, he's got pattern recognition",
+      "text_en": "If you look at Tom Brady friend of mine, he's got pattern recognition",
+      "text_pt": "Se você olhar para Tom Brady, amigo meu, ele tem reconhecimento de padrões como ninguém aos 43 anos, ele é capaz de fazer coisas que ninguém sonho poderia ser feito",
+      "duration": 3.0
+    },
+    {
+      "start": 16.0,
+      "end": 19.0,
+      "text": "like nobody else at 43 years old, he's able to do things no one dream could be done.",
+      "text_en": "like nobody else at 43 years old, he's able to do things no one dream could be done.",
+      "text_pt": "Ele tem mais anéis de bola super do que qualquer equipe",
+      "duration": 3.0
+    },
+    {
+      "start": 19.0,
+      "end": 22.0,
+      "text": "He's got more super ball rings than any team.",
+      "text_en": "He's got more super ball rings than any team.",
+      "text_pt": "Veja, o que eles vêem que nenhum de nós vê",
+      "duration": 3.0
+    },
+    {
+      "start": 22.0,
+      "end": 25.0,
+      "text": "See, what do they see that none of us see?",
+      "text_en": "See, what do they see that none of us see?",
+      "text_pt": "Qual é o padrão",
+      "duration": 3.0
+    },
+    {
+      "start": 25.0,
+      "end": 26.0,
+      "text": "What's the pattern?",
+      "text_en": "What's the pattern?",
+      "text_pt": "Então você precisa aprender a utilização de padrões",
+      "duration": 1.0
+    },
+    {
+      "start": 26.0,
+      "end": 28.0,
+      "text": "Then you got to learn pattern utilization.",
+      "text_en": "Then you got to learn pattern utilization.",
+      "text_pt": "Uma coisa é ver, não é nada para usá -lo",
+      "duration": 2.0
+    },
+    {
+      "start": 28.0,
+      "end": 30.0,
+      "text": "It's one thing to see, it's nothing to use it.",
+      "text_en": "It's one thing to see, it's nothing to use it.",
+      "text_pt": "E então, se você é bom depois de um tempo, poderá criar padrões",
+      "duration": 2.0
+    },
+    {
+      "start": 30.0,
+      "end": 33.0,
+      "text": "And then if you're good after a while, you get to pattern creation.",
+      "text_en": "And then if you're good after a while, you get to pattern creation.",
+      "text_pt": "É como se você aprender a tocar piano, a maioria das pessoas toca música de outras pessoas, e há um ponto que você aprendeu tanto que você pode criar",
+      "duration": 3.0
+    },
+    {
+      "start": 33.0,
+      "end": 36.0,
+      "text": "It's like if you learn to play the piano, most people play other people's music,",
+      "text_en": "It's like if you learn to play the piano, most people play other people's music,",
+      "text_pt": "It's like if you learn to play the piano, most people play other people's music,",
+      "duration": 3.0
+    },
+    {
+      "start": 36.0,
+      "end": 40.0,
+      "text": "and there's a point you've learned so much that you're able to create.",
+      "text_en": "and there's a point you've learned so much that you're able to create.",
+      "text_pt": "and there's a point you've learned so much that you're able to create.",
+      "duration": 4.0
+    }
+  ],
+  "metadata": {
+    "source_file": "data\\transcricoes_cortes\\corte_1.txt",
+    "total_sentences": 13,
+    "converted_for": "xtts_v2"
+  }
+}

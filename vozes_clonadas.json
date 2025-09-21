@@ -1,0 +1,14 @@
+{
+  "vozes": [
+    {
+      "nome": "Minha Voz - Paulolinks",
+      "arquivo": "temp_voice_cloning\\user_voice_1757726707.wav",
+      "ativo": true
+    }
+  ],
+  "Minha Voz - Paulo": {
+    "path": "temp_voice_cloning/user_voice_1758298006082.wav",
+    "data_criacao": 1758298006.0858867,
+    "tipo": "clonada"
+  }
+}

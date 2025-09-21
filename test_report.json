@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-09-18T16:15:14.347634",
+  "total_tests": 6,
+  "passed_tests": 6,
+  "results": {
+    "Clonagem de Voz": {
+      "success": true,
+      "message": "✅ Clonagem funcionando (áudios diferentes: 15696 vs 20592 bytes)"
+    },
+    "Sincronização Whisper": {
+      "success": true,
+      "message": "✅ Sincronização Whisper funcionando"
+    },
+    "Processamento Cortes": {
+      "success": true,
+      "message": "✅ Processamento funcionando (6 transcrições)"
+    },
+    "Dublagem": {
+      "success": true,
+      "message": "✅ Dublagem funcionando (3 vídeos dublados)"
+    },
+    "Seleção de Voz": {
+      "success": true,
+      "message": "✅ Seleção de voz funcionando (2 vozes registradas)"
+    },
+    "Dados Whisper": {
+      "success": true,
+      "message": "✅ Dados Whisper salvos corretamente"
+    }
+  }
+}

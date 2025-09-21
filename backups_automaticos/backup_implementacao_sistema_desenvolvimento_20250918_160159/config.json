@@ -1,0 +1,15 @@
+{
+  "fonte": "Times New Roman",
+  "cor": "#59bff3",
+  "tamanho": 60,
+  "altura": 1280,
+  "largura": 720,
+  "posicao": 0.2,
+  "tempo_min": 15,
+  "tempo_max": 60,
+  "automatico": true,
+  "tema": "",
+  "rede_social": "instagram",
+  "modo_video": "letterbox",
+  "qualidade_video": "alta"
+}

@@ -1,0 +1,137 @@
+{
+  "sentences": [
+    {
+      "start": 0,
+      "end": 6.0,
+      "text": "you'll never be able to control. You can influence, but you can't control it.",
+      "text_en": "you'll never be able to control. You can influence, but you can't control it.",
+      "text_pt": "Você nunca será capaz de controlar",
+      "duration": 6.0
+    },
+    {
+      "start": 6.0,
+      "end": 9.0,
+      "text": "This, your mind, your emotions, your body.",
+      "text_en": "This, your mind, your emotions, your body.",
+      "text_pt": "Você pode influenciar, mas não pode controlá -lo",
+      "duration": 3.0
+    },
+    {
+      "start": 9.0,
+      "end": 15.0,
+      "text": "You have 100% control over what you do with these things and that's where the game is won.",
+      "text_en": "You have 100% control over what you do with these things and that's where the game is won.",
+      "text_pt": "Isso, sua mente, suas emoções, seu corpo",
+      "duration": 6.0
+    },
+    {
+      "start": 15.0,
+      "end": 18.0,
+      "text": "When the inner game, then you win the outer game.",
+      "text_en": "When the inner game, then you win the outer game.",
+      "text_pt": "Você tem 100% de controle sobre o que faz com essas coisas e é aí que o jogo é vencido",
+      "duration": 3.0
+    },
+    {
+      "start": 18.0,
+      "end": 22.0,
+      "text": "But a lot of people spent their life trying to win the outer game and they won and they're miserable.",
+      "text_en": "But a lot of people spent their life trying to win the outer game and they won and they're miserable.",
+      "text_pt": "Quando o jogo interno, então você ganha o jogo externo",
+      "duration": 4.0
+    },
+    {
+      "start": 22.0,
+      "end": 26.0,
+      "text": "Someone can tell your whole life you're a piece of crap but you can say screw you,",
+      "text_en": "Someone can tell your whole life you're a piece of crap but you can say screw you,",
+      "text_pt": "Mas muitas pessoas passaram a vida tentando vencer o jogo externo e venceram e estão infelizes",
+      "duration": 4.0
+    },
+    {
+      "start": 26.0,
+      "end": 28.0,
+      "text": "read between the lines and make your life work.",
+      "text_en": "read between the lines and make your life work.",
+      "text_pt": "Alguém pode dizer a toda a sua vida que você é um pedaço de porcaria, mas você pode dizer que você se ferra, leia nas entrelinhas e faça sua vida funcionar",
+      "duration": 2.0
+    },
+    {
+      "start": 28.0,
+      "end": 32.0,
+      "text": "Someone tell your whole life you're beautiful, you're intelligent, you're the smartest person in the world",
+      "text_en": "Someone tell your whole life you're beautiful, you're intelligent, you're the smartest person in the world",
+      "text_pt": "Alguém diz a toda a sua vida que você é linda, você é inteligente, você é a pessoa mais inteligente do mundo e não acredita",
+      "duration": 4.0
+    },
+    {
+      "start": 32.0,
+      "end": 36.0,
+      "text": "and you don't believe it. Because self-esteem doesn't come from what people say about you,",
+      "text_en": "and you don't believe it. Because self-esteem doesn't come from what people say about you,",
+      "text_pt": "Como a auto-estima não vem do que as pessoas dizem sobre você, a auto-estima é conquistada dentro de si",
+      "duration": 4.0
+    },
+    {
+      "start": 36.0,
+      "end": 38.0,
+      "text": "self-esteem is earned within yourself.",
+      "text_en": "self-esteem is earned within yourself.",
+      "text_pt": "É um vapor que só vem fazendo coisas que são incrivelmente difíceis e, em seguida, seu cérebro vai, é isso que eu sou",
+      "duration": 2.0
+    },
+    {
+      "start": 38.0,
+      "end": 43.0,
+      "text": "It's a steam for yourself which only comes by doing things that are incredibly difficult",
+      "text_en": "It's a steam for yourself which only comes by doing things that are incredibly difficult",
+      "text_pt": "Você realmente precisa descobrir o que é feito e ninguém sabe no começo",
+      "duration": 5.0
+    },
+    {
+      "start": 43.0,
+      "end": 46.0,
+      "text": "and then your brain goes, this is who I am.",
+      "text_en": "and then your brain goes, this is who I am.",
+      "text_pt": "Então você começa onde está e faz o que está à sua frente, faz o que vem a seguir e depois continua crescendo até começar a descobrir, ei, essa é a minha verdadeira paixão",
+      "duration": 3.0
+    },
+    {
+      "start": 46.0,
+      "end": 51.0,
+      "text": "You really got to figure out what you're made for and nobody knows in the beginning.",
+      "text_en": "You really got to figure out what you're made for and nobody knows in the beginning.",
+      "text_pt": "You really got to figure out what you're made for and nobody knows in the beginning.",
+      "duration": 5.0
+    },
+    {
+      "start": 51.0,
+      "end": 54.0,
+      "text": "So you start where you are and you do what's in front of you, you do what's next",
+      "text_en": "So you start where you are and you do what's in front of you, you do what's next",
+      "text_pt": "So you start where you are and you do what's in front of you, you do what's next",
+      "duration": 3.0
+    },
+    {
+      "start": 54.0,
+      "end": 56.0,
+      "text": "and then you keep growing until you start to discover,",
+      "text_en": "and then you keep growing until you start to discover,",
+      "text_pt": "and then you keep growing until you start to discover,",
+      "duration": 2.0
+    },
+    {
+      "start": 56.0,
+      "end": 59.0,
+      "text": "hey, this is my real passion.",
+      "text_en": "hey, this is my real passion.",
+      "text_pt": "hey, this is my real passion.",
+      "duration": 3.0
+    }
+  ],
+  "metadata": {
+    "source_file": "data\\transcricoes_cortes\\corte_5.txt",
+    "total_sentences": 16,
+    "converted_for": "xtts_v2"
+  }
+}

@@ -1,0 +1,208 @@
+TRANSCRIÇÃO DO CORTE: corte_1.mp4
+INÍCIO: 177.00s
+FIM: 217.00s
+DURAÇÃO: 40.00s
+
+TEXTO:
+You need to be good at pattern recognition and that's what gets somebody strong at anything.  I mean look at, you know, why is Amazon doing so well?  He realized one pattern was valued over anything else, convenience, right?  If you look at Tom Brady friend of mine, he's got pattern recognition like nobody else at 43 years old.  He's able to do things no one dream could be done.  He's got more Super Bowl rings than any team.  See what do they see that none of us see?  What's the pattern?  Then you gotta learn pattern utilization.  It's one thing to see, it's nothing to use it.  And then if you're good after a while, you get to pattern creations.  Like if you learn to play the piano, most people play other people's music and there's a point you've learned so much that you're able to create.
+
+TEXTO_TRADUZIDO:
+Você precisa ser bom em reconhecimento de padrões e é isso que torna alguém forte em qualquer coisa.  Quero dizer, olhe, você sabe, por que a Amazon está indo tão bem?  Ele percebeu que um padrão era valorizado sobre qualquer outra coisa, conveniência, certo?  Se você olhar para Tom Brady, amigo meu, ele tem reconhecimento de padrões como ninguém aos 43 anos.  Ele é capaz de fazer coisas que ninguém sonho poderia ser feito.  Ele tem mais anéis do Super Bowl do que qualquer equipe.  Veja o que eles vêem que nenhum de nós vê?  Qual é o padrão?  Então você precisa aprender a utilização de padrões.  Uma coisa é ver, não é nada para usá -lo.  E então, se você é bom depois de um tempo, poderá criar criações.  Como se você aprender a tocar piano, a maioria das pessoas toca música de outras pessoas e há um ponto que você aprendeu tanto que é capaz de criar.
+
+TIMESTAMPS_DETALHADOS:
+[
+  {
+    "indice": 1,
+    "inicio": 0,
+    "fim": 5.0,
+    "duracao": 5.0,
+    "texto": "You need to be good at pattern recognition and that's what gets somebody strong at anything."
+  },
+  {
+    "indice": 2,
+    "inicio": 5.0,
+    "fim": 9.0,
+    "duracao": 4.0,
+    "texto": "I mean look at, you know, why is Amazon doing so well?"
+  },
+  {
+    "indice": 3,
+    "inicio": 9.0,
+    "fim": 13.0,
+    "duracao": 4.0,
+    "texto": "He realized one pattern was valued over anything else, convenience, right?"
+  },
+  {
+    "indice": 4,
+    "inicio": 13.0,
+    "fim": 17.0,
+    "duracao": 4.0,
+    "texto": "If you look at Tom Brady friend of mine, he's got pattern recognition like nobody else at 43 years old."
+  },
+  {
+    "indice": 5,
+    "inicio": 17.0,
+    "fim": 19.0,
+    "duracao": 2.0,
+    "texto": "He's able to do things no one dream could be done."
+  },
+  {
+    "indice": 6,
+    "inicio": 19.0,
+    "fim": 22.0,
+    "duracao": 3.0,
+    "texto": "He's got more Super Bowl rings than any team."
+  },
+  {
+    "indice": 7,
+    "inicio": 22.0,
+    "fim": 25.0,
+    "duracao": 3.0,
+    "texto": "See what do they see that none of us see?"
+  },
+  {
+    "indice": 8,
+    "inicio": 25.0,
+    "fim": 26.0,
+    "duracao": 1.0,
+    "texto": "What's the pattern?"
+  },
+  {
+    "indice": 9,
+    "inicio": 26.0,
+    "fim": 28.0,
+    "duracao": 2.0,
+    "texto": "Then you gotta learn pattern utilization."
+  },
+  {
+    "indice": 10,
+    "inicio": 28.0,
+    "fim": 30.0,
+    "duracao": 2.0,
+    "texto": "It's one thing to see, it's nothing to use it."
+  },
+  {
+    "indice": 11,
+    "inicio": 30.0,
+    "fim": 33.0,
+    "duracao": 3.0,
+    "texto": "And then if you're good after a while, you get to pattern creations."
+  },
+  {
+    "indice": 12,
+    "inicio": 33.0,
+    "fim": 40.0,
+    "duracao": 7.0,
+    "texto": "Like if you learn to play the piano, most people play other people's music and there's a point you've learned so much that you're able to create."
+  }
+]
+
+PAUSAS_DETECTADAS:
+[]
+
+SEGMENTOS_LEGENDA:
+[
+  {
+    "indice": 1,
+    "inicio": 0,
+    "fim": 5.0,
+    "duracao": 5.0,
+    "texto_original": "You need to be good at pattern recognition and that's what gets somebody strong at anything.",
+    "texto_traduzido": "Você precisa ser bom em reconhecimento de padrões e é isso que torna alguém forte em qualquer coisa"
+  },
+  {
+    "indice": 2,
+    "inicio": 5.0,
+    "fim": 9.0,
+    "duracao": 4.0,
+    "texto_original": "I mean look at, you know, why is Amazon doing so well?",
+    "texto_traduzido": "Quero dizer, olhe, você sabe, por que a Amazon está indo tão bem"
+  },
+  {
+    "indice": 3,
+    "inicio": 9.0,
+    "fim": 13.0,
+    "duracao": 4.0,
+    "texto_original": "He realized one pattern was valued over anything else, convenience, right?",
+    "texto_traduzido": "Ele percebeu que um padrão era valorizado sobre qualquer outra coisa, conveniência, certo"
+  },
+  {
+    "indice": 4,
+    "inicio": 13.0,
+    "fim": 17.0,
+    "duracao": 4.0,
+    "texto_original": "If you look at Tom Brady friend of mine, he's got pattern recognition like nobody else at 43 years old.",
+    "texto_traduzido": "Se você olhar para Tom Brady, amigo meu, ele tem reconhecimento de padrões como ninguém aos 43 anos"
+  },
+  {
+    "indice": 5,
+    "inicio": 17.0,
+    "fim": 19.0,
+    "duracao": 2.0,
+    "texto_original": "He's able to do things no one dream could be done.",
+    "texto_traduzido": "Ele é capaz de fazer coisas que ninguém sonho poderia ser feito"
+  },
+  {
+    "indice": 6,
+    "inicio": 19.0,
+    "fim": 22.0,
+    "duracao": 3.0,
+    "texto_original": "He's got more Super Bowl rings than any team.",
+    "texto_traduzido": "Ele tem mais anéis do Super Bowl do que qualquer equipe"
+  },
+  {
+    "indice": 7,
+    "inicio": 22.0,
+    "fim": 25.0,
+    "duracao": 3.0,
+    "texto_original": "See what do they see that none of us see?",
+    "texto_traduzido": "Veja o que eles vêem que nenhum de nós vê"
+  },
+  {
+    "indice": 8,
+    "inicio": 25.0,
+    "fim": 26.0,
+    "duracao": 1.0,
+    "texto_original": "What's the pattern?",
+    "texto_traduzido": "Qual é o padrão"
+  },
+  {
+    "indice": 9,
+    "inicio": 26.0,
+    "fim": 28.0,
+    "duracao": 2.0,
+    "texto_original": "Then you gotta learn pattern utilization.",
+    "texto_traduzido": "Então você precisa aprender a utilização de padrões"
+  },
+  {
+    "indice": 10,
+    "inicio": 28.0,
+    "fim": 30.0,
+    "duracao": 2.0,
+    "texto_original": "It's one thing to see, it's nothing to use it.",
+    "texto_traduzido": "Uma coisa é ver, não é nada para usá -lo"
+  },
+  {
+    "indice": 11,
+    "inicio": 30.0,
+    "fim": 33.0,
+    "duracao": 3.0,
+    "texto_original": "And then if you're good after a while, you get to pattern creations.",
+    "texto_traduzido": "E então, se você é bom depois de um tempo, poderá criar criações"
+  },
+  {
+    "indice": 12,
+    "inicio": 33.0,
+    "fim": 40.0,
+    "duracao": 7.0,
+    "texto_original": "Like if you learn to play the piano, most people play other people's music and there's a point you've learned so much that you're able to create.",
+    "texto_traduzido": "Como se você aprender a tocar piano, a maioria das pessoas toca música de outras pessoas e há um ponto que você aprendeu tanto que é capaz de criar"
+  }
+]
+
+METADADOS_DUBLAGEM:
+- Timestamps extraídos do Whisper: 12 segmentos
+- Pausas detectadas: 0 pausas
+- Segmentos de legenda: 12 segmentos
+- Fonte dos dados: Whisper (mais preciso que FFmpeg)
+- Status: Pronto para dublagem otimizada

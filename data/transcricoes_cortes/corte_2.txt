@@ -1,0 +1,238 @@
+TRANSCRIÇÃO DO CORTE: corte_2.mp4
+INÍCIO: 0.00s
+FIM: 60.00s
+DURAÇÃO: 60.00s
+
+TEXTO:
+Success without fulfillment is the ultimate failure.  Like success is getting what you want.  Fulfillment is living what you're made for.  Fulfillment and success, they're not even the same universe.  People ask me all the time, what does it take to be happy?  And I always tell them it's really simple. One word, progress.  Progress equals happiness. If you keep growing,  you're going to feel alive and if you keep growing, you're going to have more to give.  It doesn't matter how many statues, Oscars, they give you or Emmys  or how much money you have in the bank. We've all seen people  have all those things and I get the phone call because they're depressed or  somebody commits suicide in that area. It's really an inner game  and I think that's what's missing for us today.  Everybody's focusing on the outside world and how there's a lot of things in the outside world, you'll never be able to control.
+
+TEXTO_TRADUZIDO:
+O sucesso sem cumprimento é o fracasso final.  Como o sucesso é conseguir o que você deseja.  A realização está vivendo para o que você é feito.  Realização e sucesso, eles nem são o mesmo universo.  As pessoas me perguntam o tempo todo, o que é preciso para ser feliz?  E eu sempre digo a eles que é realmente simples. Uma palavra, progresso.  O progresso é igual à felicidade. Se você continuar crescendo, você se sentirá vivo e se continuar crescendo, terá mais para dar.  Não importa quantas estátuas, Oscars, elas dão a você ou Emmys ou quanto dinheiro você tem no banco. Todos nós vimos pessoas terem todas essas coisas e eu recebo o telefonema porque elas estão deprimidas ou alguém comete suicídio nessa área. É realmente um jogo interno e acho que é isso que está faltando para nós hoje.  Todo mundo está se concentrando no mundo exterior e em como há muitas coisas no mundo exterior, você nunca poderá controlar.
+
+TIMESTAMPS_DETALHADOS:
+[
+  {
+    "indice": 1,
+    "inicio": 0,
+    "fim": 4.0,
+    "duracao": 4.0,
+    "texto": "Success without fulfillment is the ultimate failure."
+  },
+  {
+    "indice": 2,
+    "inicio": 4.0,
+    "fim": 8.0,
+    "duracao": 4.0,
+    "texto": "Like success is getting what you want."
+  },
+  {
+    "indice": 3,
+    "inicio": 8.0,
+    "fim": 12.0,
+    "duracao": 4.0,
+    "texto": "Fulfillment is living what you're made for."
+  },
+  {
+    "indice": 4,
+    "inicio": 12.0,
+    "fim": 16.0,
+    "duracao": 4.0,
+    "texto": "Fulfillment and success, they're not even the same universe."
+  },
+  {
+    "indice": 5,
+    "inicio": 16.0,
+    "fim": 20.0,
+    "duracao": 4.0,
+    "texto": "People ask me all the time, what does it take to be happy?"
+  },
+  {
+    "indice": 6,
+    "inicio": 20.0,
+    "fim": 24.0,
+    "duracao": 4.0,
+    "texto": "And I always tell them it's really simple. One word, progress."
+  },
+  {
+    "indice": 7,
+    "inicio": 24.0,
+    "fim": 28.0,
+    "duracao": 4.0,
+    "texto": "Progress equals happiness. If you keep growing,"
+  },
+  {
+    "indice": 8,
+    "inicio": 28.0,
+    "fim": 34.0,
+    "duracao": 6.0,
+    "texto": "you're going to feel alive and if you keep growing, you're going to have more to give."
+  },
+  {
+    "indice": 9,
+    "inicio": 34.0,
+    "fim": 38.0,
+    "duracao": 4.0,
+    "texto": "It doesn't matter how many statues, Oscars, they give you or Emmys"
+  },
+  {
+    "indice": 10,
+    "inicio": 38.0,
+    "fim": 42.0,
+    "duracao": 4.0,
+    "texto": "or how much money you have in the bank. We've all seen people"
+  },
+  {
+    "indice": 11,
+    "inicio": 42.0,
+    "fim": 46.0,
+    "duracao": 4.0,
+    "texto": "have all those things and I get the phone call because they're depressed or"
+  },
+  {
+    "indice": 12,
+    "inicio": 46.0,
+    "fim": 50.0,
+    "duracao": 4.0,
+    "texto": "somebody commits suicide in that area. It's really an inner game"
+  },
+  {
+    "indice": 13,
+    "inicio": 50.0,
+    "fim": 56.0,
+    "duracao": 6.0,
+    "texto": "and I think that's what's missing for us today."
+  },
+  {
+    "indice": 14,
+    "inicio": 56.0,
+    "fim": 60.0,
+    "duracao": 4.0,
+    "texto": "Everybody's focusing on the outside world and how there's a lot of things in the outside world, you'll never be able to control."
+  }
+]
+
+PAUSAS_DETECTADAS:
+[]
+
+SEGMENTOS_LEGENDA:
+[
+  {
+    "indice": 1,
+    "inicio": 0,
+    "fim": 4.0,
+    "duracao": 4.0,
+    "texto_original": "Success without fulfillment is the ultimate failure.",
+    "texto_traduzido": "O sucesso sem cumprimento é o fracasso final"
+  },
+  {
+    "indice": 2,
+    "inicio": 4.0,
+    "fim": 8.0,
+    "duracao": 4.0,
+    "texto_original": "Like success is getting what you want.",
+    "texto_traduzido": "Como o sucesso é conseguir o que você deseja"
+  },
+  {
+    "indice": 3,
+    "inicio": 8.0,
+    "fim": 12.0,
+    "duracao": 4.0,
+    "texto_original": "Fulfillment is living what you're made for.",
+    "texto_traduzido": "A realização está vivendo para o que você é feito"
+  },
+  {
+    "indice": 4,
+    "inicio": 12.0,
+    "fim": 16.0,
+    "duracao": 4.0,
+    "texto_original": "Fulfillment and success, they're not even the same universe.",
+    "texto_traduzido": "Realização e sucesso, eles nem são o mesmo universo"
+  },
+  {
+    "indice": 5,
+    "inicio": 16.0,
+    "fim": 20.0,
+    "duracao": 4.0,
+    "texto_original": "People ask me all the time, what does it take to be happy?",
+    "texto_traduzido": "As pessoas me perguntam o tempo todo, o que é preciso para ser feliz"
+  },
+  {
+    "indice": 6,
+    "inicio": 20.0,
+    "fim": 24.0,
+    "duracao": 4.0,
+    "texto_original": "And I always tell them it's really simple. One word, progress.",
+    "texto_traduzido": "E eu sempre digo a eles que é realmente simples"
+  },
+  {
+    "indice": 7,
+    "inicio": 24.0,
+    "fim": 28.0,
+    "duracao": 4.0,
+    "texto_original": "Progress equals happiness. If you keep growing,",
+    "texto_traduzido": "Uma palavra, progresso"
+  },
+  {
+    "indice": 8,
+    "inicio": 28.0,
+    "fim": 34.0,
+    "duracao": 6.0,
+    "texto_original": "you're going to feel alive and if you keep growing, you're going to have more to give.",
+    "texto_traduzido": "O progresso é igual à felicidade"
+  },
+  {
+    "indice": 9,
+    "inicio": 34.0,
+    "fim": 38.0,
+    "duracao": 4.0,
+    "texto_original": "It doesn't matter how many statues, Oscars, they give you or Emmys",
+    "texto_traduzido": "Se você continuar crescendo, você se sentirá vivo e se continuar crescendo, terá mais para dar"
+  },
+  {
+    "indice": 10,
+    "inicio": 38.0,
+    "fim": 42.0,
+    "duracao": 4.0,
+    "texto_original": "or how much money you have in the bank. We've all seen people",
+    "texto_traduzido": "Não importa quantas estátuas, Oscars, elas dão a você ou Emmys ou quanto dinheiro você tem no banco"
+  },
+  {
+    "indice": 11,
+    "inicio": 42.0,
+    "fim": 46.0,
+    "duracao": 4.0,
+    "texto_original": "have all those things and I get the phone call because they're depressed or",
+    "texto_traduzido": "Todos nós vimos pessoas terem todas essas coisas e eu recebo o telefonema porque elas estão deprimidas ou alguém comete suicídio nessa área"
+  },
+  {
+    "indice": 12,
+    "inicio": 46.0,
+    "fim": 50.0,
+    "duracao": 4.0,
+    "texto_original": "somebody commits suicide in that area. It's really an inner game",
+    "texto_traduzido": "É realmente um jogo interno e acho que é isso que está faltando para nós hoje"
+  },
+  {
+    "indice": 13,
+    "inicio": 50.0,
+    "fim": 56.0,
+    "duracao": 6.0,
+    "texto_original": "and I think that's what's missing for us today.",
+    "texto_traduzido": "Todo mundo está se concentrando no mundo exterior e em como há muitas coisas no mundo exterior, você nunca poderá controlar"
+  },
+  {
+    "indice": 14,
+    "inicio": 56.0,
+    "fim": 60.0,
+    "duracao": 4.0,
+    "texto_original": "Everybody's focusing on the outside world and how there's a lot of things in the outside world, you'll never be able to control.",
+    "texto_traduzido": "Everybody's focusing on the outside world and how there's a lot of things in the outside world, you'll never be able to control."
+  }
+]
+
+METADADOS_DUBLAGEM:
+- Timestamps extraídos do Whisper: 14 segmentos
+- Pausas detectadas: 0 pausas
+- Segmentos de legenda: 14 segmentos
+- Fonte dos dados: Whisper (mais preciso que FFmpeg)
+- Status: Pronto para dublagem otimizada

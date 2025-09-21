@@ -1,0 +1,113 @@
+{
+  "sentences": [
+    {
+      "start": 0,
+      "end": 4.0,
+      "text": "Success without fulfillment is the ultimate failure.",
+      "text_en": "Success without fulfillment is the ultimate failure.",
+      "text_pt": "O sucesso sem cumprimento é o fracasso final",
+      "duration": 4.0
+    },
+    {
+      "start": 4.0,
+      "end": 8.0,
+      "text": "Like success is getting what you want.",
+      "text_en": "Like success is getting what you want.",
+      "text_pt": "Como o sucesso é conseguir o que você deseja",
+      "duration": 4.0
+    },
+    {
+      "start": 8.0,
+      "end": 12.0,
+      "text": "Fulfillment is living what you're made for.",
+      "text_en": "Fulfillment is living what you're made for.",
+      "text_pt": "A realização está vivendo para o que você é feito",
+      "duration": 4.0
+    },
+    {
+      "start": 12.0,
+      "end": 16.0,
+      "text": "Fulfillment and success, they're not even the same universe.",
+      "text_en": "Fulfillment and success, they're not even the same universe.",
+      "text_pt": "Realização e sucesso, eles nem são o mesmo universo",
+      "duration": 4.0
+    },
+    {
+      "start": 16.0,
+      "end": 20.0,
+      "text": "People ask me all the time, what does it take to be happy?",
+      "text_en": "People ask me all the time, what does it take to be happy?",
+      "text_pt": "As pessoas me perguntam o tempo todo, o que é preciso para ser feliz",
+      "duration": 4.0
+    },
+    {
+      "start": 20.0,
+      "end": 24.0,
+      "text": "And I always tell them it's really simple. One word, progress.",
+      "text_en": "And I always tell them it's really simple. One word, progress.",
+      "text_pt": "E eu sempre digo a eles que é realmente simples",
+      "duration": 4.0
+    },
+    {
+      "start": 24.0,
+      "end": 28.0,
+      "text": "Progress equals happiness. If you keep growing,",
+      "text_en": "Progress equals happiness. If you keep growing,",
+      "text_pt": "Uma palavra, progresso",
+      "duration": 4.0
+    },
+    {
+      "start": 28.0,
+      "end": 34.0,
+      "text": "you're going to feel alive. And if you keep growing, you're going to have more to give.",
+      "text_en": "you're going to feel alive. And if you keep growing, you're going to have more to give.",
+      "text_pt": "O progresso é igual à felicidade",
+      "duration": 6.0
+    },
+    {
+      "start": 34.0,
+      "end": 38.0,
+      "text": "It doesn't matter how many statues, Oscars, they give you or Emmys",
+      "text_en": "It doesn't matter how many statues, Oscars, they give you or Emmys",
+      "text_pt": "Se você continuar crescendo, você se sentirá vivo",
+      "duration": 4.0
+    },
+    {
+      "start": 38.0,
+      "end": 43.0,
+      "text": "or how much money you have in the bank. We've all seen people have all those things",
+      "text_en": "or how much money you have in the bank. We've all seen people have all those things",
+      "text_pt": "E se você continuar crescendo, terá mais a dar",
+      "duration": 5.0
+    },
+    {
+      "start": 43.0,
+      "end": 49.0,
+      "text": "and I get the phone call because they're depressed or somebody commits suicide in that area.",
+      "text_en": "and I get the phone call because they're depressed or somebody commits suicide in that area.",
+      "text_pt": "Não importa quantas estátuas, Oscars, elas dão a você ou Emmys ou quanto dinheiro você tem no banco",
+      "duration": 6.0
+    },
+    {
+      "start": 49.0,
+      "end": 55.0,
+      "text": "It's really an inner game and I think that's what's missing for us today.",
+      "text_en": "It's really an inner game and I think that's what's missing for us today.",
+      "text_pt": "Todos nós vimos pessoas terem todas essas coisas e eu recebo o telefonema porque elas estão deprimidas ou alguém comete suicídio nessa área",
+      "duration": 6.0
+    },
+    {
+      "start": 56.0,
+      "end": 59.0,
+      "text": "Everybody's focusing on the outside world and how there's a lot of things in the outside world",
+      "text_en": "Everybody's focusing on the outside world and how there's a lot of things in the outside world",
+      "text_pt": "É realmente um jogo interno e acho que é isso que está faltando para nós hoje",
+      "duration": 3.0
+    }
+  ],
+  "metadata": {
+    "source_file": "data\\transcricoes_cortes\\corte_2.txt",
+    "total_sentences": 13,
+    "converted_for": "xtts_v2"
+  }
+}
