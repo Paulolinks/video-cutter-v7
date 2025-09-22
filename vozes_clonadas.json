@@ -1,6 +1,7 @@
 {
   "vozes": [
     {
+<<<<<<< HEAD
       "nome": "Minha Voz - Paulolinks",
       "arquivo": "temp_voice_cloning\\user_voice_1757726707.wav",
       "ativo": true
@@ -10,5 +11,25 @@
     "path": "temp_voice_cloning/user_voice_1758298006082.wav",
     "data_criacao": 1758298006.0858867,
     "tipo": "clonada"
+=======
+      "id": "clonada_Minha_Voz_Paulolinks",
+      "nome": "Minha Voz - Paulolinks", 
+      "descricao": "Voz clonada personalizada do Paulo Links",
+      "tipo": "coqui_tts",
+      "modelo": "tts_models/pt/cv/vits",
+      "arquivo_referencia": "temp_speaker_embeddings/paulo_links_voice.wav",
+      "ativo": true,
+      "configuracoes": {
+        "velocidade": 1.0,
+        "tom": 0.0,
+        "qualidade": "alta"
+      }
+    }
+  ],
+  "configuracao_global": {
+    "diretorio_modelos": "checkpoints/",
+    "diretorio_referencias": "temp_speaker_embeddings/",
+    "fallback_voice": "pt-BR-ValerioNeural"
+>>>>>>> 100d948621266ee6c109edef866c7106234b6452
   }
 }
