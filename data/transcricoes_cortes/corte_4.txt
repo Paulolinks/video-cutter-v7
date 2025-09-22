@@ -1,113 +1,85 @@
 TRANSCRIÇÃO DO CORTE: corte_4.mp4
-INÍCIO: 60.00s
-FIM: 117.00s
-DURAÇÃO: 57.00s
+INÍCIO: 797.24s
+FIM: 818.24s
+DURAÇÃO: 21.00s
 
 TEXTO:
-You can influence, but you can't control it.  This, your mind, your emotions, your body,  you have 100% control over what you do with these things and that's where the game is won.  When the inner game, then you win the outer game. But a lot of people spent their life trying to win the outer game,  they won and they're miserable.  Someone can tell you your whole life, you're a piece of crap,  but you can say screw you, read between the lines and make your life work.  Someone tell you your whole life, you're beautiful, you're intelligent, you're the smartest person in the world and you don't believe it.  Because self-esteem doesn't come from what people say about you. Self-esteem is earned within yourself.  It's a steam for yourself which only comes by doing things that are incredibly difficult and then your brain goes,  this is who I am.  You really got to figure out what you're made for and nobody knows in the beginning.  So you start where you are and you do what's in front of you, you do what's next,  then you keep growing until you start to discover, hey, this is my real passion.
+So when people ask me, E.T.,  why you get up at 3 o'clock in the morning?  Why are you putting videos up every day at 3 o'clock in the morning on Instagram?  Number one, because I want to be the best that ever done it.  Like, I honor my craft.  I want Dr. Martin Luther King to look at me and go,  that's it, kid.  I want Malcolm X to look at me and go, that's it, kid.  Just like you got the Hall of Fame and basketball,  I want to be the Hall of Fame and speak it.
 
 TEXTO_TRADUZIDO:
-Você pode influenciar, mas não pode controlá -lo.  Isso, sua mente, suas emoções, seu corpo, você tem 100% de controle sobre o que faz com essas coisas e é aí que o jogo é vencido.  Quando o jogo interno, então você ganha o jogo externo. Mas muitas pessoas passaram a vida tentando vencer o jogo externo, venceram e estão infelizes.  Alguém pode lhe contar a vida inteira, você é um pedaço de porcaria, mas pode dizer que você se dane, leia nas entrelinhas e faça sua vida funcionar.  Alguém lhe diz toda a sua vida, você é linda, você é inteligente, você é a pessoa mais inteligente do mundo e não acredita.  Porque a auto-estima não vem do que as pessoas dizem sobre você. A auto-estima é conquistada dentro de si.  É um vapor que só vem fazendo coisas que são incrivelmente difíceis e, em seguida, seu cérebro vai, é isso que eu sou.  Você realmente precisa descobrir o que é feito e ninguém sabe no começo.  Então você começa onde está e faz o que está à sua frente, faz o que vem a seguir, então continua crescendo até começar a descobrir, ei, essa é a minha verdadeira paixão.
+Então, quando as pessoas me perguntam, E.T., por que você acorda às 3 horas da manhã?  Por que você está colocando vídeos todos os dias às 3 horas da manhã no Instagram?  Número um, porque eu quero ser o melhor que já o fez.  Tipo, eu honro meu ofício.  Eu quero que o Dr. Martin Luther King olhe para mim e vá, é isso, garoto.  Eu quero que Malcolm X olhe para mim e vá, é isso, garoto.  Assim como você conseguiu o Hall of Fame e Basketball, eu quero ser o Hall da Fama e falar.
 
 TIMESTAMPS_DETALHADOS:
 [
   {
     "indice": 1,
     "inicio": 0,
-    "fim": 4.0,
-    "duracao": 4.0,
-    "texto": "You can influence, but you can't control it."
+    "fim": 2.0,
+    "duracao": 2.0,
+    "texto": "So when people ask me, E.T.,"
   },
   {
     "indice": 2,
-    "inicio": 4.0,
-    "fim": 8.0,
-    "duracao": 4.0,
-    "texto": "This, your mind, your emotions, your body,"
+    "inicio": 2.0,
+    "fim": 4.0,
+    "duracao": 2.0,
+    "texto": "why you get up at 3 o'clock in the morning?"
   },
   {
     "indice": 3,
-    "inicio": 8.0,
-    "fim": 14.0,
-    "duracao": 6.0,
-    "texto": "you have 100% control over what you do with these things and that's where the game is won."
+    "inicio": 4.0,
+    "fim": 7.0,
+    "duracao": 3.0,
+    "texto": "Why are you putting videos up every day at 3 o'clock in the morning on Instagram?"
   },
   {
     "indice": 4,
-    "inicio": 14.0,
-    "fim": 18.0,
-    "duracao": 4.0,
-    "texto": "When the inner game, then you win the outer game. But a lot of people spent their life trying to win the outer game,"
+    "inicio": 7.0,
+    "fim": 10.0,
+    "duracao": 3.0,
+    "texto": "Number one, because I want to be the best that ever done it."
   },
   {
     "indice": 5,
-    "inicio": 18.0,
-    "fim": 20.0,
+    "inicio": 10.0,
+    "fim": 12.0,
     "duracao": 2.0,
-    "texto": "they won and they're miserable."
+    "texto": "Like, I honor my craft."
   },
   {
     "indice": 6,
-    "inicio": 20.0,
-    "fim": 23.0,
-    "duracao": 3.0,
-    "texto": "Someone can tell you your whole life, you're a piece of crap,"
+    "inicio": 12.0,
+    "fim": 14.0,
+    "duracao": 2.0,
+    "texto": "I want Dr. Martin Luther King to look at me and go,"
   },
   {
     "indice": 7,
-    "inicio": 23.0,
-    "fim": 27.0,
-    "duracao": 4.0,
-    "texto": "but you can say screw you, read between the lines and make your life work."
+    "inicio": 14.0,
+    "fim": 15.0,
+    "duracao": 1.0,
+    "texto": "that's it, kid."
   },
   {
     "indice": 8,
-    "inicio": 27.0,
-    "fim": 31.0,
-    "duracao": 4.0,
-    "texto": "Someone tell you your whole life, you're beautiful, you're intelligent, you're the smartest person in the world and you don't believe it."
+    "inicio": 15.0,
+    "fim": 17.0,
+    "duracao": 2.0,
+    "texto": "I want Malcolm X to look at me and go, that's it, kid."
   },
   {
     "indice": 9,
-    "inicio": 31.0,
-    "fim": 37.0,
-    "duracao": 6.0,
-    "texto": "Because self-esteem doesn't come from what people say about you. Self-esteem is earned within yourself."
+    "inicio": 17.0,
+    "fim": 19.0,
+    "duracao": 2.0,
+    "texto": "Just like you got the Hall of Fame and basketball,"
   },
   {
     "indice": 10,
-    "inicio": 37.0,
-    "fim": 43.0,
-    "duracao": 6.0,
-    "texto": "It's a steam for yourself which only comes by doing things that are incredibly difficult and then your brain goes,"
-  },
-  {
-    "indice": 11,
-    "inicio": 43.0,
-    "fim": 45.0,
+    "inicio": 19.0,
+    "fim": 21.0,
     "duracao": 2.0,
-    "texto": "this is who I am."
-  },
-  {
-    "indice": 12,
-    "inicio": 45.0,
-    "fim": 49.0,
-    "duracao": 4.0,
-    "texto": "You really got to figure out what you're made for and nobody knows in the beginning."
-  },
-  {
-    "indice": 13,
-    "inicio": 49.0,
-    "fim": 53.0,
-    "duracao": 4.0,
-    "texto": "So you start where you are and you do what's in front of you, you do what's next,"
-  },
-  {
-    "indice": 14,
-    "inicio": 53.0,
-    "fim": 57.0,
-    "duracao": 4.0,
-    "texto": "then you keep growing until you start to discover, hey, this is my real passion."
+    "texto": "I want to be the Hall of Fame and speak it."
   }
 ]
 
@@ -119,120 +91,88 @@ SEGMENTOS_LEGENDA:
   {
     "indice": 1,
     "inicio": 0,
-    "fim": 4.0,
-    "duracao": 4.0,
-    "texto_original": "You can influence, but you can't control it.",
-    "texto_traduzido": "Você pode influenciar, mas não pode controlá -lo"
+    "fim": 2.0,
+    "duracao": 2.0,
+    "texto_original": "So when people ask me, E.T.,",
+    "texto_traduzido": "Então, quando as pessoas me perguntam, E"
   },
   {
     "indice": 2,
-    "inicio": 4.0,
-    "fim": 8.0,
-    "duracao": 4.0,
-    "texto_original": "This, your mind, your emotions, your body,",
-    "texto_traduzido": "Isso, sua mente, suas emoções, seu corpo, você tem 100% de controle sobre o que faz com essas coisas e é aí que o jogo é vencido"
+    "inicio": 2.0,
+    "fim": 4.0,
+    "duracao": 2.0,
+    "texto_original": "why you get up at 3 o'clock in the morning?",
+    "texto_traduzido": "T"
   },
   {
     "indice": 3,
-    "inicio": 8.0,
-    "fim": 14.0,
-    "duracao": 6.0,
-    "texto_original": "you have 100% control over what you do with these things and that's where the game is won.",
-    "texto_traduzido": "Quando o jogo interno, então você ganha o jogo externo"
+    "inicio": 4.0,
+    "fim": 7.0,
+    "duracao": 3.0,
+    "texto_original": "Why are you putting videos up every day at 3 o'clock in the morning on Instagram?",
+    "texto_traduzido": ", por que você acorda às 3 horas da manhã"
   },
   {
     "indice": 4,
-    "inicio": 14.0,
-    "fim": 18.0,
-    "duracao": 4.0,
-    "texto_original": "When the inner game, then you win the outer game. But a lot of people spent their life trying to win the outer game,",
-    "texto_traduzido": "Mas muitas pessoas passaram a vida tentando vencer o jogo externo, venceram e estão infelizes"
+    "inicio": 7.0,
+    "fim": 10.0,
+    "duracao": 3.0,
+    "texto_original": "Number one, because I want to be the best that ever done it.",
+    "texto_traduzido": "Por que você está colocando vídeos todos os dias às 3 horas da manhã no Instagram"
   },
   {
     "indice": 5,
-    "inicio": 18.0,
-    "fim": 20.0,
+    "inicio": 10.0,
+    "fim": 12.0,
     "duracao": 2.0,
-    "texto_original": "they won and they're miserable.",
-    "texto_traduzido": "Alguém pode lhe contar a vida inteira, você é um pedaço de porcaria, mas pode dizer que você se dane, leia nas entrelinhas e faça sua vida funcionar"
+    "texto_original": "Like, I honor my craft.",
+    "texto_traduzido": "Número um, porque eu quero ser o melhor que já o fez"
   },
   {
     "indice": 6,
-    "inicio": 20.0,
-    "fim": 23.0,
-    "duracao": 3.0,
-    "texto_original": "Someone can tell you your whole life, you're a piece of crap,",
-    "texto_traduzido": "Alguém lhe diz toda a sua vida, você é linda, você é inteligente, você é a pessoa mais inteligente do mundo e não acredita"
+    "inicio": 12.0,
+    "fim": 14.0,
+    "duracao": 2.0,
+    "texto_original": "I want Dr. Martin Luther King to look at me and go,",
+    "texto_traduzido": "Tipo, eu honro meu ofício"
   },
   {
     "indice": 7,
-    "inicio": 23.0,
-    "fim": 27.0,
-    "duracao": 4.0,
-    "texto_original": "but you can say screw you, read between the lines and make your life work.",
-    "texto_traduzido": "Porque a auto-estima não vem do que as pessoas dizem sobre você"
+    "inicio": 14.0,
+    "fim": 15.0,
+    "duracao": 1.0,
+    "texto_original": "that's it, kid.",
+    "texto_traduzido": "Eu quero que o Dr"
   },
   {
     "indice": 8,
-    "inicio": 27.0,
-    "fim": 31.0,
-    "duracao": 4.0,
-    "texto_original": "Someone tell you your whole life, you're beautiful, you're intelligent, you're the smartest person in the world and you don't believe it.",
-    "texto_traduzido": "A auto-estima é conquistada dentro de si"
+    "inicio": 15.0,
+    "fim": 17.0,
+    "duracao": 2.0,
+    "texto_original": "I want Malcolm X to look at me and go, that's it, kid.",
+    "texto_traduzido": "Martin Luther King olhe para mim e vá, é isso, garoto"
   },
   {
     "indice": 9,
-    "inicio": 31.0,
-    "fim": 37.0,
-    "duracao": 6.0,
-    "texto_original": "Because self-esteem doesn't come from what people say about you. Self-esteem is earned within yourself.",
-    "texto_traduzido": "É um vapor que só vem fazendo coisas que são incrivelmente difíceis e, em seguida, seu cérebro vai, é isso que eu sou"
+    "inicio": 17.0,
+    "fim": 19.0,
+    "duracao": 2.0,
+    "texto_original": "Just like you got the Hall of Fame and basketball,",
+    "texto_traduzido": "Eu quero que Malcolm X olhe para mim e vá, é isso, garoto"
   },
   {
     "indice": 10,
-    "inicio": 37.0,
-    "fim": 43.0,
-    "duracao": 6.0,
-    "texto_original": "It's a steam for yourself which only comes by doing things that are incredibly difficult and then your brain goes,",
-    "texto_traduzido": "Você realmente precisa descobrir o que é feito e ninguém sabe no começo"
-  },
-  {
-    "indice": 11,
-    "inicio": 43.0,
-    "fim": 45.0,
+    "inicio": 19.0,
+    "fim": 21.0,
     "duracao": 2.0,
-    "texto_original": "this is who I am.",
-    "texto_traduzido": "Então você começa onde está e faz o que está à sua frente, faz o que vem a seguir, então continua crescendo até começar a descobrir, ei, essa é a minha verdadeira paixão"
-  },
-  {
-    "indice": 12,
-    "inicio": 45.0,
-    "fim": 49.0,
-    "duracao": 4.0,
-    "texto_original": "You really got to figure out what you're made for and nobody knows in the beginning.",
-    "texto_traduzido": "You really got to figure out what you're made for and nobody knows in the beginning."
-  },
-  {
-    "indice": 13,
-    "inicio": 49.0,
-    "fim": 53.0,
-    "duracao": 4.0,
-    "texto_original": "So you start where you are and you do what's in front of you, you do what's next,",
-    "texto_traduzido": "So you start where you are and you do what's in front of you, you do what's next,"
-  },
-  {
-    "indice": 14,
-    "inicio": 53.0,
-    "fim": 57.0,
-    "duracao": 4.0,
-    "texto_original": "then you keep growing until you start to discover, hey, this is my real passion.",
-    "texto_traduzido": "then you keep growing until you start to discover, hey, this is my real passion."
+    "texto_original": "I want to be the Hall of Fame and speak it.",
+    "texto_traduzido": "Assim como você conseguiu o Hall of Fame e Basketball, eu quero ser o Hall da Fama e falar"
   }
 ]
 
 METADADOS_DUBLAGEM:
-- Timestamps extraídos do Whisper: 14 segmentos
+- Timestamps extraídos do Whisper: 10 segmentos
 - Pausas detectadas: 0 pausas
-- Segmentos de legenda: 14 segmentos
+- Segmentos de legenda: 10 segmentos
 - Fonte dos dados: Whisper (mais preciso que FFmpeg)
 - Status: Pronto para dublagem otimizada

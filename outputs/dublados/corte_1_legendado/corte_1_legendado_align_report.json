@@ -3,8 +3,8 @@
     "index": 0,
     "text": "Você precisa ser bom em reconhecimento de padrões e é isso que torna alguém forte em qualquer coisa",
     "target_sec": 5.0,
-    "fit_dur_sec": 5.0,
-    "ratio": 0.7331378299120235,
+    "fit_dur_sec": 4.99,
+    "ratio": 0.7132667617689016,
     "start": 0.0,
     "end": 5.0
   },
@@ -12,8 +12,8 @@
     "index": 1,
     "text": "Quero dizer, olhe, você sabe, por que a Amazon está indo tão bem",
     "target_sec": 4.0,
-    "fit_dur_sec": 4.0,
-    "ratio": 0.7633587786259541,
+    "fit_dur_sec": 3.99,
+    "ratio": 0.7504690431519699,
     "start": 5.0,
     "end": 9.0
   },
@@ -21,8 +21,8 @@
     "index": 2,
     "text": "Você percebe que um padrão foi valorizado sobre qualquer outra coisa, conveniência, certo",
     "target_sec": 4.0,
-    "fit_dur_sec": 4.0,
-    "ratio": 0.6024096385542169,
+    "fit_dur_sec": 3.98,
+    "ratio": 0.6633499170812603,
     "start": 9.0,
     "end": 13.0
   },
@@ -31,7 +31,7 @@
     "text": "Se você olhar para Tom Brady, amigo meu, ele tem reconhecimento de padrões como ninguém aos 43 anos, ele é capaz de fazer coisas que ninguém sonho poderia ser feito",
     "target_sec": 3.0,
     "fit_dur_sec": 3.0,
-    "ratio": 0.23346303501945526,
+    "ratio": 0.23492560689115113,
     "start": 13.0,
     "end": 16.0
   },
@@ -39,8 +39,8 @@
     "index": 4,
     "text": "Ele tem mais anéis de bola super do que qualquer equipe",
     "target_sec": 3.0,
-    "fit_dur_sec": 3.0,
-    "ratio": 0.8287292817679558,
+    "fit_dur_sec": 2.99,
+    "ratio": 0.7194244604316546,
     "start": 16.0,
     "end": 19.0
   },
@@ -48,8 +48,8 @@
     "index": 5,
     "text": "Veja, o que eles vêem que nenhum de nós vê",
     "target_sec": 3.0,
-    "fit_dur_sec": 3.0,
-    "ratio": 0.8403361344537815,
+    "fit_dur_sec": 2.99,
+    "ratio": 0.8771929824561404,
     "start": 19.0,
     "end": 22.0
   },
@@ -57,8 +57,8 @@
     "index": 6,
     "text": "Qual é o padrão",
     "target_sec": 3.0,
-    "fit_dur_sec": 2.99,
-    "ratio": 1.9607843137254901,
+    "fit_dur_sec": 2.91,
+    "ratio": 2.1582733812949644,
     "start": 22.0,
     "end": 25.0
   },
@@ -67,7 +67,7 @@
     "text": "Então você precisa aprender a utilização de padrões",
     "target_sec": 1.0,
     "fit_dur_sec": 1.0,
-    "ratio": 0.2320185614849188,
+    "ratio": 0.25380710659898476,
     "start": 25.0,
     "end": 26.0
   },
@@ -75,8 +75,8 @@
     "index": 8,
     "text": "Uma coisa é ver, não é nada para usá -lo",
     "target_sec": 2.0,
-    "fit_dur_sec": 2.0,
-    "ratio": 0.625,
+    "fit_dur_sec": 1.98,
+    "ratio": 0.60790273556231,
     "start": 26.0,
     "end": 28.0
   },
@@ -85,7 +85,7 @@
     "text": "E então, se você é bom depois de um tempo, poderá criar padrões",
     "target_sec": 2.0,
     "fit_dur_sec": 2.0,
-    "ratio": 0.4065040650406504,
+    "ratio": 0.38167938931297707,
     "start": 28.0,
     "end": 30.0
   },
@@ -94,7 +94,7 @@
     "text": "É como se você aprender a tocar piano, a maioria das pessoas toca música de outras pessoas, e há um ponto que você aprendeu tanto que você pode criar",
     "target_sec": 3.0,
     "fit_dur_sec": 3.0,
-    "ratio": 0.29910269192422734,
+    "ratio": 0.26929982046678635,
     "start": 30.0,
     "end": 33.0
   },
@@ -102,8 +102,8 @@
     "index": 11,
     "text": "It's like if you learn to play the piano, most people play other people's music,",
     "target_sec": 3.0,
-    "fit_dur_sec": 3.0,
-    "ratio": 0.4862236628849271,
+    "fit_dur_sec": 2.99,
+    "ratio": 0.53475935828877,
     "start": 33.0,
     "end": 36.0
   },
@@ -111,8 +111,8 @@
     "index": 12,
     "text": "and there's a point you've learned so much that you're able to create.",
     "target_sec": 4.0,
-    "fit_dur_sec": 4.0,
-    "ratio": 0.9478672985781991,
+    "fit_dur_sec": 3.99,
+    "ratio": 0.8230452674897119,
     "start": 36.0,
     "end": 40.0
   }

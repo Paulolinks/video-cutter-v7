@@ -1,99 +1,148 @@
 TRANSCRIÇÃO DO CORTE: corte_1.mp4
-INÍCIO: 177.00s
-FIM: 217.00s
-DURAÇÃO: 40.00s
+INÍCIO: 1014.24s
+FIM: 1050.24s
+DURAÇÃO: 36.00s
 
 TEXTO:
-You need to be good at pattern recognition and that's what gets somebody strong at anything.  I mean look at, you know, why is Amazon doing so well?  He realized one pattern was valued over anything else, convenience, right?  If you look at Tom Brady friend of mine, he's got pattern recognition like nobody else at 43 years old.  He's able to do things no one dream could be done.  He's got more Super Bowl rings than any team.  See what do they see that none of us see?  What's the pattern?  Then you gotta learn pattern utilization.  It's one thing to see, it's nothing to use it.  And then if you're good after a while, you get to pattern creations.  Like if you learn to play the piano, most people play other people's music and there's a point you've learned so much that you're able to create.
+Number one, this is not about basketball.  This is about who?  Yourself and their who?  Your family.  So the days you don't feel like working out?  It's easy.  How do you get motivated?  How you get pumped up?  You think about mama and that feeling on draft day?  Which one is more important?  You get some rest,  but mama coming to the draft.  I'm just being real.  Which one is more important?  So somebody locking you down.  You're trying to score, they locking you down.  Like in your mind, you gotta go all over.  This ain't just about me getting locked down.  This about mama not having one.
 
 TEXTO_TRADUZIDO:
-Você precisa ser bom em reconhecimento de padrões e é isso que torna alguém forte em qualquer coisa.  Quero dizer, olhe, você sabe, por que a Amazon está indo tão bem?  Ele percebeu que um padrão era valorizado sobre qualquer outra coisa, conveniência, certo?  Se você olhar para Tom Brady, amigo meu, ele tem reconhecimento de padrões como ninguém aos 43 anos.  Ele é capaz de fazer coisas que ninguém sonho poderia ser feito.  Ele tem mais anéis do Super Bowl do que qualquer equipe.  Veja o que eles vêem que nenhum de nós vê?  Qual é o padrão?  Então você precisa aprender a utilização de padrões.  Uma coisa é ver, não é nada para usá -lo.  E então, se você é bom depois de um tempo, poderá criar criações.  Como se você aprender a tocar piano, a maioria das pessoas toca música de outras pessoas e há um ponto que você aprendeu tanto que é capaz de criar.
+Número um, não se trata de basquete.  Isso é sobre quem?  Você e deles quem?  Sua família.  Então, os dias em que você não sente vontade de malhar?  É fácil.  Como você fica motivado?  Como você é bombeado?  Você pensa em mamãe e naquele sentimento no dia do rascunho?  Qual é mais importante?  Você descansa um pouco, mas mamãe vindo para o rascunho.  Estou apenas sendo real.  Qual é mais importante?  Então, alguém te travava.  Você está tentando marcar, eles o travam.  Como em sua mente, você tem que ir por todo o lado.  Isso não é apenas sobre eu ser trancado.  Sobre mamãe não ter um.
 
 TIMESTAMPS_DETALHADOS:
 [
   {
     "indice": 1,
     "inicio": 0,
-    "fim": 5.0,
-    "duracao": 5.0,
-    "texto": "You need to be good at pattern recognition and that's what gets somebody strong at anything."
+    "fim": 2.0,
+    "duracao": 2.0,
+    "texto": "Number one, this is not about basketball."
   },
   {
     "indice": 2,
-    "inicio": 5.0,
-    "fim": 9.0,
-    "duracao": 4.0,
-    "texto": "I mean look at, you know, why is Amazon doing so well?"
+    "inicio": 2.0,
+    "fim": 4.0,
+    "duracao": 2.0,
+    "texto": "This is about who?"
   },
   {
     "indice": 3,
-    "inicio": 9.0,
-    "fim": 13.0,
-    "duracao": 4.0,
-    "texto": "He realized one pattern was valued over anything else, convenience, right?"
+    "inicio": 5.0,
+    "fim": 7.0,
+    "duracao": 2.0,
+    "texto": "Yourself and their who?"
   },
   {
     "indice": 4,
-    "inicio": 13.0,
-    "fim": 17.0,
-    "duracao": 4.0,
-    "texto": "If you look at Tom Brady friend of mine, he's got pattern recognition like nobody else at 43 years old."
+    "inicio": 7.0,
+    "fim": 9.0,
+    "duracao": 2.0,
+    "texto": "Your family."
   },
   {
     "indice": 5,
-    "inicio": 17.0,
-    "fim": 19.0,
+    "inicio": 10.0,
+    "fim": 12.0,
     "duracao": 2.0,
-    "texto": "He's able to do things no one dream could be done."
+    "texto": "So the days you don't feel like working out?"
   },
   {
     "indice": 6,
-    "inicio": 19.0,
-    "fim": 22.0,
-    "duracao": 3.0,
-    "texto": "He's got more Super Bowl rings than any team."
+    "inicio": 12.0,
+    "fim": 14.0,
+    "duracao": 2.0,
+    "texto": "It's easy."
   },
   {
     "indice": 7,
-    "inicio": 22.0,
-    "fim": 25.0,
-    "duracao": 3.0,
-    "texto": "See what do they see that none of us see?"
+    "inicio": 14.0,
+    "fim": 15.0,
+    "duracao": 1.0,
+    "texto": "How do you get motivated?"
   },
   {
     "indice": 8,
-    "inicio": 25.0,
-    "fim": 26.0,
+    "inicio": 15.0,
+    "fim": 16.0,
     "duracao": 1.0,
-    "texto": "What's the pattern?"
+    "texto": "How you get pumped up?"
   },
   {
     "indice": 9,
-    "inicio": 26.0,
-    "fim": 28.0,
+    "inicio": 16.0,
+    "fim": 18.0,
     "duracao": 2.0,
-    "texto": "Then you gotta learn pattern utilization."
+    "texto": "You think about mama and that feeling on draft day?"
   },
   {
     "indice": 10,
-    "inicio": 28.0,
-    "fim": 30.0,
+    "inicio": 18.0,
+    "fim": 20.0,
     "duracao": 2.0,
-    "texto": "It's one thing to see, it's nothing to use it."
+    "texto": "Which one is more important?"
   },
   {
     "indice": 11,
-    "inicio": 30.0,
-    "fim": 33.0,
-    "duracao": 3.0,
-    "texto": "And then if you're good after a while, you get to pattern creations."
+    "inicio": 20.0,
+    "fim": 21.0,
+    "duracao": 1.0,
+    "texto": "You get some rest,"
   },
   {
     "indice": 12,
-    "inicio": 33.0,
-    "fim": 40.0,
-    "duracao": 7.0,
-    "texto": "Like if you learn to play the piano, most people play other people's music and there's a point you've learned so much that you're able to create."
+    "inicio": 21.0,
+    "fim": 23.0,
+    "duracao": 2.0,
+    "texto": "but mama coming to the draft."
+  },
+  {
+    "indice": 13,
+    "inicio": 23.0,
+    "fim": 24.0,
+    "duracao": 1.0,
+    "texto": "I'm just being real."
+  },
+  {
+    "indice": 14,
+    "inicio": 24.0,
+    "fim": 26.0,
+    "duracao": 2.0,
+    "texto": "Which one is more important?"
+  },
+  {
+    "indice": 15,
+    "inicio": 26.0,
+    "fim": 28.0,
+    "duracao": 2.0,
+    "texto": "So somebody locking you down."
+  },
+  {
+    "indice": 16,
+    "inicio": 28.0,
+    "fim": 30.0,
+    "duracao": 2.0,
+    "texto": "You're trying to score, they locking you down."
+  },
+  {
+    "indice": 17,
+    "inicio": 30.0,
+    "fim": 32.0,
+    "duracao": 2.0,
+    "texto": "Like in your mind, you gotta go all over."
+  },
+  {
+    "indice": 18,
+    "inicio": 32.0,
+    "fim": 34.0,
+    "duracao": 2.0,
+    "texto": "This ain't just about me getting locked down."
+  },
+  {
+    "indice": 19,
+    "inicio": 34.0,
+    "fim": 36.0,
+    "duracao": 2.0,
+    "texto": "This about mama not having one."
   }
 ]
 
@@ -105,104 +154,160 @@ SEGMENTOS_LEGENDA:
   {
     "indice": 1,
     "inicio": 0,
-    "fim": 5.0,
-    "duracao": 5.0,
-    "texto_original": "You need to be good at pattern recognition and that's what gets somebody strong at anything.",
-    "texto_traduzido": "Você precisa ser bom em reconhecimento de padrões e é isso que torna alguém forte em qualquer coisa"
+    "fim": 2.0,
+    "duracao": 2.0,
+    "texto_original": "Number one, this is not about basketball.",
+    "texto_traduzido": "Número um, não se trata de basquete"
   },
   {
     "indice": 2,
-    "inicio": 5.0,
-    "fim": 9.0,
-    "duracao": 4.0,
-    "texto_original": "I mean look at, you know, why is Amazon doing so well?",
-    "texto_traduzido": "Quero dizer, olhe, você sabe, por que a Amazon está indo tão bem"
+    "inicio": 2.0,
+    "fim": 4.0,
+    "duracao": 2.0,
+    "texto_original": "This is about who?",
+    "texto_traduzido": "Isso é sobre quem"
   },
   {
     "indice": 3,
-    "inicio": 9.0,
-    "fim": 13.0,
-    "duracao": 4.0,
-    "texto_original": "He realized one pattern was valued over anything else, convenience, right?",
-    "texto_traduzido": "Ele percebeu que um padrão era valorizado sobre qualquer outra coisa, conveniência, certo"
+    "inicio": 5.0,
+    "fim": 7.0,
+    "duracao": 2.0,
+    "texto_original": "Yourself and their who?",
+    "texto_traduzido": "Você e deles quem"
   },
   {
     "indice": 4,
-    "inicio": 13.0,
-    "fim": 17.0,
-    "duracao": 4.0,
-    "texto_original": "If you look at Tom Brady friend of mine, he's got pattern recognition like nobody else at 43 years old.",
-    "texto_traduzido": "Se você olhar para Tom Brady, amigo meu, ele tem reconhecimento de padrões como ninguém aos 43 anos"
+    "inicio": 7.0,
+    "fim": 9.0,
+    "duracao": 2.0,
+    "texto_original": "Your family.",
+    "texto_traduzido": "Sua família"
   },
   {
     "indice": 5,
-    "inicio": 17.0,
-    "fim": 19.0,
+    "inicio": 10.0,
+    "fim": 12.0,
     "duracao": 2.0,
-    "texto_original": "He's able to do things no one dream could be done.",
-    "texto_traduzido": "Ele é capaz de fazer coisas que ninguém sonho poderia ser feito"
+    "texto_original": "So the days you don't feel like working out?",
+    "texto_traduzido": "Então, os dias em que você não sente vontade de malhar"
   },
   {
     "indice": 6,
-    "inicio": 19.0,
-    "fim": 22.0,
-    "duracao": 3.0,
-    "texto_original": "He's got more Super Bowl rings than any team.",
-    "texto_traduzido": "Ele tem mais anéis do Super Bowl do que qualquer equipe"
+    "inicio": 12.0,
+    "fim": 14.0,
+    "duracao": 2.0,
+    "texto_original": "It's easy.",
+    "texto_traduzido": "É fácil"
   },
   {
     "indice": 7,
-    "inicio": 22.0,
-    "fim": 25.0,
-    "duracao": 3.0,
-    "texto_original": "See what do they see that none of us see?",
-    "texto_traduzido": "Veja o que eles vêem que nenhum de nós vê"
+    "inicio": 14.0,
+    "fim": 15.0,
+    "duracao": 1.0,
+    "texto_original": "How do you get motivated?",
+    "texto_traduzido": "Como você fica motivado"
   },
   {
     "indice": 8,
-    "inicio": 25.0,
-    "fim": 26.0,
+    "inicio": 15.0,
+    "fim": 16.0,
     "duracao": 1.0,
-    "texto_original": "What's the pattern?",
-    "texto_traduzido": "Qual é o padrão"
+    "texto_original": "How you get pumped up?",
+    "texto_traduzido": "Como você é bombeado"
   },
   {
     "indice": 9,
-    "inicio": 26.0,
-    "fim": 28.0,
+    "inicio": 16.0,
+    "fim": 18.0,
     "duracao": 2.0,
-    "texto_original": "Then you gotta learn pattern utilization.",
-    "texto_traduzido": "Então você precisa aprender a utilização de padrões"
+    "texto_original": "You think about mama and that feeling on draft day?",
+    "texto_traduzido": "Você pensa em mamãe e naquele sentimento no dia do rascunho"
   },
   {
     "indice": 10,
-    "inicio": 28.0,
-    "fim": 30.0,
+    "inicio": 18.0,
+    "fim": 20.0,
     "duracao": 2.0,
-    "texto_original": "It's one thing to see, it's nothing to use it.",
-    "texto_traduzido": "Uma coisa é ver, não é nada para usá -lo"
+    "texto_original": "Which one is more important?",
+    "texto_traduzido": "Qual é mais importante"
   },
   {
     "indice": 11,
-    "inicio": 30.0,
-    "fim": 33.0,
-    "duracao": 3.0,
-    "texto_original": "And then if you're good after a while, you get to pattern creations.",
-    "texto_traduzido": "E então, se você é bom depois de um tempo, poderá criar criações"
+    "inicio": 20.0,
+    "fim": 21.0,
+    "duracao": 1.0,
+    "texto_original": "You get some rest,",
+    "texto_traduzido": "Você descansa um pouco, mas mamãe vindo para o rascunho"
   },
   {
     "indice": 12,
-    "inicio": 33.0,
-    "fim": 40.0,
-    "duracao": 7.0,
-    "texto_original": "Like if you learn to play the piano, most people play other people's music and there's a point you've learned so much that you're able to create.",
-    "texto_traduzido": "Como se você aprender a tocar piano, a maioria das pessoas toca música de outras pessoas e há um ponto que você aprendeu tanto que é capaz de criar"
+    "inicio": 21.0,
+    "fim": 23.0,
+    "duracao": 2.0,
+    "texto_original": "but mama coming to the draft.",
+    "texto_traduzido": "Estou apenas sendo real"
+  },
+  {
+    "indice": 13,
+    "inicio": 23.0,
+    "fim": 24.0,
+    "duracao": 1.0,
+    "texto_original": "I'm just being real.",
+    "texto_traduzido": "Qual é mais importante"
+  },
+  {
+    "indice": 14,
+    "inicio": 24.0,
+    "fim": 26.0,
+    "duracao": 2.0,
+    "texto_original": "Which one is more important?",
+    "texto_traduzido": "Então, alguém te travava"
+  },
+  {
+    "indice": 15,
+    "inicio": 26.0,
+    "fim": 28.0,
+    "duracao": 2.0,
+    "texto_original": "So somebody locking you down.",
+    "texto_traduzido": "Você está tentando marcar, eles o travam"
+  },
+  {
+    "indice": 16,
+    "inicio": 28.0,
+    "fim": 30.0,
+    "duracao": 2.0,
+    "texto_original": "You're trying to score, they locking you down.",
+    "texto_traduzido": "Como em sua mente, você tem que ir por todo o lado"
+  },
+  {
+    "indice": 17,
+    "inicio": 30.0,
+    "fim": 32.0,
+    "duracao": 2.0,
+    "texto_original": "Like in your mind, you gotta go all over.",
+    "texto_traduzido": "Isso não é apenas sobre eu ser trancado"
+  },
+  {
+    "indice": 18,
+    "inicio": 32.0,
+    "fim": 34.0,
+    "duracao": 2.0,
+    "texto_original": "This ain't just about me getting locked down.",
+    "texto_traduzido": "Sobre mamãe não ter um"
+  },
+  {
+    "indice": 19,
+    "inicio": 34.0,
+    "fim": 36.0,
+    "duracao": 2.0,
+    "texto_original": "This about mama not having one.",
+    "texto_traduzido": "This about mama not having one."
   }
 ]
 
 METADADOS_DUBLAGEM:
-- Timestamps extraídos do Whisper: 12 segmentos
+- Timestamps extraídos do Whisper: 19 segmentos
 - Pausas detectadas: 0 pausas
-- Segmentos de legenda: 12 segmentos
+- Segmentos de legenda: 19 segmentos
 - Fonte dos dados: Whisper (mais preciso que FFmpeg)
 - Status: Pronto para dublagem otimizada

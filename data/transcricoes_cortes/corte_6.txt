@@ -1,64 +1,127 @@
 TRANSCRIÇÃO DO CORTE: corte_6.mp4
-INÍCIO: 439.00s
-FIM: 462.00s
-DURAÇÃO: 23.00s
+INÍCIO: 901.24s
+FIM: 936.24s
+DURAÇÃO: 35.00s
 
 TEXTO:
-I think as early on I realized, you know, one of the things you have to understand about  life is everything changes and everything ends.  And that kind of sounds heavy on the front end, but it's a truth.  If everything changes and everything ends, number one, it should make you appreciate what  you have right now.  And then my view is what's next is always better.  If I make it so, it's my job to make it so.
+Hands down, I'm gonna say it again.  How many of y'all need to move your mama out that neighborhood  and y'all need to put your mama in another neighborhood  and the league is how you gonna get there, let me see your head.  So what I'm trying to tell you is,  why you playing, it might be some gas in the league  who really are going, or who do come from privilege,  and you like thinking you them.  I promise you, I ain't stupid.  I ain't Tony Robbins.  I don't come from where you come from.  I don't come from where Kiyosaki come from.  I don't come from where ZK came from.  My mama barely finished Dunbar.  I'm from the south side of Chicago.  I ain't, I ain't had no safety net.
 
 TEXTO_TRADUZIDO:
-Acho que, no início, percebi, uma das coisas que você precisa entender sobre a vida é tudo muda e tudo termina.  E isso parece pesado no front -end, mas é uma verdade.  Se tudo mudar e tudo terminar, número um, deve fazer você apreciar o que você tem agora.  E então minha opinião é o que vem a seguir é sempre melhor.  Se eu fizer assim, é meu trabalho fazê -lo.
+Mãos para baixo, vou dizer de novo.  Quantos de vocês precisam tirar sua mãe que o bairro e vocês precisam colocar sua mãe em outro bairro e a liga é como você vai chegar lá, deixe -me ver sua cabeça.  Então, o que estou tentando dizer é: por que você está jogando, pode ser um gás na liga que realmente está indo ou que vem do privilégio, e você gosta de pensar em você.  Eu prometo a você, não sou estúpido.  Eu não sou Tony Robbins.  Eu não venho de onde você vem.  Eu não venho de onde vêm kiyosaki.  Eu não venho de onde ZK veio.  Minha mãe mal terminou de Dunbar.  Eu sou do lado sul de Chicago.  Eu não sou, não tive rede de segurança.
 
 TIMESTAMPS_DETALHADOS:
 [
   {
     "indice": 1,
     "inicio": 0,
-    "fim": 5.0,
-    "duracao": 5.0,
-    "texto": "I think as early on I realized, you know, one of the things you have to understand about"
+    "fim": 1.0,
+    "duracao": 1.0,
+    "texto": "Hands down, I'm gonna say it again."
   },
   {
     "indice": 2,
-    "inicio": 5.0,
-    "fim": 8.0,
+    "inicio": 1.0,
+    "fim": 4.0,
     "duracao": 3.0,
-    "texto": "life is everything changes and everything ends."
+    "texto": "How many of y'all need to move your mama out that neighborhood"
   },
   {
     "indice": 3,
-    "inicio": 8.0,
-    "fim": 12.0,
-    "duracao": 4.0,
-    "texto": "And that kind of sounds heavy on the front end, but it's a truth."
+    "inicio": 4.0,
+    "fim": 7.0,
+    "duracao": 3.0,
+    "texto": "and y'all need to put your mama in another neighborhood"
   },
   {
     "indice": 4,
-    "inicio": 12.0,
-    "fim": 16.0,
-    "duracao": 4.0,
-    "texto": "If everything changes and everything ends, number one, it should make you appreciate what"
+    "inicio": 7.0,
+    "fim": 10.0,
+    "duracao": 3.0,
+    "texto": "and the league is how you gonna get there, let me see your head."
   },
   {
     "indice": 5,
-    "inicio": 16.0,
-    "fim": 17.0,
-    "duracao": 1.0,
-    "texto": "you have right now."
+    "inicio": 10.0,
+    "fim": 12.0,
+    "duracao": 2.0,
+    "texto": "So what I'm trying to tell you is,"
   },
   {
     "indice": 6,
-    "inicio": 17.0,
-    "fim": 20.0,
+    "inicio": 12.0,
+    "fim": 15.0,
     "duracao": 3.0,
-    "texto": "And then my view is what's next is always better."
+    "texto": "why you playing, it might be some gas in the league"
   },
   {
     "indice": 7,
-    "inicio": 20.0,
-    "fim": 23.0,
+    "inicio": 15.0,
+    "fim": 18.0,
     "duracao": 3.0,
-    "texto": "If I make it so, it's my job to make it so."
+    "texto": "who really are going, or who do come from privilege,"
+  },
+  {
+    "indice": 8,
+    "inicio": 18.0,
+    "fim": 19.0,
+    "duracao": 1.0,
+    "texto": "and you like thinking you them."
+  },
+  {
+    "indice": 9,
+    "inicio": 19.0,
+    "fim": 22.0,
+    "duracao": 3.0,
+    "texto": "I promise you, I ain't stupid."
+  },
+  {
+    "indice": 10,
+    "inicio": 22.0,
+    "fim": 23.0,
+    "duracao": 1.0,
+    "texto": "I ain't Tony Robbins."
+  },
+  {
+    "indice": 11,
+    "inicio": 23.0,
+    "fim": 25.0,
+    "duracao": 2.0,
+    "texto": "I don't come from where you come from."
+  },
+  {
+    "indice": 12,
+    "inicio": 25.0,
+    "fim": 27.0,
+    "duracao": 2.0,
+    "texto": "I don't come from where Kiyosaki come from."
+  },
+  {
+    "indice": 13,
+    "inicio": 27.0,
+    "fim": 29.0,
+    "duracao": 2.0,
+    "texto": "I don't come from where ZK came from."
+  },
+  {
+    "indice": 14,
+    "inicio": 29.0,
+    "fim": 31.0,
+    "duracao": 2.0,
+    "texto": "My mama barely finished Dunbar."
+  },
+  {
+    "indice": 15,
+    "inicio": 31.0,
+    "fim": 33.0,
+    "duracao": 2.0,
+    "texto": "I'm from the south side of Chicago."
+  },
+  {
+    "indice": 16,
+    "inicio": 33.0,
+    "fim": 35.0,
+    "duracao": 2.0,
+    "texto": "I ain't, I ain't had no safety net."
   }
 ]
 
@@ -70,64 +133,136 @@ SEGMENTOS_LEGENDA:
   {
     "indice": 1,
     "inicio": 0,
-    "fim": 5.0,
-    "duracao": 5.0,
-    "texto_original": "I think as early on I realized, you know, one of the things you have to understand about",
-    "texto_traduzido": "Acho que, no início, percebi, uma das coisas que você precisa entender sobre a vida é tudo muda e tudo termina"
+    "fim": 1.0,
+    "duracao": 1.0,
+    "texto_original": "Hands down, I'm gonna say it again.",
+    "texto_traduzido": "Mãos para baixo, vou dizer de novo"
   },
   {
     "indice": 2,
-    "inicio": 5.0,
-    "fim": 8.0,
+    "inicio": 1.0,
+    "fim": 4.0,
     "duracao": 3.0,
-    "texto_original": "life is everything changes and everything ends.",
-    "texto_traduzido": "E isso parece pesado no front -end, mas é uma verdade"
+    "texto_original": "How many of y'all need to move your mama out that neighborhood",
+    "texto_traduzido": "Quantos de vocês precisam tirar sua mãe que o bairro e vocês precisam colocar sua mãe em outro bairro e a liga é como você vai chegar lá, deixe -me ver sua cabeça"
   },
   {
     "indice": 3,
-    "inicio": 8.0,
-    "fim": 12.0,
-    "duracao": 4.0,
-    "texto_original": "And that kind of sounds heavy on the front end, but it's a truth.",
-    "texto_traduzido": "Se tudo mudar e tudo terminar, número um, deve fazer você apreciar o que você tem agora"
+    "inicio": 4.0,
+    "fim": 7.0,
+    "duracao": 3.0,
+    "texto_original": "and y'all need to put your mama in another neighborhood",
+    "texto_traduzido": "Então, o que estou tentando dizer é: por que você está jogando, pode ser um gás na liga que realmente está indo ou que vem do privilégio, e você gosta de pensar em você"
   },
   {
     "indice": 4,
-    "inicio": 12.0,
-    "fim": 16.0,
-    "duracao": 4.0,
-    "texto_original": "If everything changes and everything ends, number one, it should make you appreciate what",
-    "texto_traduzido": "E então minha opinião é o que vem a seguir é sempre melhor"
+    "inicio": 7.0,
+    "fim": 10.0,
+    "duracao": 3.0,
+    "texto_original": "and the league is how you gonna get there, let me see your head.",
+    "texto_traduzido": "Eu prometo a você, não sou estúpido"
   },
   {
     "indice": 5,
-    "inicio": 16.0,
-    "fim": 17.0,
-    "duracao": 1.0,
-    "texto_original": "you have right now.",
-    "texto_traduzido": "Se eu fizer assim, é meu trabalho fazê -lo"
+    "inicio": 10.0,
+    "fim": 12.0,
+    "duracao": 2.0,
+    "texto_original": "So what I'm trying to tell you is,",
+    "texto_traduzido": "Eu não sou Tony Robbins"
   },
   {
     "indice": 6,
-    "inicio": 17.0,
-    "fim": 20.0,
+    "inicio": 12.0,
+    "fim": 15.0,
     "duracao": 3.0,
-    "texto_original": "And then my view is what's next is always better.",
-    "texto_traduzido": "And then my view is what's next is always better."
+    "texto_original": "why you playing, it might be some gas in the league",
+    "texto_traduzido": "Eu não venho de onde você vem"
   },
   {
     "indice": 7,
-    "inicio": 20.0,
-    "fim": 23.0,
+    "inicio": 15.0,
+    "fim": 18.0,
     "duracao": 3.0,
-    "texto_original": "If I make it so, it's my job to make it so.",
-    "texto_traduzido": "If I make it so, it's my job to make it so."
+    "texto_original": "who really are going, or who do come from privilege,",
+    "texto_traduzido": "Eu não venho de onde vêm kiyosaki"
+  },
+  {
+    "indice": 8,
+    "inicio": 18.0,
+    "fim": 19.0,
+    "duracao": 1.0,
+    "texto_original": "and you like thinking you them.",
+    "texto_traduzido": "Eu não venho de onde ZK veio"
+  },
+  {
+    "indice": 9,
+    "inicio": 19.0,
+    "fim": 22.0,
+    "duracao": 3.0,
+    "texto_original": "I promise you, I ain't stupid.",
+    "texto_traduzido": "Minha mãe mal terminou de Dunbar"
+  },
+  {
+    "indice": 10,
+    "inicio": 22.0,
+    "fim": 23.0,
+    "duracao": 1.0,
+    "texto_original": "I ain't Tony Robbins.",
+    "texto_traduzido": "Eu sou do lado sul de Chicago"
+  },
+  {
+    "indice": 11,
+    "inicio": 23.0,
+    "fim": 25.0,
+    "duracao": 2.0,
+    "texto_original": "I don't come from where you come from.",
+    "texto_traduzido": "Eu não sou, não tive rede de segurança"
+  },
+  {
+    "indice": 12,
+    "inicio": 25.0,
+    "fim": 27.0,
+    "duracao": 2.0,
+    "texto_original": "I don't come from where Kiyosaki come from.",
+    "texto_traduzido": "I don't come from where Kiyosaki come from."
+  },
+  {
+    "indice": 13,
+    "inicio": 27.0,
+    "fim": 29.0,
+    "duracao": 2.0,
+    "texto_original": "I don't come from where ZK came from.",
+    "texto_traduzido": "I don't come from where ZK came from."
+  },
+  {
+    "indice": 14,
+    "inicio": 29.0,
+    "fim": 31.0,
+    "duracao": 2.0,
+    "texto_original": "My mama barely finished Dunbar.",
+    "texto_traduzido": "My mama barely finished Dunbar."
+  },
+  {
+    "indice": 15,
+    "inicio": 31.0,
+    "fim": 33.0,
+    "duracao": 2.0,
+    "texto_original": "I'm from the south side of Chicago.",
+    "texto_traduzido": "I'm from the south side of Chicago."
+  },
+  {
+    "indice": 16,
+    "inicio": 33.0,
+    "fim": 35.0,
+    "duracao": 2.0,
+    "texto_original": "I ain't, I ain't had no safety net.",
+    "texto_traduzido": "I ain't, I ain't had no safety net."
   }
 ]
 
 METADADOS_DUBLAGEM:
-- Timestamps extraídos do Whisper: 7 segmentos
+- Timestamps extraídos do Whisper: 16 segmentos
 - Pausas detectadas: 0 pausas
-- Segmentos de legenda: 7 segmentos
+- Segmentos de legenda: 16 segmentos
 - Fonte dos dados: Whisper (mais preciso que FFmpeg)
 - Status: Pronto para dublagem otimizada

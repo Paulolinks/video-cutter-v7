@@ -1,64 +1,183 @@
 TRANSCRIÇÃO DO CORTE: corte_5.mp4
-INÍCIO: 357.00s
-FIM: 381.00s
-DURAÇÃO: 24.00s
+INÍCIO: 428.64s
+FIM: 473.00s
+DURAÇÃO: 44.36s
 
 TEXTO:
-The idea of remembering who you are is something incredibly powerful.  There was a Batman cartoon where he gets amnesia and he gets put in like a camp basically.  A work camp and he can't get out.  And he feels stuck and weak and you know afraid.  And then something happens.  I don't remember what triggers the memory.  And he remembers that he's Batman.
+You told yourself to get up at three is three.  Get your butt up.  You cannot tell nobody else to get up at three o'clock  in the morning.  You can't tell nobody else how they need to grind.  They grind, look like they grind.  You can't tell nobody, you didn't get up early.  Maybe they don't, who know?  You know what you need to do.  You're going to have to say for you.  So if you're going to separate yourself,  growth is the greatest separated between me.  As you grow, right?  You see CP3 leadership grow.  You see the way he handles himself.  Growth.  So I'm asking what sacrifices are you willing to make?  Everybody want what you want.  Everybody want to go to the lead.  Everybody want to take care of their family.  Everybody want to be a celebrity  or whatever you want to be, right?  What are you willing to give up for?  What are you willing to sacrifice?
 
 TEXTO_TRADUZIDO:
-A idéia de lembrar quem você é é algo incrivelmente poderoso.  Havia um desenho animado do Batman onde ele recebe amnésia e ele é colocado como um acampamento basicamente.  Um acampamento de trabalho e ele não pode sair.  E ele se sente preso e fraco e você sabe com medo.  E então algo acontece.  Não me lembro do que desencadeia a memória.  E ele se lembra de que é Batman.
+Você disse a si mesmo para se levantar às três são três.  Levante sua bunda.  Você não pode dizer a mais ninguém para acordar às três horas da manhã.  Você não pode dizer a mais ninguém como eles precisam moer.  Eles moem, parecem que eles moem.  Você não pode dizer ninguém, não acordou cedo.  Talvez eles não saibam, quem sabe?  Você sabe o que precisa fazer.  Você terá que dizer para você.  Então, se você vai se separar, o crescimento é o maior separado entre mim.  À medida que você cresce, certo?  Você vê a liderança do CP3 crescer.  Você vê a maneira como ele se manipula.  Crescimento.  Então, estou perguntando que sacrifícios você está disposto a fazer?  Todo mundo quer o que você quer.  Todo mundo quer ir para a liderança.  Todo mundo quer cuidar de sua família.  Todo mundo quer ser uma celebridade ou o que você quiser, certo?  O que você está disposto a desistir?  O que você está disposto a sacrificar?
 
 TIMESTAMPS_DETALHADOS:
 [
   {
     "indice": 1,
     "inicio": 0,
-    "fim": 4.0,
-    "duracao": 4.0,
-    "texto": "The idea of remembering who you are is something incredibly powerful."
+    "fim": 1.88,
+    "duracao": 1.88,
+    "texto": "You told yourself to get up at three is three."
   },
   {
     "indice": 2,
-    "inicio": 4.0,
-    "fim": 13.0,
-    "duracao": 9.0,
-    "texto": "There was a Batman cartoon where he gets amnesia and he gets put in like a camp basically."
+    "inicio": 1.88,
+    "fim": 3.08,
+    "duracao": 1.2,
+    "texto": "Get your butt up."
   },
   {
     "indice": 3,
-    "inicio": 13.0,
-    "fim": 15.0,
-    "duracao": 2.0,
-    "texto": "A work camp and he can't get out."
+    "inicio": 3.08,
+    "fim": 5.0,
+    "duracao": 1.92,
+    "texto": "You cannot tell nobody else to get up at three o'clock"
   },
   {
     "indice": 4,
-    "inicio": 15.0,
-    "fim": 18.0,
-    "duracao": 3.0,
-    "texto": "And he feels stuck and weak and you know afraid."
+    "inicio": 5.0,
+    "fim": 6.56,
+    "duracao": 1.56,
+    "texto": "in the morning."
   },
   {
     "indice": 5,
-    "inicio": 18.0,
-    "fim": 20.0,
-    "duracao": 2.0,
-    "texto": "And then something happens."
+    "inicio": 6.56,
+    "fim": 8.88,
+    "duracao": 2.32,
+    "texto": "You can't tell nobody else how they need to grind."
   },
   {
     "indice": 6,
-    "inicio": 20.0,
-    "fim": 22.0,
-    "duracao": 2.0,
-    "texto": "I don't remember what triggers the memory."
+    "inicio": 8.88,
+    "fim": 11.0,
+    "duracao": 2.12,
+    "texto": "They grind, look like they grind."
   },
   {
     "indice": 7,
-    "inicio": 22.0,
-    "fim": 24.0,
-    "duracao": 2.0,
-    "texto": "And he remembers that he's Batman."
+    "inicio": 11.0,
+    "fim": 12.8,
+    "duracao": 1.8,
+    "texto": "You can't tell nobody, you didn't get up early."
+  },
+  {
+    "indice": 8,
+    "inicio": 12.8,
+    "fim": 14.36,
+    "duracao": 1.56,
+    "texto": "Maybe they don't, who know?"
+  },
+  {
+    "indice": 9,
+    "inicio": 14.36,
+    "fim": 15.44,
+    "duracao": 1.08,
+    "texto": "You know what you need to do."
+  },
+  {
+    "indice": 10,
+    "inicio": 15.44,
+    "fim": 18.0,
+    "duracao": 2.56,
+    "texto": "You're going to have to say for you."
+  },
+  {
+    "indice": 11,
+    "inicio": 18.0,
+    "fim": 19.8,
+    "duracao": 1.8,
+    "texto": "So if you're going to separate yourself,"
+  },
+  {
+    "indice": 12,
+    "inicio": 19.8,
+    "fim": 23.52,
+    "duracao": 3.72,
+    "texto": "growth is the greatest separated between me."
+  },
+  {
+    "indice": 13,
+    "inicio": 23.52,
+    "fim": 25.16,
+    "duracao": 1.64,
+    "texto": "As you grow, right?"
+  },
+  {
+    "indice": 14,
+    "inicio": 25.16,
+    "fim": 27.8,
+    "duracao": 2.64,
+    "texto": "You see CP3 leadership grow."
+  },
+  {
+    "indice": 15,
+    "inicio": 27.8,
+    "fim": 29.2,
+    "duracao": 1.4,
+    "texto": "You see the way he handles himself."
+  },
+  {
+    "indice": 16,
+    "inicio": 29.28,
+    "fim": 30.4,
+    "duracao": 1.12,
+    "texto": "Growth."
+  },
+  {
+    "indice": 17,
+    "inicio": 30.4,
+    "fim": 32.56,
+    "duracao": 2.16,
+    "texto": "So I'm asking what sacrifices are you willing to make?"
+  },
+  {
+    "indice": 18,
+    "inicio": 32.56,
+    "fim": 34.28,
+    "duracao": 1.72,
+    "texto": "Everybody want what you want."
+  },
+  {
+    "indice": 19,
+    "inicio": 34.28,
+    "fim": 36.0,
+    "duracao": 1.72,
+    "texto": "Everybody want to go to the lead."
+  },
+  {
+    "indice": 20,
+    "inicio": 36.0,
+    "fim": 37.6,
+    "duracao": 1.6,
+    "texto": "Everybody want to take care of their family."
+  },
+  {
+    "indice": 21,
+    "inicio": 37.6,
+    "fim": 38.84,
+    "duracao": 1.24,
+    "texto": "Everybody want to be a celebrity"
+  },
+  {
+    "indice": 22,
+    "inicio": 38.84,
+    "fim": 40.56,
+    "duracao": 1.72,
+    "texto": "or whatever you want to be, right?"
+  },
+  {
+    "indice": 23,
+    "inicio": 40.56,
+    "fim": 42.6,
+    "duracao": 2.04,
+    "texto": "What are you willing to give up for?"
+  },
+  {
+    "indice": 24,
+    "inicio": 42.6,
+    "fim": 44.36,
+    "duracao": 1.76,
+    "texto": "What are you willing to sacrifice?"
   }
 ]
 
@@ -70,64 +189,200 @@ SEGMENTOS_LEGENDA:
   {
     "indice": 1,
     "inicio": 0,
-    "fim": 4.0,
-    "duracao": 4.0,
-    "texto_original": "The idea of remembering who you are is something incredibly powerful.",
-    "texto_traduzido": "A idéia de lembrar quem você é é algo incrivelmente poderoso"
+    "fim": 1.88,
+    "duracao": 1.88,
+    "texto_original": "You told yourself to get up at three is three.",
+    "texto_traduzido": "Você disse a si mesmo para se levantar às três são três"
   },
   {
     "indice": 2,
-    "inicio": 4.0,
-    "fim": 13.0,
-    "duracao": 9.0,
-    "texto_original": "There was a Batman cartoon where he gets amnesia and he gets put in like a camp basically.",
-    "texto_traduzido": "Havia um desenho animado do Batman onde ele recebe amnésia e ele é colocado como um acampamento basicamente"
+    "inicio": 1.88,
+    "fim": 3.08,
+    "duracao": 1.2,
+    "texto_original": "Get your butt up.",
+    "texto_traduzido": "Levante sua bunda"
   },
   {
     "indice": 3,
-    "inicio": 13.0,
-    "fim": 15.0,
-    "duracao": 2.0,
-    "texto_original": "A work camp and he can't get out.",
-    "texto_traduzido": "Um acampamento de trabalho e ele não pode sair"
+    "inicio": 3.08,
+    "fim": 5.0,
+    "duracao": 1.92,
+    "texto_original": "You cannot tell nobody else to get up at three o'clock",
+    "texto_traduzido": "Você não pode dizer a mais ninguém para acordar às três horas da manhã"
   },
   {
     "indice": 4,
-    "inicio": 15.0,
-    "fim": 18.0,
-    "duracao": 3.0,
-    "texto_original": "And he feels stuck and weak and you know afraid.",
-    "texto_traduzido": "E ele se sente preso e fraco e você sabe com medo"
+    "inicio": 5.0,
+    "fim": 6.56,
+    "duracao": 1.56,
+    "texto_original": "in the morning.",
+    "texto_traduzido": "Você não pode dizer a mais ninguém como eles precisam moer"
   },
   {
     "indice": 5,
-    "inicio": 18.0,
-    "fim": 20.0,
-    "duracao": 2.0,
-    "texto_original": "And then something happens.",
-    "texto_traduzido": "E então algo acontece"
+    "inicio": 6.56,
+    "fim": 8.88,
+    "duracao": 2.32,
+    "texto_original": "You can't tell nobody else how they need to grind.",
+    "texto_traduzido": "Eles moem, parecem que eles moem"
   },
   {
     "indice": 6,
-    "inicio": 20.0,
-    "fim": 22.0,
-    "duracao": 2.0,
-    "texto_original": "I don't remember what triggers the memory.",
-    "texto_traduzido": "Não me lembro do que desencadeia a memória"
+    "inicio": 8.88,
+    "fim": 11.0,
+    "duracao": 2.12,
+    "texto_original": "They grind, look like they grind.",
+    "texto_traduzido": "Você não pode dizer ninguém, não acordou cedo"
   },
   {
     "indice": 7,
-    "inicio": 22.0,
-    "fim": 24.0,
-    "duracao": 2.0,
-    "texto_original": "And he remembers that he's Batman.",
-    "texto_traduzido": "E ele se lembra de que é Batman"
+    "inicio": 11.0,
+    "fim": 12.8,
+    "duracao": 1.8,
+    "texto_original": "You can't tell nobody, you didn't get up early.",
+    "texto_traduzido": "Talvez eles não saibam, quem sabe"
+  },
+  {
+    "indice": 8,
+    "inicio": 12.8,
+    "fim": 14.36,
+    "duracao": 1.56,
+    "texto_original": "Maybe they don't, who know?",
+    "texto_traduzido": "Você sabe o que precisa fazer"
+  },
+  {
+    "indice": 9,
+    "inicio": 14.36,
+    "fim": 15.44,
+    "duracao": 1.08,
+    "texto_original": "You know what you need to do.",
+    "texto_traduzido": "Você terá que dizer para você"
+  },
+  {
+    "indice": 10,
+    "inicio": 15.44,
+    "fim": 18.0,
+    "duracao": 2.56,
+    "texto_original": "You're going to have to say for you.",
+    "texto_traduzido": "Então, se você vai se separar, o crescimento é o maior separado entre mim"
+  },
+  {
+    "indice": 11,
+    "inicio": 18.0,
+    "fim": 19.8,
+    "duracao": 1.8,
+    "texto_original": "So if you're going to separate yourself,",
+    "texto_traduzido": "À medida que você cresce, certo"
+  },
+  {
+    "indice": 12,
+    "inicio": 19.8,
+    "fim": 23.52,
+    "duracao": 3.72,
+    "texto_original": "growth is the greatest separated between me.",
+    "texto_traduzido": "Você vê a liderança do CP3 crescer"
+  },
+  {
+    "indice": 13,
+    "inicio": 23.52,
+    "fim": 25.16,
+    "duracao": 1.64,
+    "texto_original": "As you grow, right?",
+    "texto_traduzido": "Você vê a maneira como ele se manipula"
+  },
+  {
+    "indice": 14,
+    "inicio": 25.16,
+    "fim": 27.8,
+    "duracao": 2.64,
+    "texto_original": "You see CP3 leadership grow.",
+    "texto_traduzido": "Crescimento"
+  },
+  {
+    "indice": 15,
+    "inicio": 27.8,
+    "fim": 29.2,
+    "duracao": 1.4,
+    "texto_original": "You see the way he handles himself.",
+    "texto_traduzido": "Então, estou perguntando que sacrifícios você está disposto a fazer"
+  },
+  {
+    "indice": 16,
+    "inicio": 29.28,
+    "fim": 30.4,
+    "duracao": 1.12,
+    "texto_original": "Growth.",
+    "texto_traduzido": "Todo mundo quer o que você quer"
+  },
+  {
+    "indice": 17,
+    "inicio": 30.4,
+    "fim": 32.56,
+    "duracao": 2.16,
+    "texto_original": "So I'm asking what sacrifices are you willing to make?",
+    "texto_traduzido": "Todo mundo quer ir para a liderança"
+  },
+  {
+    "indice": 18,
+    "inicio": 32.56,
+    "fim": 34.28,
+    "duracao": 1.72,
+    "texto_original": "Everybody want what you want.",
+    "texto_traduzido": "Todo mundo quer cuidar de sua família"
+  },
+  {
+    "indice": 19,
+    "inicio": 34.28,
+    "fim": 36.0,
+    "duracao": 1.72,
+    "texto_original": "Everybody want to go to the lead.",
+    "texto_traduzido": "Todo mundo quer ser uma celebridade ou o que você quiser, certo"
+  },
+  {
+    "indice": 20,
+    "inicio": 36.0,
+    "fim": 37.6,
+    "duracao": 1.6,
+    "texto_original": "Everybody want to take care of their family.",
+    "texto_traduzido": "O que você está disposto a desistir"
+  },
+  {
+    "indice": 21,
+    "inicio": 37.6,
+    "fim": 38.84,
+    "duracao": 1.24,
+    "texto_original": "Everybody want to be a celebrity",
+    "texto_traduzido": "O que você está disposto a sacrificar"
+  },
+  {
+    "indice": 22,
+    "inicio": 38.84,
+    "fim": 40.56,
+    "duracao": 1.72,
+    "texto_original": "or whatever you want to be, right?",
+    "texto_traduzido": "or whatever you want to be, right?"
+  },
+  {
+    "indice": 23,
+    "inicio": 40.56,
+    "fim": 42.6,
+    "duracao": 2.04,
+    "texto_original": "What are you willing to give up for?",
+    "texto_traduzido": "What are you willing to give up for?"
+  },
+  {
+    "indice": 24,
+    "inicio": 42.6,
+    "fim": 44.36,
+    "duracao": 1.76,
+    "texto_original": "What are you willing to sacrifice?",
+    "texto_traduzido": "What are you willing to sacrifice?"
   }
 ]
 
 METADADOS_DUBLAGEM:
-- Timestamps extraídos do Whisper: 7 segmentos
+- Timestamps extraídos do Whisper: 24 segmentos
 - Pausas detectadas: 0 pausas
-- Segmentos de legenda: 7 segmentos
+- Segmentos de legenda: 24 segmentos
 - Fonte dos dados: Whisper (mais preciso que FFmpeg)
 - Status: Pronto para dublagem otimizada

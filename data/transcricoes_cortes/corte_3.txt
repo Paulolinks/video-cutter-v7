@@ -1,64 +1,225 @@
 TRANSCRIÇÃO DO CORTE: corte_3.mp4
-INÍCIO: 382.00s
-FIM: 404.00s
-DURAÇÃO: 22.00s
+INÍCIO: 475.12s
+FIM: 525.28s
+DURAÇÃO: 50.16s
 
 TEXTO:
-Justin remembering that he's Batman.  He then takes the actions to fight his way out.  Look, I know it's a cartoon, but that has always resonated with me.  And whenever I'm feeling anxious about something, I always tell myself, remember who you are.  But you're really talking about the most important concept in lasting change.  Identity.  We all define ourselves in certain ways.
+That's next level.  That's saying that although I'm already great at what I do,  I'm ready to dig deeper.  I'm ready to do so.  I'm ready to make another sacrifice.  I'm ready to go somewhere, everybody else  ain't ready to go.  Why?  Because I'm ready to take it to the next level.  No matter what has happened to you,  no matter what somebody said to you,  no matter what somebody did to you,  I need you to walk away knowing you were one of one.  Strive for perfection.  Don't mean you got to be perfect,  but strive for it.  People tell me all the time.  Oh, you got this thing, it's image.  You try to be 1,000 percent.  I'm trying to be perfect.  1,000 percent.  It don't mean I'm not trying to dog you out.  I'm not judging you.  I don't even think I'm better than you,  but I am striving for perfection.  I am.  I'm definitely not trying to be the same version  of Eric Thomas I was last year or the month before.  I'm definitely, if you knew me five years ago,  you better take a picture.
 
 TEXTO_TRADUZIDO:
-Justin lembrando que ele é Batman.  Ele então toma as ações para lutar.  Olha, eu sei que é um desenho animado, mas isso sempre ressoou comigo.  E sempre que estou ansioso por algo, sempre digo a mim mesmo, lembre -se de quem você é.  Mas você está realmente falando sobre o conceito mais importante na mudança duradoura.  Identidade.  Todos nós nos definimos de certas maneiras.
+Esse é o próximo nível.  Isso está dizendo que, embora eu já seja ótimo no que faço, estou pronto para me aprofundar.  Estou pronto para fazer isso.  Estou pronto para fazer outro sacrifício.  Estou pronto para ir a algum lugar, todo mundo não está pronto para ir.  Por que?  Porque estou pronto para levá -lo para o próximo nível.  Não importa o que tenha acontecido com você, não importa o que alguém lhe disse, não importa o que alguém tenha feito com você, preciso que você se afaste sabendo que você era um dos um.  Lute por perfeição.  Não significa que você tenha que ser perfeito, mas lute por isso.  As pessoas me dizem o tempo todo.  Oh, você conseguiu isso, é a imagem.  Você tenta ser 1.000 por cento.  Estou tentando ser perfeito.  1.000 por cento.  Isso não significa que não estou tentando dar um cachimbo.  Não estou te julgando.  Eu nem acho que sou melhor que você, mas estou buscando a perfeição.  Eu sou.  Definitivamente, não estou tentando ser a mesma versão de Eric Thomas que eu estava no ano passado ou no mês anterior.  Definitivamente, se você me conheceu há cinco anos, é melhor tirar uma foto.
 
 TIMESTAMPS_DETALHADOS:
 [
   {
     "indice": 1,
     "inicio": 0,
-    "fim": 3.0,
-    "duracao": 3.0,
-    "texto": "Justin remembering that he's Batman."
+    "fim": 1.08,
+    "duracao": 1.08,
+    "texto": "That's next level."
   },
   {
     "indice": 2,
-    "inicio": 3.0,
-    "fim": 5.0,
-    "duracao": 2.0,
-    "texto": "He then takes the actions to fight his way out."
+    "inicio": 1.08,
+    "fim": 4.8,
+    "duracao": 3.72,
+    "texto": "That's saying that although I'm already great at what I do,"
   },
   {
     "indice": 3,
-    "inicio": 5.0,
-    "fim": 9.0,
-    "duracao": 4.0,
-    "texto": "Look, I know it's a cartoon, but that has always resonated with me."
+    "inicio": 4.8,
+    "fim": 6.6,
+    "duracao": 1.8,
+    "texto": "I'm ready to dig deeper."
   },
   {
     "indice": 4,
-    "inicio": 9.0,
-    "fim": 14.0,
-    "duracao": 5.0,
-    "texto": "And whenever I'm feeling anxious about something, I always tell myself, remember who you are."
+    "inicio": 6.6,
+    "fim": 7.44,
+    "duracao": 0.84,
+    "texto": "I'm ready to do so."
   },
   {
     "indice": 5,
-    "inicio": 14.0,
-    "fim": 18.0,
-    "duracao": 4.0,
-    "texto": "But you're really talking about the most important concept in lasting change."
+    "inicio": 7.44,
+    "fim": 9.32,
+    "duracao": 1.88,
+    "texto": "I'm ready to make another sacrifice."
   },
   {
     "indice": 6,
-    "inicio": 18.0,
-    "fim": 19.0,
-    "duracao": 1.0,
-    "texto": "Identity."
+    "inicio": 9.32,
+    "fim": 10.88,
+    "duracao": 1.56,
+    "texto": "I'm ready to go somewhere, everybody else"
   },
   {
     "indice": 7,
-    "inicio": 19.0,
-    "fim": 22.0,
-    "duracao": 3.0,
-    "texto": "We all define ourselves in certain ways."
+    "inicio": 10.88,
+    "fim": 11.72,
+    "duracao": 0.84,
+    "texto": "ain't ready to go."
+  },
+  {
+    "indice": 8,
+    "inicio": 11.72,
+    "fim": 12.56,
+    "duracao": 0.84,
+    "texto": "Why?"
+  },
+  {
+    "indice": 9,
+    "inicio": 12.56,
+    "fim": 15.12,
+    "duracao": 2.56,
+    "texto": "Because I'm ready to take it to the next level."
+  },
+  {
+    "indice": 10,
+    "inicio": 15.12,
+    "fim": 16.68,
+    "duracao": 1.56,
+    "texto": "No matter what has happened to you,"
+  },
+  {
+    "indice": 11,
+    "inicio": 16.68,
+    "fim": 18.52,
+    "duracao": 1.84,
+    "texto": "no matter what somebody said to you,"
+  },
+  {
+    "indice": 12,
+    "inicio": 18.52,
+    "fim": 20.08,
+    "duracao": 1.56,
+    "texto": "no matter what somebody did to you,"
+  },
+  {
+    "indice": 13,
+    "inicio": 20.08,
+    "fim": 23.2,
+    "duracao": 3.12,
+    "texto": "I need you to walk away knowing you were one of one."
+  },
+  {
+    "indice": 14,
+    "inicio": 23.2,
+    "fim": 24.4,
+    "duracao": 1.2,
+    "texto": "Strive for perfection."
+  },
+  {
+    "indice": 15,
+    "inicio": 24.4,
+    "fim": 25.84,
+    "duracao": 1.44,
+    "texto": "Don't mean you got to be perfect,"
+  },
+  {
+    "indice": 16,
+    "inicio": 25.84,
+    "fim": 26.68,
+    "duracao": 0.84,
+    "texto": "but strive for it."
+  },
+  {
+    "indice": 17,
+    "inicio": 26.68,
+    "fim": 27.6,
+    "duracao": 0.92,
+    "texto": "People tell me all the time."
+  },
+  {
+    "indice": 18,
+    "inicio": 27.6,
+    "fim": 29.08,
+    "duracao": 1.48,
+    "texto": "Oh, you got this thing, it's image."
+  },
+  {
+    "indice": 19,
+    "inicio": 29.08,
+    "fim": 30.68,
+    "duracao": 1.6,
+    "texto": "You try to be 1,000 percent."
+  },
+  {
+    "indice": 20,
+    "inicio": 30.68,
+    "fim": 32.2,
+    "duracao": 1.52,
+    "texto": "I'm trying to be perfect."
+  },
+  {
+    "indice": 21,
+    "inicio": 32.2,
+    "fim": 33.84,
+    "duracao": 1.64,
+    "texto": "1,000 percent."
+  },
+  {
+    "indice": 22,
+    "inicio": 33.84,
+    "fim": 35.96,
+    "duracao": 2.12,
+    "texto": "It don't mean I'm not trying to dog you out."
+  },
+  {
+    "indice": 23,
+    "inicio": 35.96,
+    "fim": 37.08,
+    "duracao": 1.12,
+    "texto": "I'm not judging you."
+  },
+  {
+    "indice": 24,
+    "inicio": 37.08,
+    "fim": 38.52,
+    "duracao": 1.44,
+    "texto": "I don't even think I'm better than you,"
+  },
+  {
+    "indice": 25,
+    "inicio": 38.52,
+    "fim": 40.2,
+    "duracao": 1.68,
+    "texto": "but I am striving for perfection."
+  },
+  {
+    "indice": 26,
+    "inicio": 40.2,
+    "fim": 41.4,
+    "duracao": 1.2,
+    "texto": "I am."
+  },
+  {
+    "indice": 27,
+    "inicio": 41.4,
+    "fim": 43.28,
+    "duracao": 1.88,
+    "texto": "I'm definitely not trying to be the same version"
+  },
+  {
+    "indice": 28,
+    "inicio": 43.28,
+    "fim": 46.12,
+    "duracao": 2.84,
+    "texto": "of Eric Thomas I was last year or the month before."
+  },
+  {
+    "indice": 29,
+    "inicio": 46.12,
+    "fim": 48.76,
+    "duracao": 2.64,
+    "texto": "I'm definitely, if you knew me five years ago,"
+  },
+  {
+    "indice": 30,
+    "inicio": 48.76,
+    "fim": 50.16,
+    "duracao": 1.4,
+    "texto": "you better take a picture."
   }
 ]
 
@@ -70,64 +231,248 @@ SEGMENTOS_LEGENDA:
   {
     "indice": 1,
     "inicio": 0,
-    "fim": 3.0,
-    "duracao": 3.0,
-    "texto_original": "Justin remembering that he's Batman.",
-    "texto_traduzido": "Justin lembrando que ele é Batman"
+    "fim": 1.08,
+    "duracao": 1.08,
+    "texto_original": "That's next level.",
+    "texto_traduzido": "Esse é o próximo nível"
   },
   {
     "indice": 2,
-    "inicio": 3.0,
-    "fim": 5.0,
-    "duracao": 2.0,
-    "texto_original": "He then takes the actions to fight his way out.",
-    "texto_traduzido": "Ele então toma as ações para lutar"
+    "inicio": 1.08,
+    "fim": 4.8,
+    "duracao": 3.72,
+    "texto_original": "That's saying that although I'm already great at what I do,",
+    "texto_traduzido": "Isso está dizendo que, embora eu já seja ótimo no que faço, estou pronto para me aprofundar"
   },
   {
     "indice": 3,
-    "inicio": 5.0,
-    "fim": 9.0,
-    "duracao": 4.0,
-    "texto_original": "Look, I know it's a cartoon, but that has always resonated with me.",
-    "texto_traduzido": "Olha, eu sei que é um desenho animado, mas isso sempre ressoou comigo"
+    "inicio": 4.8,
+    "fim": 6.6,
+    "duracao": 1.8,
+    "texto_original": "I'm ready to dig deeper.",
+    "texto_traduzido": "Estou pronto para fazer isso"
   },
   {
     "indice": 4,
-    "inicio": 9.0,
-    "fim": 14.0,
-    "duracao": 5.0,
-    "texto_original": "And whenever I'm feeling anxious about something, I always tell myself, remember who you are.",
-    "texto_traduzido": "E sempre que estou ansioso por algo, sempre digo a mim mesmo, lembre -se de quem você é"
+    "inicio": 6.6,
+    "fim": 7.44,
+    "duracao": 0.84,
+    "texto_original": "I'm ready to do so.",
+    "texto_traduzido": "Estou pronto para fazer outro sacrifício"
   },
   {
     "indice": 5,
-    "inicio": 14.0,
-    "fim": 18.0,
-    "duracao": 4.0,
-    "texto_original": "But you're really talking about the most important concept in lasting change.",
-    "texto_traduzido": "Mas você está realmente falando sobre o conceito mais importante na mudança duradoura"
+    "inicio": 7.44,
+    "fim": 9.32,
+    "duracao": 1.88,
+    "texto_original": "I'm ready to make another sacrifice.",
+    "texto_traduzido": "Estou pronto para ir a algum lugar, todo mundo não está pronto para ir"
   },
   {
     "indice": 6,
-    "inicio": 18.0,
-    "fim": 19.0,
-    "duracao": 1.0,
-    "texto_original": "Identity.",
-    "texto_traduzido": "Identidade"
+    "inicio": 9.32,
+    "fim": 10.88,
+    "duracao": 1.56,
+    "texto_original": "I'm ready to go somewhere, everybody else",
+    "texto_traduzido": "Por que"
   },
   {
     "indice": 7,
-    "inicio": 19.0,
-    "fim": 22.0,
-    "duracao": 3.0,
-    "texto_original": "We all define ourselves in certain ways.",
-    "texto_traduzido": "Todos nós nos definimos de certas maneiras"
+    "inicio": 10.88,
+    "fim": 11.72,
+    "duracao": 0.84,
+    "texto_original": "ain't ready to go.",
+    "texto_traduzido": "Porque estou pronto para levá -lo para o próximo nível"
+  },
+  {
+    "indice": 8,
+    "inicio": 11.72,
+    "fim": 12.56,
+    "duracao": 0.84,
+    "texto_original": "Why?",
+    "texto_traduzido": "Não importa o que tenha acontecido com você, não importa o que alguém lhe disse, não importa o que alguém tenha feito com você, preciso que você se afaste sabendo que você era um dos um"
+  },
+  {
+    "indice": 9,
+    "inicio": 12.56,
+    "fim": 15.12,
+    "duracao": 2.56,
+    "texto_original": "Because I'm ready to take it to the next level.",
+    "texto_traduzido": "Lute por perfeição"
+  },
+  {
+    "indice": 10,
+    "inicio": 15.12,
+    "fim": 16.68,
+    "duracao": 1.56,
+    "texto_original": "No matter what has happened to you,",
+    "texto_traduzido": "Não significa que você tenha que ser perfeito, mas lute por isso"
+  },
+  {
+    "indice": 11,
+    "inicio": 16.68,
+    "fim": 18.52,
+    "duracao": 1.84,
+    "texto_original": "no matter what somebody said to you,",
+    "texto_traduzido": "As pessoas me dizem o tempo todo"
+  },
+  {
+    "indice": 12,
+    "inicio": 18.52,
+    "fim": 20.08,
+    "duracao": 1.56,
+    "texto_original": "no matter what somebody did to you,",
+    "texto_traduzido": "Oh, você conseguiu isso, é a imagem"
+  },
+  {
+    "indice": 13,
+    "inicio": 20.08,
+    "fim": 23.2,
+    "duracao": 3.12,
+    "texto_original": "I need you to walk away knowing you were one of one.",
+    "texto_traduzido": "Você tenta ser 1"
+  },
+  {
+    "indice": 14,
+    "inicio": 23.2,
+    "fim": 24.4,
+    "duracao": 1.2,
+    "texto_original": "Strive for perfection.",
+    "texto_traduzido": "000 por cento"
+  },
+  {
+    "indice": 15,
+    "inicio": 24.4,
+    "fim": 25.84,
+    "duracao": 1.44,
+    "texto_original": "Don't mean you got to be perfect,",
+    "texto_traduzido": "Estou tentando ser perfeito"
+  },
+  {
+    "indice": 16,
+    "inicio": 25.84,
+    "fim": 26.68,
+    "duracao": 0.84,
+    "texto_original": "but strive for it.",
+    "texto_traduzido": "1"
+  },
+  {
+    "indice": 17,
+    "inicio": 26.68,
+    "fim": 27.6,
+    "duracao": 0.92,
+    "texto_original": "People tell me all the time.",
+    "texto_traduzido": "000 por cento"
+  },
+  {
+    "indice": 18,
+    "inicio": 27.6,
+    "fim": 29.08,
+    "duracao": 1.48,
+    "texto_original": "Oh, you got this thing, it's image.",
+    "texto_traduzido": "Isso não significa que não estou tentando dar um cachimbo"
+  },
+  {
+    "indice": 19,
+    "inicio": 29.08,
+    "fim": 30.68,
+    "duracao": 1.6,
+    "texto_original": "You try to be 1,000 percent.",
+    "texto_traduzido": "Não estou te julgando"
+  },
+  {
+    "indice": 20,
+    "inicio": 30.68,
+    "fim": 32.2,
+    "duracao": 1.52,
+    "texto_original": "I'm trying to be perfect.",
+    "texto_traduzido": "Eu nem acho que sou melhor que você, mas estou buscando a perfeição"
+  },
+  {
+    "indice": 21,
+    "inicio": 32.2,
+    "fim": 33.84,
+    "duracao": 1.64,
+    "texto_original": "1,000 percent.",
+    "texto_traduzido": "Eu sou"
+  },
+  {
+    "indice": 22,
+    "inicio": 33.84,
+    "fim": 35.96,
+    "duracao": 2.12,
+    "texto_original": "It don't mean I'm not trying to dog you out.",
+    "texto_traduzido": "Definitivamente, não estou tentando ser a mesma versão de Eric Thomas que eu estava no ano passado ou no mês anterior"
+  },
+  {
+    "indice": 23,
+    "inicio": 35.96,
+    "fim": 37.08,
+    "duracao": 1.12,
+    "texto_original": "I'm not judging you.",
+    "texto_traduzido": "Definitivamente, se você me conheceu há cinco anos, é melhor tirar uma foto"
+  },
+  {
+    "indice": 24,
+    "inicio": 37.08,
+    "fim": 38.52,
+    "duracao": 1.44,
+    "texto_original": "I don't even think I'm better than you,",
+    "texto_traduzido": "I don't even think I'm better than you,"
+  },
+  {
+    "indice": 25,
+    "inicio": 38.52,
+    "fim": 40.2,
+    "duracao": 1.68,
+    "texto_original": "but I am striving for perfection.",
+    "texto_traduzido": "but I am striving for perfection."
+  },
+  {
+    "indice": 26,
+    "inicio": 40.2,
+    "fim": 41.4,
+    "duracao": 1.2,
+    "texto_original": "I am.",
+    "texto_traduzido": "I am."
+  },
+  {
+    "indice": 27,
+    "inicio": 41.4,
+    "fim": 43.28,
+    "duracao": 1.88,
+    "texto_original": "I'm definitely not trying to be the same version",
+    "texto_traduzido": "I'm definitely not trying to be the same version"
+  },
+  {
+    "indice": 28,
+    "inicio": 43.28,
+    "fim": 46.12,
+    "duracao": 2.84,
+    "texto_original": "of Eric Thomas I was last year or the month before.",
+    "texto_traduzido": "of Eric Thomas I was last year or the month before."
+  },
+  {
+    "indice": 29,
+    "inicio": 46.12,
+    "fim": 48.76,
+    "duracao": 2.64,
+    "texto_original": "I'm definitely, if you knew me five years ago,",
+    "texto_traduzido": "I'm definitely, if you knew me five years ago,"
+  },
+  {
+    "indice": 30,
+    "inicio": 48.76,
+    "fim": 50.16,
+    "duracao": 1.4,
+    "texto_original": "you better take a picture.",
+    "texto_traduzido": "you better take a picture."
   }
 ]
 
 METADADOS_DUBLAGEM:
-- Timestamps extraídos do Whisper: 7 segmentos
+- Timestamps extraídos do Whisper: 30 segmentos
 - Pausas detectadas: 0 pausas
-- Segmentos de legenda: 7 segmentos
+- Segmentos de legenda: 30 segmentos
 - Fonte dos dados: Whisper (mais preciso que FFmpeg)
 - Status: Pronto para dublagem otimizada

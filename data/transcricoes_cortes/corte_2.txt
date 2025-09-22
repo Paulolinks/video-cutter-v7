@@ -1,113 +1,183 @@
 TRANSCRIÇÃO DO CORTE: corte_2.mp4
-INÍCIO: 0.00s
-FIM: 60.00s
-DURAÇÃO: 60.00s
+INÍCIO: 44.32s
+FIM: 100.48s
+DURAÇÃO: 56.16s
 
 TEXTO:
-Success without fulfillment is the ultimate failure.  Like success is getting what you want.  Fulfillment is living what you're made for.  Fulfillment and success, they're not even the same universe.  People ask me all the time, what does it take to be happy?  And I always tell them it's really simple. One word, progress.  Progress equals happiness. If you keep growing,  you're going to feel alive and if you keep growing, you're going to have more to give.  It doesn't matter how many statues, Oscars, they give you or Emmys  or how much money you have in the bank. We've all seen people  have all those things and I get the phone call because they're depressed or  somebody commits suicide in that area. It's really an inner game  and I think that's what's missing for us today.  Everybody's focusing on the outside world and how there's a lot of things in the outside world, you'll never be able to control.
+You got to have a reason for why you do what you do.  All he keep thinking about is, I'm  going to get one for my coach.  That's why he ain't all smiley, because why?  He not smiling, because what he's trying to accomplish,  he has not what?  He ain't got it yet.  Y'all better start watching these games, bro,  because you're going to need to do what these champions doing  if they're going to be a champion.  The problem with some of y'all, the reason  why you don't give 120% every double time you get on the field,  because you ain't got a why for what you do.  You ain't got a why.  So because you don't live long, you  don't have time not to make your dreams and goals become  really.  Every single day, because you don't  know how long you have, every single day should be about,  what can I do?  What can I have?  What can I be?  And you got to hang out with other people  on the same trajectory you own.
 
 TEXTO_TRADUZIDO:
-O sucesso sem cumprimento é o fracasso final.  Como o sucesso é conseguir o que você deseja.  A realização está vivendo para o que você é feito.  Realização e sucesso, eles nem são o mesmo universo.  As pessoas me perguntam o tempo todo, o que é preciso para ser feliz?  E eu sempre digo a eles que é realmente simples. Uma palavra, progresso.  O progresso é igual à felicidade. Se você continuar crescendo, você se sentirá vivo e se continuar crescendo, terá mais para dar.  Não importa quantas estátuas, Oscars, elas dão a você ou Emmys ou quanto dinheiro você tem no banco. Todos nós vimos pessoas terem todas essas coisas e eu recebo o telefonema porque elas estão deprimidas ou alguém comete suicídio nessa área. É realmente um jogo interno e acho que é isso que está faltando para nós hoje.  Todo mundo está se concentrando no mundo exterior e em como há muitas coisas no mundo exterior, você nunca poderá controlar.
+Você precisa ter um motivo pelo qual você faz o que faz.  Tudo o que ele continua pensando é que vou conseguir um para o meu treinador.  É por isso que ele não é todo sorridente, porque por quê?  Ele não está sorrindo, porque o que está tentando realizar, ele não tem o quê?  Ele ainda não conseguiu.  É melhor você começar a assistir a esses jogos, mano, porque precisará fazer o que esses campeões fazem se forem um campeão.  O problema com alguns de vocês, a razão pela qual você não dá 120% a cada dobro de que entra em campo, porque você não tem um porquê pelo que faz.  Você não tem um porquê.  Então, porque você não vive muito, não tem tempo para não fazer seus sonhos e objetivos se tornarem realmente.  Todos os dias, porque você não sabe quanto tempo você tem, todos os dias deveriam ter, o que posso fazer?  O que posso ter?  O que posso ser?  E você tem que sair com outras pessoas na mesma trajetória que você possui.
 
 TIMESTAMPS_DETALHADOS:
 [
   {
     "indice": 1,
     "inicio": 0,
-    "fim": 4.0,
-    "duracao": 4.0,
-    "texto": "Success without fulfillment is the ultimate failure."
+    "fim": 2.36,
+    "duracao": 2.36,
+    "texto": "You got to have a reason for why you do what you do."
   },
   {
     "indice": 2,
-    "inicio": 4.0,
-    "fim": 8.0,
-    "duracao": 4.0,
-    "texto": "Like success is getting what you want."
+    "inicio": 2.36,
+    "fim": 4.08,
+    "duracao": 1.72,
+    "texto": "All he keep thinking about is, I'm"
   },
   {
     "indice": 3,
-    "inicio": 8.0,
-    "fim": 12.0,
-    "duracao": 4.0,
-    "texto": "Fulfillment is living what you're made for."
+    "inicio": 4.08,
+    "fim": 6.84,
+    "duracao": 2.76,
+    "texto": "going to get one for my coach."
   },
   {
     "indice": 4,
-    "inicio": 12.0,
-    "fim": 16.0,
-    "duracao": 4.0,
-    "texto": "Fulfillment and success, they're not even the same universe."
+    "inicio": 6.84,
+    "fim": 9.4,
+    "duracao": 2.56,
+    "texto": "That's why he ain't all smiley, because why?"
   },
   {
     "indice": 5,
-    "inicio": 16.0,
-    "fim": 20.0,
-    "duracao": 4.0,
-    "texto": "People ask me all the time, what does it take to be happy?"
+    "inicio": 9.4,
+    "fim": 12.36,
+    "duracao": 2.96,
+    "texto": "He not smiling, because what he's trying to accomplish,"
   },
   {
     "indice": 6,
-    "inicio": 20.0,
-    "fim": 24.0,
-    "duracao": 4.0,
-    "texto": "And I always tell them it's really simple. One word, progress."
+    "inicio": 12.36,
+    "fim": 13.84,
+    "duracao": 1.48,
+    "texto": "he has not what?"
   },
   {
     "indice": 7,
-    "inicio": 24.0,
-    "fim": 28.0,
-    "duracao": 4.0,
-    "texto": "Progress equals happiness. If you keep growing,"
+    "inicio": 13.84,
+    "fim": 16.72,
+    "duracao": 2.88,
+    "texto": "He ain't got it yet."
   },
   {
     "indice": 8,
-    "inicio": 28.0,
-    "fim": 34.0,
-    "duracao": 6.0,
-    "texto": "you're going to feel alive and if you keep growing, you're going to have more to give."
+    "inicio": 16.72,
+    "fim": 18.56,
+    "duracao": 1.84,
+    "texto": "Y'all better start watching these games, bro,"
   },
   {
     "indice": 9,
-    "inicio": 34.0,
-    "fim": 38.0,
-    "duracao": 4.0,
-    "texto": "It doesn't matter how many statues, Oscars, they give you or Emmys"
+    "inicio": 18.56,
+    "fim": 20.56,
+    "duracao": 2.0,
+    "texto": "because you're going to need to do what these champions doing"
   },
   {
     "indice": 10,
-    "inicio": 38.0,
-    "fim": 42.0,
-    "duracao": 4.0,
-    "texto": "or how much money you have in the bank. We've all seen people"
+    "inicio": 20.56,
+    "fim": 23.32,
+    "duracao": 2.76,
+    "texto": "if they're going to be a champion."
   },
   {
     "indice": 11,
-    "inicio": 42.0,
-    "fim": 46.0,
-    "duracao": 4.0,
-    "texto": "have all those things and I get the phone call because they're depressed or"
+    "inicio": 23.32,
+    "fim": 25.16,
+    "duracao": 1.84,
+    "texto": "The problem with some of y'all, the reason"
   },
   {
     "indice": 12,
-    "inicio": 46.0,
-    "fim": 50.0,
-    "duracao": 4.0,
-    "texto": "somebody commits suicide in that area. It's really an inner game"
+    "inicio": 25.16,
+    "fim": 29.2,
+    "duracao": 4.04,
+    "texto": "why you don't give 120% every double time you get on the field,"
   },
   {
     "indice": 13,
-    "inicio": 50.0,
-    "fim": 56.0,
-    "duracao": 6.0,
-    "texto": "and I think that's what's missing for us today."
+    "inicio": 29.2,
+    "fim": 32.32,
+    "duracao": 3.12,
+    "texto": "because you ain't got a why for what you do."
   },
   {
     "indice": 14,
-    "inicio": 56.0,
-    "fim": 60.0,
-    "duracao": 4.0,
-    "texto": "Everybody's focusing on the outside world and how there's a lot of things in the outside world, you'll never be able to control."
+    "inicio": 32.32,
+    "fim": 34.96,
+    "duracao": 2.64,
+    "texto": "You ain't got a why."
+  },
+  {
+    "indice": 15,
+    "inicio": 34.96,
+    "fim": 37.4,
+    "duracao": 2.44,
+    "texto": "So because you don't live long, you"
+  },
+  {
+    "indice": 16,
+    "inicio": 37.4,
+    "fim": 40.28,
+    "duracao": 2.88,
+    "texto": "don't have time not to make your dreams and goals become"
+  },
+  {
+    "indice": 17,
+    "inicio": 40.28,
+    "fim": 40.76,
+    "duracao": 0.48,
+    "texto": "really."
+  },
+  {
+    "indice": 18,
+    "inicio": 40.76,
+    "fim": 42.76,
+    "duracao": 2.0,
+    "texto": "Every single day, because you don't"
+  },
+  {
+    "indice": 19,
+    "inicio": 42.76,
+    "fim": 46.08,
+    "duracao": 3.32,
+    "texto": "know how long you have, every single day should be about,"
+  },
+  {
+    "indice": 20,
+    "inicio": 46.08,
+    "fim": 47.08,
+    "duracao": 1.0,
+    "texto": "what can I do?"
+  },
+  {
+    "indice": 21,
+    "inicio": 47.08,
+    "fim": 48.08,
+    "duracao": 1.0,
+    "texto": "What can I have?"
+  },
+  {
+    "indice": 22,
+    "inicio": 48.08,
+    "fim": 48.92,
+    "duracao": 0.84,
+    "texto": "What can I be?"
+  },
+  {
+    "indice": 23,
+    "inicio": 48.92,
+    "fim": 52.84,
+    "duracao": 3.92,
+    "texto": "And you got to hang out with other people"
+  },
+  {
+    "indice": 24,
+    "inicio": 52.84,
+    "fim": 56.16,
+    "duracao": 3.32,
+    "texto": "on the same trajectory you own."
   }
 ]
 
@@ -119,120 +189,200 @@ SEGMENTOS_LEGENDA:
   {
     "indice": 1,
     "inicio": 0,
-    "fim": 4.0,
-    "duracao": 4.0,
-    "texto_original": "Success without fulfillment is the ultimate failure.",
-    "texto_traduzido": "O sucesso sem cumprimento é o fracasso final"
+    "fim": 2.36,
+    "duracao": 2.36,
+    "texto_original": "You got to have a reason for why you do what you do.",
+    "texto_traduzido": "Você precisa ter um motivo pelo qual você faz o que faz"
   },
   {
     "indice": 2,
-    "inicio": 4.0,
-    "fim": 8.0,
-    "duracao": 4.0,
-    "texto_original": "Like success is getting what you want.",
-    "texto_traduzido": "Como o sucesso é conseguir o que você deseja"
+    "inicio": 2.36,
+    "fim": 4.08,
+    "duracao": 1.72,
+    "texto_original": "All he keep thinking about is, I'm",
+    "texto_traduzido": "Tudo o que ele continua pensando é que vou conseguir um para o meu treinador"
   },
   {
     "indice": 3,
-    "inicio": 8.0,
-    "fim": 12.0,
-    "duracao": 4.0,
-    "texto_original": "Fulfillment is living what you're made for.",
-    "texto_traduzido": "A realização está vivendo para o que você é feito"
+    "inicio": 4.08,
+    "fim": 6.84,
+    "duracao": 2.76,
+    "texto_original": "going to get one for my coach.",
+    "texto_traduzido": "É por isso que ele não é todo sorridente, porque por quê"
   },
   {
     "indice": 4,
-    "inicio": 12.0,
-    "fim": 16.0,
-    "duracao": 4.0,
-    "texto_original": "Fulfillment and success, they're not even the same universe.",
-    "texto_traduzido": "Realização e sucesso, eles nem são o mesmo universo"
+    "inicio": 6.84,
+    "fim": 9.4,
+    "duracao": 2.56,
+    "texto_original": "That's why he ain't all smiley, because why?",
+    "texto_traduzido": "Ele não está sorrindo, porque o que está tentando realizar, ele não tem o quê"
   },
   {
     "indice": 5,
-    "inicio": 16.0,
-    "fim": 20.0,
-    "duracao": 4.0,
-    "texto_original": "People ask me all the time, what does it take to be happy?",
-    "texto_traduzido": "As pessoas me perguntam o tempo todo, o que é preciso para ser feliz"
+    "inicio": 9.4,
+    "fim": 12.36,
+    "duracao": 2.96,
+    "texto_original": "He not smiling, because what he's trying to accomplish,",
+    "texto_traduzido": "Ele ainda não conseguiu"
   },
   {
     "indice": 6,
-    "inicio": 20.0,
-    "fim": 24.0,
-    "duracao": 4.0,
-    "texto_original": "And I always tell them it's really simple. One word, progress.",
-    "texto_traduzido": "E eu sempre digo a eles que é realmente simples"
+    "inicio": 12.36,
+    "fim": 13.84,
+    "duracao": 1.48,
+    "texto_original": "he has not what?",
+    "texto_traduzido": "É melhor você começar a assistir a esses jogos, mano, porque precisará fazer o que esses campeões fazem se forem um campeão"
   },
   {
     "indice": 7,
-    "inicio": 24.0,
-    "fim": 28.0,
-    "duracao": 4.0,
-    "texto_original": "Progress equals happiness. If you keep growing,",
-    "texto_traduzido": "Uma palavra, progresso"
+    "inicio": 13.84,
+    "fim": 16.72,
+    "duracao": 2.88,
+    "texto_original": "He ain't got it yet.",
+    "texto_traduzido": "O problema com alguns de vocês, a razão pela qual você não dá 120% a cada dobro de que entra em campo, porque você não tem um porquê pelo que faz"
   },
   {
     "indice": 8,
-    "inicio": 28.0,
-    "fim": 34.0,
-    "duracao": 6.0,
-    "texto_original": "you're going to feel alive and if you keep growing, you're going to have more to give.",
-    "texto_traduzido": "O progresso é igual à felicidade"
+    "inicio": 16.72,
+    "fim": 18.56,
+    "duracao": 1.84,
+    "texto_original": "Y'all better start watching these games, bro,",
+    "texto_traduzido": "Você não tem um porquê"
   },
   {
     "indice": 9,
-    "inicio": 34.0,
-    "fim": 38.0,
-    "duracao": 4.0,
-    "texto_original": "It doesn't matter how many statues, Oscars, they give you or Emmys",
-    "texto_traduzido": "Se você continuar crescendo, você se sentirá vivo e se continuar crescendo, terá mais para dar"
+    "inicio": 18.56,
+    "fim": 20.56,
+    "duracao": 2.0,
+    "texto_original": "because you're going to need to do what these champions doing",
+    "texto_traduzido": "Então, porque você não vive muito, não tem tempo para não fazer seus sonhos e objetivos se tornarem realmente"
   },
   {
     "indice": 10,
-    "inicio": 38.0,
-    "fim": 42.0,
-    "duracao": 4.0,
-    "texto_original": "or how much money you have in the bank. We've all seen people",
-    "texto_traduzido": "Não importa quantas estátuas, Oscars, elas dão a você ou Emmys ou quanto dinheiro você tem no banco"
+    "inicio": 20.56,
+    "fim": 23.32,
+    "duracao": 2.76,
+    "texto_original": "if they're going to be a champion.",
+    "texto_traduzido": "Todos os dias, porque você não sabe quanto tempo você tem, todos os dias deveriam ter, o que posso fazer"
   },
   {
     "indice": 11,
-    "inicio": 42.0,
-    "fim": 46.0,
-    "duracao": 4.0,
-    "texto_original": "have all those things and I get the phone call because they're depressed or",
-    "texto_traduzido": "Todos nós vimos pessoas terem todas essas coisas e eu recebo o telefonema porque elas estão deprimidas ou alguém comete suicídio nessa área"
+    "inicio": 23.32,
+    "fim": 25.16,
+    "duracao": 1.84,
+    "texto_original": "The problem with some of y'all, the reason",
+    "texto_traduzido": "O que posso ter"
   },
   {
     "indice": 12,
-    "inicio": 46.0,
-    "fim": 50.0,
-    "duracao": 4.0,
-    "texto_original": "somebody commits suicide in that area. It's really an inner game",
-    "texto_traduzido": "É realmente um jogo interno e acho que é isso que está faltando para nós hoje"
+    "inicio": 25.16,
+    "fim": 29.2,
+    "duracao": 4.04,
+    "texto_original": "why you don't give 120% every double time you get on the field,",
+    "texto_traduzido": "O que posso ser"
   },
   {
     "indice": 13,
-    "inicio": 50.0,
-    "fim": 56.0,
-    "duracao": 6.0,
-    "texto_original": "and I think that's what's missing for us today.",
-    "texto_traduzido": "Todo mundo está se concentrando no mundo exterior e em como há muitas coisas no mundo exterior, você nunca poderá controlar"
+    "inicio": 29.2,
+    "fim": 32.32,
+    "duracao": 3.12,
+    "texto_original": "because you ain't got a why for what you do.",
+    "texto_traduzido": "E você tem que sair com outras pessoas na mesma trajetória que você possui"
   },
   {
     "indice": 14,
-    "inicio": 56.0,
-    "fim": 60.0,
-    "duracao": 4.0,
-    "texto_original": "Everybody's focusing on the outside world and how there's a lot of things in the outside world, you'll never be able to control.",
-    "texto_traduzido": "Everybody's focusing on the outside world and how there's a lot of things in the outside world, you'll never be able to control."
+    "inicio": 32.32,
+    "fim": 34.96,
+    "duracao": 2.64,
+    "texto_original": "You ain't got a why.",
+    "texto_traduzido": "You ain't got a why."
+  },
+  {
+    "indice": 15,
+    "inicio": 34.96,
+    "fim": 37.4,
+    "duracao": 2.44,
+    "texto_original": "So because you don't live long, you",
+    "texto_traduzido": "So because you don't live long, you"
+  },
+  {
+    "indice": 16,
+    "inicio": 37.4,
+    "fim": 40.28,
+    "duracao": 2.88,
+    "texto_original": "don't have time not to make your dreams and goals become",
+    "texto_traduzido": "don't have time not to make your dreams and goals become"
+  },
+  {
+    "indice": 17,
+    "inicio": 40.28,
+    "fim": 40.76,
+    "duracao": 0.48,
+    "texto_original": "really.",
+    "texto_traduzido": "really."
+  },
+  {
+    "indice": 18,
+    "inicio": 40.76,
+    "fim": 42.76,
+    "duracao": 2.0,
+    "texto_original": "Every single day, because you don't",
+    "texto_traduzido": "Every single day, because you don't"
+  },
+  {
+    "indice": 19,
+    "inicio": 42.76,
+    "fim": 46.08,
+    "duracao": 3.32,
+    "texto_original": "know how long you have, every single day should be about,",
+    "texto_traduzido": "know how long you have, every single day should be about,"
+  },
+  {
+    "indice": 20,
+    "inicio": 46.08,
+    "fim": 47.08,
+    "duracao": 1.0,
+    "texto_original": "what can I do?",
+    "texto_traduzido": "what can I do?"
+  },
+  {
+    "indice": 21,
+    "inicio": 47.08,
+    "fim": 48.08,
+    "duracao": 1.0,
+    "texto_original": "What can I have?",
+    "texto_traduzido": "What can I have?"
+  },
+  {
+    "indice": 22,
+    "inicio": 48.08,
+    "fim": 48.92,
+    "duracao": 0.84,
+    "texto_original": "What can I be?",
+    "texto_traduzido": "What can I be?"
+  },
+  {
+    "indice": 23,
+    "inicio": 48.92,
+    "fim": 52.84,
+    "duracao": 3.92,
+    "texto_original": "And you got to hang out with other people",
+    "texto_traduzido": "And you got to hang out with other people"
+  },
+  {
+    "indice": 24,
+    "inicio": 52.84,
+    "fim": 56.16,
+    "duracao": 3.32,
+    "texto_original": "on the same trajectory you own.",
+    "texto_traduzido": "on the same trajectory you own."
   }
 ]
 
 METADADOS_DUBLAGEM:
-- Timestamps extraídos do Whisper: 14 segmentos
+- Timestamps extraídos do Whisper: 24 segmentos
 - Pausas detectadas: 0 pausas
-- Segmentos de legenda: 14 segmentos
+- Segmentos de legenda: 24 segmentos
 - Fonte dos dados: Whisper (mais preciso que FFmpeg)
 - Status: Pronto para dublagem otimizada

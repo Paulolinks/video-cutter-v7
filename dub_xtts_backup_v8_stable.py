@@ -223,11 +223,8 @@ def _time_stretch_to_duration(wav_in: Path, wav_out: Path, target_sec: float, sr
     ratio = target_sec / cur
     print(f"🔍 [TIME-STRETCH] Ratio calculado: {ratio:.3f}")
     
-    #  LIMITES SEGUROS: Máximo 2.5x aceleração para preservar qualidade
-    MAX_ACCELERATION = 2.5
-    MIN_RATIO = 1.0 / MAX_ACCELERATION  # 0.4 = 2.5x aceleração
-    
-    if ratio < MIN_RATIO or ratio > 5.0:
+    # Limitar ratio para evitar distorção extrema
+    if ratio < 0.2 or ratio > 5.0:
         print(f"⚠️ [TIME-STRETCH] Ratio extremo ({ratio:.3f}), usando padding/trimming")
         
         # Se muito rápido, fazer trim
@@ -245,42 +242,16 @@ def _time_stretch_to_duration(wav_in: Path, wav_out: Path, target_sec: float, sr
         print(f"✅ [TIME-STRETCH] Duração final (padding/trim): {final_dur:.3f}s")
         return final_dur, ratio
     
-        # Aplicar limites inteligentes
-    if ratio < MIN_RATIO:
-        print(f"⚠️ [TIME-STRETCH] Ratio muito baixo ({ratio:.3f}), limitando para {MIN_RATIO:.3f}")
-        ratio = MIN_RATIO  # Limitar para 2.5x aceleração máximo
-    elif ratio > 5.0:
-        print(f"⚠️ [TIME-STRETCH] Ratio muito alto ({ratio:.3f}), limitando para 5.0")
-        ratio = 5.0
+    # CORREÇÃO: Usar asetrate+aresample para time-stretching correto
+    print(f"🎵 [TIME-STRETCH] Aplicando asetrate+aresample (ratio={ratio:.3f})")
     
-    # 🎯 CORREÇÃO: Usar atempo (preserva pitch) em vez de asetrate
-    print(f"🎵 [TIME-STRETCH] Aplicando atempo (preserva timbre) - ratio={ratio:.3f}")
+    # Calcular nova taxa de amostragem para acelerar/desacelerar
+    new_rate = int(sr / ratio)  # CORREÇÃO: dividir por ratio, não multiplicar
     
-    # CORREÇÃO CRÍTICA: atempo precisa do INVERSO do ratio
-    atempo_ratio = 1.0 / ratio
-    print(f"�� [TIME-STRETCH] Invertendo ratio para atempo: {ratio:.3f} → {atempo_ratio:.3f}")
-    
-    # Criar cadeia de atempo para ratios complexos
-    atempo_chain = []
-    r = float(atempo_ratio)
-    
-    # Decompor ratio em passos de 0.5 a 2.0 (limite do atempo)
-    while r > 2.0:
-        atempo_chain.append(2.0)
-        r /= 2.0
-    while r < 0.5:
-        atempo_chain.append(0.5)
-        r /= 0.5
-    atempo_chain.append(r)
-    
-    # Criar comando FFmpeg com atempo (preserva pitch)
-    if len(atempo_chain) == 1:
-        cmd = ["ffmpeg","-y","-i",str(wav_in),"-af",f"atempo={atempo_chain[0]:.6f}",
-               "-ar",str(sr),"-ac","1","-sample_fmt","s16",str(wav_out)]
-    else:
-        atempo_str = ",".join([f"atempo={x:.6f}" for x in atempo_chain])
-        cmd = ["ffmpeg","-y","-i",str(wav_in),"-af",atempo_str,
-               "-ar",str(sr),"-ac","1","-sample_fmt","s16",str(wav_out)]
+    # Criar comando FFmpeg com asetrate+aresample (mais preciso que atempo)
+    cmd = ["ffmpeg","-y","-i",str(wav_in),
+           "-af",f"asetrate={new_rate},aresample={sr}",
+           "-ar",str(sr),"-ac","1","-sample_fmt","s16",str(wav_out)]
     
     try:
         _ffmpeg(cmd)
