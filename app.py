@@ -3368,24 +3368,9 @@ def processar_sequencial_ia():
         # Configurações do Ollama
         ollama_host = os.getenv("OLLAMA_HOST", "http://127.0.0.1:11434")
         
-        # Buscar modelo configurado no Ollama
-        ollama_model = "qwen2.5:7b-instruct"  # Default
-        try:
-            import ollama
-            client = ollama.Client(host=ollama_host)
-            models = client.list()
-            if models and 'models' in models and models['models']:
-                first_model = models['models'][0]
-                if hasattr(first_model, 'model'):
-                    ollama_model = first_model.model
-                elif 'model' in first_model:
-                    ollama_model = first_model['model']
-                else:
-                    ollama_model = str(first_model)
-        except ImportError:
-            print("Ollama não instalado")
-        except Exception as e:
-            print(f"Erro ao buscar modelo Ollama: {e}")
+        # Carregar modelo configurado do ai_config.json
+        config_ai = carregar_config_ai()
+        ollama_model = config_ai.get("model", "qwen2.5:7b-instruct")  # Carrega do config
         
         # Buscar vídeos prontos em data/final (onde estão os vídeos legendados)
         pasta_final = "data/final"
@@ -3543,24 +3528,9 @@ def processar_sequencial_ia_dublados():
         # Configurações do Ollama
         ollama_host = os.getenv("OLLAMA_HOST", "http://127.0.0.1:11434")
         
-        # Buscar modelo configurado no Ollama
-        ollama_model = "qwen2.5:7b-instruct"  # Default
-        try:
-            import ollama
-            client = ollama.Client(host=ollama_host)
-            models = client.list()
-            if models and 'models' in models and models['models']:
-                first_model = models['models'][0]
-                if hasattr(first_model, 'model'):
-                    ollama_model = first_model.model
-                elif 'model' in first_model:
-                    ollama_model = first_model['model']
-                else:
-                    ollama_model = str(first_model)
-        except ImportError:
-            print("Ollama não instalado")
-        except Exception as e:
-            print(f"Erro ao buscar modelo Ollama: {e}")
+        # Carregar modelo configurado do ai_config.json
+        config_ai = carregar_config_ai()
+        ollama_model = config_ai.get("model", "qwen2.5:7b-instruct")  # Carrega do config
         
         # Buscar vídeos dublados em múltiplas pastas possíveis
         pastas_dublados = ["data/cortes_dublado", "static/dublados", "outputs/dublados"]
@@ -4587,7 +4557,8 @@ def gerar_conteudo_individual():
         
         # Configurações do Ollama
         ollama_host = os.getenv("OLLAMA_HOST", "http://127.0.0.1:11434")
-        ollama_model = "qwen2.5:7b"  # Usar modelo específico
+        config_ai = carregar_config_ai()
+        ollama_model = config_ai.get("model", "qwen2.5:7b")  # Carrega do config
         
         print(f"🤖 [METADADOS] Chamando IA: {ollama_model}")
         
