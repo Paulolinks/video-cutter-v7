@@ -195,6 +195,13 @@ node_modules/
 # Build artifacts
 build/
 dist/
+# Ignorar .exe EXCETO os binários essenciais
 *.exe
+!bin/ffmpeg/*.exe
+!bin/imagemagick/*.exe
 *.msi
 *.dmg
+
+# Backup folders - não versionar
+backup-test/
+backups/

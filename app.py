@@ -1,5 +1,6 @@
 # app.py (atualizado: suporta 'automatico' e 'tema' no /process)
 from flask import Flask, render_template, request, jsonify
+from flask_socketio import SocketIO, emit
 import subprocess
 import os, glob
 import json
@@ -39,6 +40,7 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 # Se alterar o escopo, delete o token.json para re-autenticar
 SCOPES = [
@@ -85,12 +87,12 @@ def get_drive_service():
     if os.path.exists('token.json'):
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
     if not creds or not creds.valid or not creds.refresh_token:
-        print("🔐 Re-autorizando com Google para incluir Google Sheets e Gmail...")
+        print("Re-autorizando com Google para incluir Google Sheets e Gmail...")
         flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
         creds = flow.run_local_server(port=5501, access_type='offline', prompt='consent')
         with open('token.json', 'w', encoding='utf-8') as token_file:
             token_file.write(creds.to_json())
-        print("✅ Autorização atualizada com sucesso!")
+        print("Autorizacao atualizada com sucesso!")
     return build('drive', 'v3', credentials=creds)
 
 
@@ -109,10 +111,10 @@ def reauth_google():
         # Deletar token existente para forçar re-autorização
         if os.path.exists('token.json'):
             os.remove('token.json')
-            print("🗑️ Token anterior removido")
+            print("[LIMPEZA] Token anterior removido")
         
         # Forçar nova autorização
-        print("🔐 Iniciando re-autorização com Google...")
+        print("Iniciando re-autorizacao com Google...")
         flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
         creds = flow.run_local_server(port=5501, access_type='offline', prompt='consent')
         
@@ -120,14 +122,14 @@ def reauth_google():
         with open('token.json', 'w', encoding='utf-8') as token_file:
             token_file.write(creds.to_json())
         
-        print("✅ Re-autorização concluída com sucesso!")
+        print("Re-autorizacao concluida com sucesso!")
         return jsonify({
             "success": True, 
             "message": "Re-autorização concluída! Agora você tem acesso ao Google Drive, Google Sheets e Gmail."
         })
         
     except Exception as e:
-        print(f"❌ Erro na re-autorização: {e}")
+        print(f"Erro na re-autorizacao: {e}")
         return jsonify({"success": False, "message": f"Erro na re-autorização: {str(e)}"})
 
 @app.route("/check_permissions", methods=["GET"])
@@ -180,7 +182,7 @@ def check_permissions():
 def reset_google_config():
     """Reseta completamente a configuração do Google e força nova autorização"""
     try:
-        print("🗑️ Iniciando reset completo da configuração Google...")
+        print("[LIMPEZA] Iniciando reset completo da configuracao Google...")
         
         # 1. Deletar token de autorização
         if os.path.exists('token.json'):
@@ -197,7 +199,7 @@ def reset_google_config():
         for config_file in config_files:
             if os.path.exists(config_file):
                 os.remove(config_file)
-                print(f"✅ {config_file} removido")
+                print(f" {config_file} removido")
         
         # 3. Verificar se credentials.json existe
         if not os.path.exists('credentials.json'):
@@ -218,7 +220,7 @@ def reset_google_config():
         # 6. Tentar converter arquivo Excel se existir ID da planilha
         planilha_id = carregar_planilha_id()
         if planilha_id:
-            print("🔄 Tentando converter arquivo Excel para Google Sheet...")
+            print("[CONVERSAO] Tentando converter arquivo Excel para Google Sheet...")
             drive_service = get_drive_service()
             if drive_service:
                 is_sheets, file_id = verificar_google_sheets(drive_service, planilha_id)
@@ -226,7 +228,7 @@ def reset_google_config():
                     success, new_file_id, new_name = converter_excel_para_google_sheets(drive_service, file_id)
                     if success:
                         salvar_planilha_id(new_file_id)
-                        print(f"✅ Arquivo convertido automaticamente: {new_name}")
+                        print(f" Arquivo convertido automaticamente: {new_name}")
         
         print("✅ Reset completo concluído!")
         return jsonify({
@@ -235,10 +237,10 @@ def reset_google_config():
         })
         
     except Exception as e:
-        print(f"❌ Erro no reset: {e}")
+        print(f" Erro no reset: {e}")
         return jsonify({
             "success": False, 
-            "message": f"❌ Erro no reset: {str(e)}"
+            "message": f"Erro no reset: {str(e)}"
         })
 
 @app.route("/convert_to_sheets", methods=["POST"])
@@ -282,14 +284,14 @@ def convert_to_sheets():
         else:
             return jsonify({
                 "success": False, 
-                "message": "❌ Erro ao converter arquivo. Verifique as permissões."
+                "message": "Erro ao converter arquivo. Verifique as permissoes."
             })
         
     except Exception as e:
-        print(f"❌ Erro na conversão: {e}")
+        print(f" Erro na conversão: {e}")
         return jsonify({
             "success": False, 
-            "message": f"❌ Erro na conversão: {str(e)}"
+            "message": f"Erro na conversao: {str(e)}"
         })
 
 def verificar_google_sheets(service, file_id):
@@ -298,14 +300,14 @@ def verificar_google_sheets(service, file_id):
         # Usar o serviço correto do Google Drive
         drive_service = get_drive_service()
         if not drive_service:
-            print("❌ Erro: Não foi possível conectar com Google Drive")
+            print(" Erro: Não foi possível conectar com Google Drive")
             return False, file_id
             
         file_info = drive_service.files().get(fileId=file_id, fields='mimeType,name').execute()
         mime_type = file_info.get('mimeType', '')
         file_name = file_info.get('name', '')
         
-        print(f"📄 Arquivo: {file_name}, Tipo: {mime_type}")
+        print(f" Arquivo: {file_name}, Tipo: {mime_type}")
         
         if mime_type == 'application/vnd.google-apps.spreadsheet':
             print("✅ Arquivo é um Google Sheets nativo")
@@ -314,21 +316,21 @@ def verificar_google_sheets(service, file_id):
             print("⚠️ Arquivo é Excel (.xlsx) - precisa ser convertido para Google Sheets")
             return False, file_id
         else:
-            print(f"❌ Tipo de arquivo não suportado: {mime_type}")
+            print(f" Tipo de arquivo não suportado: {mime_type}")
             return False, file_id
     except Exception as e:
-        print(f"❌ Erro ao verificar arquivo: {e}")
+        print(f" Erro ao verificar arquivo: {e}")
         return False, file_id
 
 def converter_excel_para_google_sheets(service, file_id):
     """Converte arquivo Excel para Google Sheet nativo"""
     try:
-        print(f"🔄 Convertendo arquivo Excel para Google Sheet...")
+        print(f"[CONVERSAO] Convertendo arquivo Excel para Google Sheet...")
         
         # Usar o serviço correto do Google Drive
         drive_service = get_drive_service()
         if not drive_service:
-            print("❌ Erro: Não foi possível conectar com Google Drive")
+            print(" Erro: Não foi possível conectar com Google Drive")
             return False, None, None
         
         # Primeiro, obter informações do arquivo original
@@ -355,9 +357,9 @@ def converter_excel_para_google_sheets(service, file_id):
         new_file_id = copied_file.get('id')
         new_file_name = copied_file.get('name')
         
-        print(f"✅ Arquivo convertido com sucesso!")
-        print(f"📄 Novo ID: {new_file_id}")
-        print(f"📄 Novo nome: {new_file_name}")
+        print(f" Arquivo convertido com sucesso!")
+        print(f" Novo ID: {new_file_id}")
+        print(f" Novo nome: {new_file_name}")
         
         # Aguardar um pouco para garantir que a conversão seja processada
         import time
@@ -366,13 +368,13 @@ def converter_excel_para_google_sheets(service, file_id):
         return True, new_file_id, new_file_name
         
     except Exception as e:
-        print(f"❌ Erro ao converter arquivo: {e}")
+        print(f" Erro ao converter arquivo: {e}")
         return False, None, None
 
 def sincronizar_com_google_sheets_continuar(service, spreadsheet_id, dados):
     """Continua a sincronização após conversão bem-sucedida"""
     try:
-        print(f"🔄 Continuando sincronização com planilha convertida: {spreadsheet_id}")
+        print(f"[CONVERSAO] Continuando sincronizacao com planilha convertida: {spreadsheet_id}")
         
         # Implementar lógica Append/Update igual ao N8n
         try:
@@ -398,7 +400,7 @@ def sincronizar_com_google_sheets_continuar(service, spreadsheet_id, dados):
                 body={'values': dados[1:]}  # Pular cabeçalho
             ).execute()
             
-            print(f"✅ Planilha sincronizada: {result.get('updatedCells', 0)} células atualizadas, {result.get('appendedRows', 0)} linhas adicionadas")
+            print(f" Planilha sincronizada: {result.get('updatedCells', 0)} células atualizadas, {result.get('appendedRows', 0)} linhas adicionadas")
             
             return {
                 "success": True, 
@@ -406,14 +408,14 @@ def sincronizar_com_google_sheets_continuar(service, spreadsheet_id, dados):
             }
             
         except Exception as e:
-            print(f"❌ Erro ao sincronizar planilha convertida: {e}")
+            print(f" Erro ao sincronizar planilha convertida: {e}")
             return {
                 "success": False,
                 "message": f"Erro ao sincronizar planilha convertida: {str(e)}"
             }
         
     except Exception as e:
-        print(f"❌ Erro na sincronização: {e}")
+        print(f" Erro na sincronização: {e}")
         return {
             "success": False,
             "message": f"Erro na sincronização: {str(e)}"
@@ -451,15 +453,17 @@ def salvar_metadados_mp4(caminho_video, titulo, legenda, hashtags, tipo_video="L
         if result.returncode == 0:
             # Substituir arquivo original pelo temporário
             os.replace(temp_video, caminho_video)
-            print(f"✅ Metadados salvos no MP4 com FFmpeg: {os.path.basename(caminho_video)}")
+            print(f" Metadados salvos no MP4 com FFmpeg: {os.path.basename(caminho_video)}")
+            # ALWAYS use Mutagen to ensure iTunes-compatible tags are set
+            salvar_metadados_mp4_mutagen(caminho_video, titulo, legenda, hashtags, tipo_video)
             return True
         else:
-            print(f"❌ Erro FFmpeg: {result.stderr}")
+            print(f" Erro FFmpeg: {result.stderr}")
             # Fallback: usar mutagen
             return salvar_metadados_mp4_mutagen(caminho_video, titulo, legenda, hashtags, tipo_video)
         
     except Exception as e:
-        print(f"❌ Erro ao salvar metadados MP4: {e}")
+        print(f" Erro ao salvar metadados MP4: {e}")
         # Fallback: usar mutagen
         return salvar_metadados_mp4_mutagen(caminho_video, titulo, legenda, hashtags, tipo_video)
 
@@ -489,11 +493,11 @@ def salvar_metadados_mp4_mutagen(caminho_video, titulo, legenda, hashtags, tipo_
         # Salvar arquivo
         mp4_file.save()
         
-        print(f"✅ Metadados salvos no MP4 com mutagen: {os.path.basename(caminho_video)}")
+        print(f" Metadados salvos no MP4 com mutagen: {os.path.basename(caminho_video)}")
         return True
         
     except Exception as e:
-        print(f"❌ Erro ao salvar metadados MP4 com mutagen: {e}")
+        print(f" Erro ao salvar metadados MP4 com mutagen: {e}")
         return False
 
 def ler_metadados_mp4(caminho_video):
@@ -525,7 +529,7 @@ def ler_metadados_mp4(caminho_video):
         }
         
     except Exception as e:
-        print(f"❌ Erro ao ler metadados MP4: {e}")
+        print(f" Erro ao ler metadados MP4: {e}")
         return {
             'titulo': '',
             'legenda': '',
@@ -572,11 +576,14 @@ def gerar_metadados_para_video(nome_arquivo, tipo_video):
         
         # Gerar conteúdo com IA usando o nome do arquivo
         try:
+            print(f" Tentando gerar metadados com AI para: {nome_base}")
             res = requests.post('http://127.0.0.1:5000/gerar_conteudo_individual', 
-                              json={'transcricao': nome_base, 'tipo': tipo_video.lower()})
+                              json={'transcricao': nome_base, 'tipo': tipo_video.lower()}, 
+                              timeout=10)  # Adicionar timeout de 10 segundos
             if res.status_code == 200:
                 data = res.json()
                 if data.get('ok'):
+                    print(f" Metadados gerados com sucesso para: {nome_base}")
                     return {
                         'titulo': data.get('titulo', ''),
                         'legenda': data.get('legenda', ''),
@@ -585,8 +592,16 @@ def gerar_metadados_para_video(nome_arquivo, tipo_video):
                         'origem': tipo_video.lower(),
                         'idioma': 'pt'
                     }
-        except:
-            pass
+                else:
+                    print(f" AI retornou erro: {data.get('error', 'Erro desconhecido')}")
+            else:
+                print(f" AI não respondeu (status {res.status_code})")
+        except requests.exceptions.Timeout:
+            print(f" Timeout na requisição AI para: {nome_base}")
+        except requests.exceptions.ConnectionError:
+            print(f" Erro de conexão com AI para: {nome_base}")
+        except Exception as e:
+            print(f" Erro inesperado na AI: {e}")
         
         # Fallback: usar nome do arquivo formatado
         return {
@@ -653,9 +668,20 @@ def salvar_metadados_local(nome_arquivo, metadados, tipo_video):
         
         # Salvar arquivos
         df.to_excel(planilha_path, index=False)
-        df.to_csv(csv_path, index=False)
+        df.to_csv(csv_path, index=False, encoding='utf-8')
         
-        print(f"✅ Metadados salvos para {nome_arquivo}")
+        print(f" Metadados salvos para {nome_arquivo}")
+        
+        # Emitir evento para frontend recarregar metadados
+        try:
+            socketio.emit('metadados_salvos', {
+                'arquivo': nome_arquivo,
+                'tipo': tipo_video,
+                'metadados': metadados
+            })
+            print(f" 📡 Evento Socket.IO emitido para {nome_arquivo}")
+        except Exception as socket_error:
+            print(f" ⚠️ Erro ao emitir Socket.IO: {socket_error}")
         
     except Exception as e:
         print(f"Erro ao salvar metadados locais: {e}")
@@ -731,7 +757,7 @@ def salvar_ids_drive_no_excel(uploaded_data):
                 df.loc[mask, 'video_id'] = video_id
                 df.loc[mask, 'tipo'] = tipo
                 df.loc[mask, 'postado'] = 'Sim'
-                print(f"✅ Atualizado: {arquivo_nome} -> ID: {video_id}")
+                print(f" Atualizado: {arquivo_nome} -> ID: {video_id}")
             else:
                 # Adicionar nova linha
                 nova_linha = {
@@ -748,16 +774,16 @@ def salvar_ids_drive_no_excel(uploaded_data):
                     "postado": "Sim"
                 }
                 df = pd.concat([df, pd.DataFrame([nova_linha])], ignore_index=True)
-                print(f"✅ Adicionado: {arquivo_nome} -> ID: {video_id}")
+                print(f" Adicionado: {arquivo_nome} -> ID: {video_id}")
         
         # Salvar planilha atualizada
         df.to_excel(planilha_path, index=False)
-        df.to_csv(csv_path, index=False)
+        df.to_csv(csv_path, index=False, encoding='utf-8')
         
-        print(f"✅ {len(uploaded_data)} IDs salvos no Excel")
+        print(f" {len(uploaded_data)} IDs salvos no Excel")
         
     except Exception as e:
-        print(f"❌ Erro ao salvar IDs no Excel: {e}")
+        print(f" Erro ao salvar IDs no Excel: {e}")
 
 def sincronizar_com_google_sheets(uploaded_data=None):
     """Sincroniza planilha local com Google Sheets"""
@@ -798,10 +824,10 @@ def sincronizar_com_google_sheets(uploaded_data=None):
                         df = pd.read_csv(path)
                     else:
                         df = pd.read_excel(path)
-                    print(f"✅ Planilha carregada para sincronização: {path}")
+                    print(f" Planilha carregada para sincronização: {path}")
                     break
                 except Exception as e:
-                    print(f"⚠️ Erro ao carregar {path}: {e}")
+                    print(f" Erro ao carregar {path}: {e}")
                     continue
         
         if df is None:
@@ -863,28 +889,28 @@ def sincronizar_com_google_sheets(uploaded_data=None):
                 spreadsheetId=spreadsheet_id,
                 range=test_range
             ).execute()
-            print(f"✅ Planilha acessível: {spreadsheet_id}")
+            print(f" Planilha acessível: {spreadsheet_id}")
         except Exception as e:
             error_msg = str(e)
-            print(f"❌ Erro ao acessar planilha: {error_msg}")
+            print(f" Erro ao acessar planilha: {error_msg}")
             
             # Verificar se é erro de permissão
             if "permission" in error_msg.lower() or "forbidden" in error_msg.lower() or "unauthorized" in error_msg.lower():
                 return {
                     "success": False, 
-                    "message": "❌ Permissão insuficiente para Google Sheets. Clique em '🔐 Re-autorizar Google' na configuração de IA para incluir todas as permissões necessárias.",
+                    "message": " Permissão insuficiente para Google Sheets. Clique em ' Re-autorizar Google' na configuração de IA para incluir todas as permissões necessárias.",
                     "needs_reauth": True
                 }
             elif "This operation is not supported for this document" in error_msg:
                 # Arquivo não é um Google Sheet nativo - tentar converter automaticamente
-                print("🔄 Detectado arquivo Excel - tentando converter automaticamente...")
+                print("[CONVERSAO] Detectado arquivo Excel - tentando converter automaticamente...")
                 
                 # Usar serviço do Google Drive para verificar e converter
                 drive_service = get_drive_service()
                 if not drive_service:
                     return {
                         "success": False, 
-                        "message": "❌ Erro: Não foi possível conectar com Google Drive para conversão."
+                        "message": " Erro: Não foi possível conectar com Google Drive para conversão."
                     }
                 
                 # Verificar se é realmente um arquivo Excel
@@ -897,8 +923,8 @@ def sincronizar_com_google_sheets(uploaded_data=None):
                     if success:
                         # Salvar novo ID da planilha convertida
                         salvar_planilha_id(new_file_id)
-                        print(f"✅ Arquivo convertido automaticamente: {new_name}")
-                        print(f"✅ Novo ID salvo: {new_file_id}")
+                        print(f" Arquivo convertido automaticamente: {new_name}")
+                        print(f" Novo ID salvo: {new_file_id}")
                         
                         # Tentar novamente com o novo ID
                         try:
@@ -906,7 +932,7 @@ def sincronizar_com_google_sheets(uploaded_data=None):
                                 spreadsheetId=new_file_id,
                                 range=test_range
                             ).execute()
-                            print(f"✅ Planilha convertida acessível: {new_file_id}")
+                            print(f" Planilha convertida acessível: {new_file_id}")
                             spreadsheet_id = new_file_id  # Usar o novo ID
                             
                             # Continuar com a sincronização usando o novo ID
@@ -915,12 +941,12 @@ def sincronizar_com_google_sheets(uploaded_data=None):
                         except Exception as e2:
                             return {
                                 "success": False, 
-                                "message": f"❌ Erro após conversão: {str(e2)}\n\nTente converter manualmente:\n1. Abra o arquivo Excel no Google Drive\n2. Clique em 'Abrir com' → 'Planilhas Google'\n3. Copie o novo ID da planilha"
+                                "message": f" Erro após conversão: {str(e2)}\n\nTente converter manualmente:\n1. Abra o arquivo Excel no Google Drive\n2. Clique em 'Abrir com' → 'Planilhas Google'\n3. Copie o novo ID da planilha"
                             }
                     else:
                         return {
                             "success": False, 
-                            "message": "❌ Não foi possível converter automaticamente.\n\nPara sincronizar com Google Sheets:\n\n1. Abra o arquivo Excel no Google Drive\n2. Clique em 'Abrir com' → 'Planilhas Google'\n3. Copie o novo ID da planilha convertida\n4. Cole o novo ID na configuração"
+                            "message": " Não foi possível converter automaticamente.\n\nPara sincronizar com Google Sheets:\n\n1. Abra o arquivo Excel no Google Drive\n2. Clique em 'Abrir com' → 'Planilhas Google'\n3. Copie o novo ID da planilha convertida\n4. Cole o novo ID na configuração"
                         }
                 else:
                     return {
@@ -944,7 +970,7 @@ def sincronizar_com_google_sheets(uploaded_data=None):
             existing_values = existing_data.get('values', [])
             
             # SEMPRE USAR APPEND - NUNCA UPDATE (manter histórico completo)
-            print("📝 Modo Append: Adicionando novos dados sem modificar existentes")
+            print(" Modo Append: Adicionando novos dados sem modificar existentes")
             # Determinar range baseado no número de colunas
             num_colunas = len(dados[0]) if dados else 5
             col_final = chr(ord('A') + num_colunas - 1)  # A, B, C, D, E, F...
@@ -957,7 +983,7 @@ def sincronizar_com_google_sheets(uploaded_data=None):
                 body={'values': dados[1:]}  # Pular cabeçalho
             ).execute()
             
-            print(f"✅ Planilha atualizada: {result.get('updatedCells', 0)} células atualizadas, {result.get('appendedRows', 0)} linhas adicionadas")
+            print(f" Planilha atualizada: {result.get('updatedCells', 0)} células atualizadas, {result.get('appendedRows', 0)} linhas adicionadas")
             
             return {
                 "success": True, 
@@ -965,7 +991,7 @@ def sincronizar_com_google_sheets(uploaded_data=None):
             }
             
         except Exception as e:
-            print(f"❌ Erro ao atualizar planilha: {e}")
+            print(f" Erro ao atualizar planilha: {e}")
             return {
                 "success": False,
                 "message": f"Erro ao atualizar planilha: {str(e)}"
@@ -973,7 +999,7 @@ def sincronizar_com_google_sheets(uploaded_data=None):
         
     except Exception as e:
         error_msg = str(e)
-        print(f"❌ Erro na sincronização: {error_msg}")
+        print(f" Erro na sincronização: {error_msg}")
         
         # Tratar erros específicos
         if "not found" in error_msg.lower():
@@ -1009,7 +1035,7 @@ def carregar_credenciais():
             
         return creds
     except Exception as e:
-        print(f"❌ Erro ao carregar credenciais: {e}")
+        print(f" Erro ao carregar credenciais: {e}")
         return None
 
 def carregar_planilha_id():
@@ -1037,10 +1063,10 @@ def salvar_planilha_id(spreadsheet_id):
         config["spreadsheet_id"] = spreadsheet_id
         with open("planilha_config.json", "w") as f:
             json.dump(config, f)
-        print(f"✅ ID da planilha salvo: {spreadsheet_id}")
+        print(f" ID da planilha salvo: {spreadsheet_id}")
         return True
     except Exception as e:
-        print(f"❌ Erro ao salvar ID da planilha: {e}")
+        print(f" Erro ao salvar ID da planilha: {e}")
         return False
 
 def salvar_excel_id(excel_file_id):
@@ -1054,15 +1080,15 @@ def salvar_excel_id(excel_file_id):
         config["excel_file_id"] = excel_file_id
         with open("planilha_config.json", "w") as f:
             json.dump(config, f)
-        print(f"✅ ID do arquivo Excel salvo: {excel_file_id}")
+        print(f" ID do arquivo Excel salvo: {excel_file_id}")
         return True
     except Exception as e:
-        print(f"❌ Erro ao salvar ID do arquivo Excel: {e}")
+        print(f" Erro ao salvar ID do arquivo Excel: {e}")
         return False
 
 def upload_to_drive():
     try:
-        print("🚀 Iniciando upload para Google Drive...")
+        print("Iniciando upload para Google Drive...")
         
         # Verificar credenciais
         if not os.path.exists('credentials.json'):
@@ -1071,9 +1097,9 @@ def upload_to_drive():
         # Obter serviço do Google Drive
         try:
             service = get_drive_service()
-            print("✅ Serviço Google Drive conectado")
+            print(" Serviço Google Drive conectado")
         except Exception as e:
-            print(f"❌ Erro ao conectar com Google Drive: {e}")
+            print(f" Erro ao conectar com Google Drive: {e}")
             return jsonify({"success": False, "message": f"Erro ao conectar com Google Drive: {str(e)}"})
         
         # Verificar ID da pasta
@@ -1081,19 +1107,19 @@ def upload_to_drive():
         if not target_folder_id:
             return jsonify({"success": False, "message": "ID da pasta não configurado. Configure o ID da pasta do Google Drive primeiro."})
         
-        print(f"📁 Pasta de destino: {target_folder_id}")
+        print(f" Pasta de destino: {target_folder_id}")
         uploaded_data = []
         
         # 1. PROCESSAR VÍDEOS LEGENDADOS (data/final)
         pasta_videos_legendados = Path("data/final")
         if not pasta_videos_legendados.exists():
-            print("⚠️ Pasta data/final não encontrada")
+            print(" Pasta data/final não encontrada")
         else:
             arquivos_legendados = list(pasta_videos_legendados.glob("*.mp4"))
-            print(f"📁 Encontrados {len(arquivos_legendados)} vídeos legendados em data/final")
+            print(f" Encontrados {len(arquivos_legendados)} vídeos legendados em data/final")
         
         if arquivos_legendados:
-            print(f"📹 Processando {len(arquivos_legendados)} vídeos legendados...")
+            print(f" Processando {len(arquivos_legendados)} vídeos legendados...")
             
             # Carregar metadados existentes
             metadados_videos = carregar_metadados_existentes()
@@ -1102,14 +1128,14 @@ def upload_to_drive():
                 # Gerar metadados se não existirem
                 metadados = metadados_videos.get(arquivo.name, {})
                 if not metadados.get('titulo'):
-                    print(f"🤖 Gerando metadados para {arquivo.name}...")
+                    print(f" Gerando metadados para {arquivo.name}...")
                     metadados = gerar_metadados_para_video(arquivo.name, "Legendado")
                     # Salvar metadados localmente
                     salvar_metadados_local(arquivo.name, metadados, "Legendado")
                 
                 # Upload do vídeo
                 try:
-                    print(f"📤 Enviando {arquivo.name}...")
+                    print(f" Enviando {arquivo.name}...")
                     file_metadata = {'name': arquivo.name, 'parents': [target_folder_id]}
                     media = MediaFileUpload(str(arquivo), mimetype='video/mp4')
                     gfile = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
@@ -1121,22 +1147,22 @@ def upload_to_drive():
                         'metadados': metadados,
                         'tipo': 'Legendado'
                     })
-                    print(f"✅ {arquivo.name} enviado com sucesso - ID: {video_id}")
+                    print(f" {arquivo.name} enviado com sucesso - ID: {video_id}")
                 except Exception as e:
-                    print(f"❌ Erro ao enviar {arquivo.name}: {e}")
+                    print(f" Erro ao enviar {arquivo.name}: {e}")
                     continue
         
         # 2. PROCESSAR VÍDEOS DUBLADOS (data/cortes_dublado)
         pasta_videos_dublados = Path("data/cortes_dublado")
         if not pasta_videos_dublados.exists():
-            print("⚠️ Pasta data/cortes_dublado não encontrada")
+            print(" Pasta data/cortes_dublado não encontrada")
             arquivos_dublados = []
         else:
             arquivos_dublados = list(pasta_videos_dublados.glob("*.mp4"))
-            print(f"📁 Encontrados {len(arquivos_dublados)} vídeos dublados em data/cortes_dublado")
+            print(f" Encontrados {len(arquivos_dublados)} vídeos dublados em data/cortes_dublado")
             
             if arquivos_dublados:
-                print(f"🎤 Processando {len(arquivos_dublados)} vídeos dublados...")
+                print(f" Processando {len(arquivos_dublados)} vídeos dublados...")
                 
                 for arquivo in arquivos_dublados:
                     # Gerar metadados para vídeo dublado
@@ -1156,9 +1182,9 @@ def upload_to_drive():
                             'metadados': metadados,
                             'tipo': 'Dublado'
                         })
-                        print(f"✅ {arquivo.name} enviado com sucesso - ID: {video_id}")
+                        print(f" {arquivo.name} enviado com sucesso - ID: {video_id}")
                     except Exception as e:
-                        print(f"❌ Erro ao enviar {arquivo.name}: {e}")
+                        print(f" Erro ao enviar {arquivo.name}: {e}")
                         continue
         
         if not uploaded_data:
@@ -1281,10 +1307,10 @@ def upload_metadados_completos():
                         df = pd.read_csv(path)
                     else:
                         df = pd.read_excel(path)
-                    print(f"✅ Planilha carregada: {path}")
+                    print(f" Planilha carregada: {path}")
                     break
                 except Exception as e:
-                    print(f"⚠️ Erro ao carregar {path}: {e}")
+                    print(f" Erro ao carregar {path}: {e}")
                     continue
         
         if df is None:
@@ -1301,7 +1327,7 @@ def upload_metadados_completos():
         if os.path.exists(dublados_path):
             videos_existentes.extend([f for f in os.listdir(dublados_path) if f.endswith('.mp4')])
         
-        print(f"📁 Vídeos existentes no sistema: {len(videos_existentes)}")
+        print(f" Vídeos existentes no sistema: {len(videos_existentes)}")
         
         # Filtrar apenas vídeos que existem e têm IDs
         df_filtrado = df[
@@ -1313,7 +1339,7 @@ def upload_metadados_completos():
         if df_filtrado.empty:
             return jsonify({"success": False, "message": "Nenhum vídeo existente com ID encontrado"})
         
-        print(f"📊 Vídeos com ID encontrados: {len(df_filtrado)}")
+        print(f" Vídeos com ID encontrados: {len(df_filtrado)}")
         
         # Atualizar Excel no Google Drive
         service = get_drive_service()
@@ -1360,9 +1386,9 @@ def testar_setup():
         try:
             import spacy
             nlp = spacy.load("pt_core_news_sm")
-            resultados["spacy"] = "✅ Funcionando"
+            resultados["spacy"] = " Funcionando"
         except Exception as e:
-            resultados["spacy"] = f"❌ Erro: {str(e)}"
+            resultados["spacy"] = f" Erro: {str(e)}"
         
         # Testar Ollama
         try:
@@ -1370,31 +1396,31 @@ def testar_setup():
             client = ollama.Client()
             models = client.list()
             if models and hasattr(models, 'models'):
-                resultados["ollama"] = f"✅ Funcionando - {len(models.models)} modelos"
+                resultados["ollama"] = f" Funcionando - {len(models.models)} modelos"
             else:
-                resultados["ollama"] = "⚠️ Conectado mas sem modelos"
+                resultados["ollama"] = " Conectado mas sem modelos"
         except Exception as e:
-            resultados["ollama"] = f"❌ Erro: {str(e)}"
+            resultados["ollama"] = f" Erro: {str(e)}"
         
         # Testar Google Drive
         try:
             creds = carregar_credenciais()
             if creds:
-                resultados["google_drive"] = "✅ Credenciais encontradas"
+                resultados["google_drive"] = " Credenciais encontradas"
             else:
-                resultados["google_drive"] = "⚠️ Credenciais não configuradas"
+                resultados["google_drive"] = " Credenciais não configuradas"
         except Exception as e:
-            resultados["google_drive"] = f"❌ Erro: {str(e)}"
+            resultados["google_drive"] = f" Erro: {str(e)}"
         
         # Testar planilha local
         try:
             if os.path.exists("data/planilhas/publicar.xlsx"):
                 df = pd.read_excel("data/planilhas/publicar.xlsx")
-                resultados["planilha_local"] = f"✅ Funcionando - {len(df)} registros"
+                resultados["planilha_local"] = f" Funcionando - {len(df)} registros"
             else:
-                resultados["planilha_local"] = "⚠️ Planilha não encontrada"
+                resultados["planilha_local"] = " Planilha não encontrada"
         except Exception as e:
-            resultados["planilha_local"] = f"❌ Erro: {str(e)}"
+            resultados["planilha_local"] = f" Erro: {str(e)}"
         
         return jsonify({
             "success": True,
@@ -1482,15 +1508,47 @@ def progresso():
 @app.route("/videos")
 def videos():
     try:
-        # Verificar se existe em data/final primeiro
-        if os.path.exists("data/final"):
-            arquivos = os.listdir("data/final")
-            mp4s = ["/data/final/" + arq for arq in arquivos if arq.endswith(".mp4")]
-        elif os.path.exists("static/final"):
-            arquivos = os.listdir("static/final")
-            mp4s = ["/static/final/" + arq for arq in arquivos if arq.endswith(".mp4")]
-        else:
-            return jsonify({"success": True, "videos": []})
+        # Parâmetros opcionais: source=final|cortes|both (default: final)
+        source = request.args.get('source', 'final')
+        
+        mp4s = []
+        
+        # Buscar vídeos de acordo com a fonte
+        if source in ['final', 'both']:
+            # Buscar vídeos com legenda em data/final
+            if os.path.exists("data/final"):
+                arquivos = os.listdir("data/final")
+                for arq in arquivos:
+                    if arq.endswith(".mp4"):
+                        mp4s.append({
+                            "path": "/data/final/" + arq,
+                            "filename": arq,
+                            "source": "final",
+                            "has_subtitle": True
+                        })
+            elif os.path.exists("static/final"):
+                arquivos = os.listdir("static/final")
+                for arq in arquivos:
+                    if arq.endswith(".mp4"):
+                        mp4s.append({
+                            "path": "/static/final/" + arq,
+                            "filename": arq,
+                            "source": "final",
+                            "has_subtitle": True
+                        })
+        
+        if source in ['cortes', 'both']:
+            # Buscar vídeos sem legenda em data/cortes
+            if os.path.exists("data/cortes"):
+                arquivos = os.listdir("data/cortes")
+                for arq in arquivos:
+                    if arq.endswith(".mp4"):
+                        mp4s.append({
+                            "path": "/data/cortes/" + arq,
+                            "filename": arq,
+                            "source": "cortes",
+                            "has_subtitle": False
+                        })
         
         # Buscar metadados para cada vídeo
         videos_com_metadados = []
@@ -1521,17 +1579,12 @@ def videos():
         
         # Adicionar metadados aos vídeos
         for video in mp4s:
-            nome_arquivo = video.split('/')[-1]
-            video_data = {
-                "path": video,
-                "filename": nome_arquivo,
-                "metadata": metadados.get(nome_arquivo, {
-                    'titulo': '',
-                    'legenda': '',
-                    'hashtags': ''
-                })
-            }
-            videos_com_metadados.append(video_data)
+            video["metadata"] = metadados.get(video["filename"], {
+                'titulo': '',
+                'legenda': '',
+                'hashtags': ''
+            })
+            videos_com_metadados.append(video)
         
         return jsonify({"success": True, "videos": videos_com_metadados})
     except Exception as e:
@@ -1633,27 +1686,50 @@ def limpar_videos_antigos():
 
 @app.route("/deletar_video_final/<nome>", methods=["DELETE"])
 def deletar_video_final(nome):
-    """Deleta um vídeo específico da pasta final"""
+    """Deleta um vídeo específico de TODAS as pastas"""
     try:
-        # Deletar de ambas as pastas
-        caminho_static = os.path.join("static/final", nome)
-        caminho_data = os.path.join("data/final", nome)
+        # Deletar de TODAS as pastas possíveis
+        pastas = [
+            "static/final",
+            "data/final", 
+            "data/cortes",
+            "data/cortes_dublado"
+        ]
         
         deletados = []
+        for pasta in pastas:
+            caminho = os.path.join(pasta, nome)
+            if os.path.exists(caminho):
+                os.remove(caminho)
+                deletados.append(pasta)
+                print(f"Deletado: {caminho}")
         
-        if os.path.exists(caminho_static):
-            os.remove(caminho_static)
-            deletados.append("static/final")
-            
-        if os.path.exists(caminho_data):
-            os.remove(caminho_data)
-            deletados.append("data/final")
-            
+        # Também deletar transcrições associadas
+        nome_base = os.path.splitext(nome)[0]
+        # Remover sufixo _legendado se existir
+        nome_base_limpo = nome_base.replace("_legendado", "")
+        
+        transcricao_paths = [
+            f"data/transcricoes_cortes/{nome_base}.txt",
+            f"data/transcricoes_cortes/{nome_base_limpo}.txt",
+            f"data/transcricoes_cortes/json/{nome_base}.json",
+            f"data/transcricoes_cortes/json/{nome_base_limpo}.json"
+        ]
+        
+        for trans_path in transcricao_paths:
+            if os.path.exists(trans_path):
+                os.remove(trans_path)
+                deletados.append(f"transcricao_{os.path.basename(trans_path)}")
+                print(f"Deletado: {trans_path}")
+        
         if deletados:
             return jsonify({"success": True, "message": f"Vídeo {nome} deletado de: {', '.join(deletados)}"})
         else:
             return jsonify({"success": False, "message": "Arquivo não encontrado"})
     except Exception as e:
+        print(f"Erro ao deletar vídeo: {e}")
+        import traceback
+        traceback.print_exc()
         return jsonify({"success": False, "message": str(e)})
 
 @app.route("/deletar_todos_final", methods=["POST"])
@@ -1712,6 +1788,14 @@ def serve_final_file(filename):
     except Exception as e:
         return jsonify({"error": str(e)}), 404
 
+@app.route("/data/cortes/<path:filename>")
+def serve_cortes_file(filename):
+    """Serve arquivos da pasta data/cortes"""
+    try:
+        return send_from_directory("data/cortes", filename)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 404
+
 # ==== METADADOS UNIFICADO ====
 @app.route("/metadados/gerar", methods=["POST"])
 def gerar_metadados():
@@ -1746,6 +1830,26 @@ def gerar_metadados():
             # Renomear arquivo dentro de static/final
             novo_path = renomear_video(path, titulo, destino_dir="static/final")
             arquivo_novo = os.path.basename(novo_path)
+            
+            # COPIAR transcrições JSON/TXT para novo nome
+            nome_base_antigo = os.path.splitext(arquivo_antigo)[0].replace("_legendado", "")
+            nome_base_novo = os.path.splitext(arquivo_novo)[0]
+            
+            # Tentar copiar JSON
+            json_antigo = f"data/transcricoes_cortes/json/{nome_base_antigo}.json"
+            if os.path.exists(json_antigo):
+                json_novo = f"data/transcricoes_cortes/json/{nome_base_novo}.json"
+                import shutil
+                shutil.copy2(json_antigo, json_novo)
+                print(f"Transcrição JSON copiada: {json_antigo} -> {json_novo}")
+            
+            # Tentar copiar TXT
+            txt_antigo = f"data/transcricoes_cortes/{nome_base_antigo}.txt"
+            if os.path.exists(txt_antigo):
+                txt_novo = f"data/transcricoes_cortes/{nome_base_novo}.txt"
+                import shutil
+                shutil.copy2(txt_antigo, txt_novo)
+                print(f"Transcrição TXT copiada: {txt_antigo} -> {txt_novo}")
             
             # Salvar na planilha específica de metadados
             salvar_metadados_planilha(
@@ -1794,15 +1898,15 @@ def gerar_titulo_contextual(transcricao):
     
     # Gerar título baseado no contexto detectado
     if contexto['tipo'] == 'motivacional':
-        return f"🔥 {contexto['tema']} - {contexto['beneficio']}"
+        return f"{contexto['tema']} - {contexto['beneficio']}"
     elif contexto['tipo'] == 'negocios':
-        return f"💼 {contexto['tema']} - {contexto['beneficio']}"
+        return f"{contexto['tema']} - {contexto['beneficio']}"
     elif contexto['tipo'] == 'educativo':
-        return f"📚 {contexto['tema']} - {contexto['beneficio']}"
+        return f"{contexto['tema']} - {contexto['beneficio']}"
     elif contexto['tipo'] == 'pessoal':
-        return f"💪 {contexto['tema']} - {contexto['beneficio']}"
+        return f"{contexto['tema']} - {contexto['beneficio']}"
     else:
-        return f"📱 {palavras_chave[0] if palavras_chave else 'Vídeo'} - {palavras_chave[1] if len(palavras_chave) > 1 else 'Conteúdo exclusivo'}"
+        return f"{palavras_chave[0] if palavras_chave else 'Vídeo'} - {palavras_chave[1] if len(palavras_chave) > 1 else 'Conteúdo exclusivo'}"
 
 def gerar_titulo_com_openai(transcricao):
     """Gera título usando OpenAI (se configurado)"""
@@ -1827,7 +1931,6 @@ def gerar_titulo_com_openai(transcricao):
         Crie um título:
         - Máximo 60 caracteres
         - Atrativo para Instagram/TikTok
-        - Inclua emoji relevante
         - Foque no benefício principal
         - Use linguagem persuasiva
         
@@ -1877,7 +1980,6 @@ def gerar_legenda_com_ollama(transcricao, titulo):
 
         REGRAS:
         - Máximo 200 caracteres
-        - Use EMOJIS estratégicos
         - Inclua CALL-TO-ACTION forte
         - Seja PERSUASIVO e DIRETO
         - Use quebras de linha para legibilidade
@@ -2103,32 +2205,40 @@ def dublar_video(video_entrada, video_saida, texto_traduzido, voice, lang_target
         
         print(f"🎬 Iniciando dublagem XTTS v2: {video_entrada} -> {video_saida}")
         print(f"📝 Texto traduzido: {texto_traduzido[:100]}...")
+        print(f"🎤 Voz selecionada: {voice}")
         
         # Extrair cut_id do nome do arquivo
         cut_id = os.path.splitext(os.path.basename(video_entrada))[0]
         print(f"🆔 Cut ID: {cut_id}")
         
-        # Executar dublagem XTTS
-        print(f"🚀 [DEBUG] Chamando dublar_corte_xtts...")
+        # Executar dublagem XTTS com voz selecionada
+        print(f"🚀 [DEBUG] Chamando dublar_corte_xtts com voz: {voice}...")
         result = dublar_corte_xtts(
             cut_id=cut_id,
             prefer_lang="pt" if lang_target == "pt" else "en",
             base_data_dir="data",
-            outputs_dir="outputs"
+            outputs_dir="outputs",
+            voice_ref=voice  # NOVO: passar voz selecionada
         )
         
         print(f"✅ Dublagem XTTS concluída: {result}")
         
-        # Copiar o vídeo dublado para o destino final
+        # Usar o arquivo que já foi criado pelo dub_xtts.py
         if result and "video" in result:
             video_dublado = result["video"]
             print(f"🔍 [DEBUG] Vídeo dublado encontrado: {video_dublado}")
             print(f"🔍 [DEBUG] Arquivo existe? {os.path.exists(video_dublado)}")
             
             if os.path.exists(video_dublado):
-                shutil.copy2(video_dublado, video_saida)
-                print(f"✅ Vídeo dublado copiado para: {video_saida}")
-                return video_saida
+                # USAR O ARQUIVO video_final que já está em data/cortes_dublado/
+                if "video_final" in result and os.path.exists(result["video_final"]):
+                    print(f"✅ Vídeo dublado já está em: {result['video_final']}")
+                    return result["video_final"]
+                else:
+                    # Fallback: copiar para video_saida
+                    shutil.copy2(video_dublado, video_saida)
+                    print(f"✅ Vídeo dublado copiado para: {video_saida}")
+                    return video_saida
             else:
                 print(f"❌ Vídeo dublado não encontrado: {video_dublado}")
                 return None
@@ -2177,11 +2287,11 @@ def gerar_audio_voz_clonada(texto, voice_id, lang_target):
                 break
         
         if not voz_config:
-            print(f"❌ Voz clonada '{voice_id}' não encontrada")
+            print(f" Voz clonada '{voice_id}' não encontrada")
             return None
             
         if not voz_config.get("ativo", False):
-            print(f"❌ Voz clonada '{voice_id}' está desativada")
+            print(f" Voz clonada '{voice_id}' está desativada")
             return None
         
         # Criar arquivo temporário para áudio
@@ -2190,7 +2300,7 @@ def gerar_audio_voz_clonada(texto, voice_id, lang_target):
         
         # Método 1: Tentar Coqui TTS primeiro (mais avançado para clonagem)
         try:
-            print("🔮 Tentando Coqui TTS para voz clonada...")
+            print(" Tentando Coqui TTS para voz clonada...")
             import TTS
             from TTS.api import TTS as CoquiTTS
             
@@ -2212,21 +2322,21 @@ def gerar_audio_voz_clonada(texto, voice_id, lang_target):
                     language="pt"
                 )
                 
-                print(f"✅ Áudio Coqui TTS gerado: {audio_path}")
+                print(f" Áudio Coqui TTS gerado: {audio_path}")
                 
                 if os.path.exists(audio_path) and os.path.getsize(audio_path) > 1000:
                     return audio_path
             else:
-                print(f"⚠️ Arquivo de referência não encontrado: {arquivo_referencia}")
+                print(f" Arquivo de referência não encontrado: {arquivo_referencia}")
                 
         except ImportError:
-            print("⚠️ Coqui TTS não instalado, tentando método alternativo...")
+            print(" Coqui TTS não instalado, tentando método alternativo...")
         except Exception as e:
-            print(f"❌ Erro com Coqui TTS: {e}")
+            print(f" Erro com Coqui TTS: {e}")
         
         # Método 2: Tentar usar XTTS (se disponível)
         try:
-            print("🔮 Tentando XTTS para voz clonada...")
+            print(" Tentando XTTS para voz clonada...")
             
             # Tentar usar torch-tts ou outra biblioteca de clonagem
             # Esta é uma implementação básica - pode ser expandida
@@ -2242,19 +2352,53 @@ def gerar_audio_voz_clonada(texto, voice_id, lang_target):
                     # Mover arquivo para o caminho final
                     import shutil
                     shutil.move(audio_temp, audio_path)
-                    print(f"✅ Áudio com voz personalizada gerado: {audio_path}")
+                    print(f" Áudio com voz personalizada gerado: {audio_path}")
                     return audio_path
                     
         except Exception as e:
-            print(f"❌ Erro com XTTS: {e}")
+            print(f" Erro com XTTS: {e}")
         
-        # Fallback: usar voz Edge TTS mais próxima
-        print("🔄 Usando fallback para voz Edge TTS...")
-        fallback_voice = config["configuracao_global"].get("fallback_voice", "pt-BR-ValerioNeural")
-        return gerar_audio_edge_tts_simples(texto, fallback_voice)
+        # Fallback: usar voz XTTS local
+        print(" Usando fallback para voz XTTS local...")
+        fallback_voice = config["configuracao_global"].get("fallback_voice", "voice_refs/paulo_links_fixed.wav")
+        # Forçar uso de XTTS local em vez de Edge TTS
+        return gerar_audio_tts_clonado_local(texto, fallback_voice)
         
     except Exception as e:
-        print(f"❌ Erro geral na voz clonada: {e}")
+        print(f" Erro geral na voz clonada: {e}")
+        return None
+
+def gerar_audio_tts_clonado_local(texto, arquivo_referencia):
+    """Gera áudio usando XTTS v2 local com arquivo de referência WAV"""
+    try:
+        print(f"🎤 [XTTS LOCAL] Gerando áudio com voz: {arquivo_referencia}")
+        
+        # Verificar se arquivo de referência existe
+        if not os.path.exists(arquivo_referencia):
+            print(f"❌ [XTTS LOCAL] Arquivo de referência não encontrado: {arquivo_referencia}")
+            return None
+        
+        # Usar XTTS v2 para gerar áudio
+        from dub_xtts import synth_tts_clone_xtts
+        from pathlib import Path
+        import tempfile
+        
+        # Criar arquivo temporário para o áudio
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
+            temp_path = temp_file.name
+        
+        # Gerar áudio com XTTS v2
+        synth_tts_clone_xtts(texto, Path(arquivo_referencia), Path(temp_path), language="pt")
+        
+        if os.path.exists(temp_path) and os.path.getsize(temp_path) > 0:
+            print(f"✅ [XTTS LOCAL] Áudio gerado com sucesso: {temp_path}")
+            return temp_path
+        else:
+            print(f"❌ [XTTS LOCAL] Falha ao gerar áudio")
+            return None
+            
+    except Exception as e:
+        print(f"❌ [XTTS LOCAL] Erro: {e}")
         return None
 
 def gerar_audio_edge_tts_personalizado(texto, arquivo_referencia):
@@ -2284,11 +2428,11 @@ def gerar_audio_edge_tts_personalizado(texto, arquivo_referencia):
         asyncio.run(gerar_audio())
         
         if os.path.exists(audio_path) and os.path.getsize(audio_path) > 1000:
-            print(f"✅ Áudio Edge TTS personalizado gerado: {audio_path}")
+            print(f" Áudio Edge TTS personalizado gerado: {audio_path}")
             return audio_path
             
     except Exception as e:
-        print(f"❌ Erro no Edge TTS personalizado: {e}")
+        print(f" Erro no Edge TTS personalizado: {e}")
         
     return None
 
@@ -2312,16 +2456,12 @@ def gerar_audio_edge_tts_simples(texto, voice):
             return audio_path
             
     except Exception as e:
-        print(f"❌ Erro no Edge TTS simples: {e}")
+        print(f" Erro no Edge TTS simples: {e}")
         
     return None
 
 def gerar_audio_tts(texto, voice, lang_target):
-<<<<<<< HEAD
     """Gera áudio usando TTS (Text-to-Speech) - versão com clonagem de voz"""
-=======
-    """Gera áudio usando TTS - versão com suporte a vozes clonadas"""
->>>>>>> 100d948621266ee6c109edef866c7106234b6452
     try:
         import tempfile
         import subprocess
@@ -2332,14 +2472,13 @@ def gerar_audio_tts(texto, voice, lang_target):
         print(f"Gerando áudio TTS para: {texto[:50]}...")
         print(f"Idioma: {lang_target}, Voz: {voice}")
         
-<<<<<<< HEAD
         # Verificar se é uma voz clonada
         if voice.startswith('clonada_'):
             print("🎤 Detectada voz clonada, processando...")
             
             # Extrair nome da voz clonada
             nome_voz = voice.replace('clonada_', '')
-            print(f"🔍 Procurando voz clonada: {nome_voz}")
+            print(f"[DEBUG] Procurando voz clonada: {nome_voz}")
             
             # Carregar vozes clonadas
             vozes_path = 'vozes_clonadas.json'
@@ -2356,7 +2495,7 @@ def gerar_audio_tts(texto, voice, lang_target):
                             break
                 
                 if arquivo_voz and os.path.exists(arquivo_voz):
-                    print(f"✅ Voz clonada encontrada: {arquivo_voz}")
+                    print(f" Voz clonada encontrada: {arquivo_voz}")
                     
                     # Criar arquivo temporário para áudio
                     with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
@@ -2372,7 +2511,7 @@ def gerar_audio_tts(texto, voice, lang_target):
                             # Calcular duração necessária baseada no texto
                             # Estimativa: ~150 caracteres por minuto de fala (velocidade natural)
                             duracao_necessaria = len(texto) / 150 * 60  # segundos
-                            print(f"📊 Duração necessária: {duracao_necessaria:.2f}s")
+                            print(f" Duração necessária: {duracao_necessaria:.2f}s")
                             
                             # Usar FFmpeg para ajustar velocidade da sua voz
                             import subprocess
@@ -2403,23 +2542,23 @@ def gerar_audio_tts(texto, voice, lang_target):
                             print(f"🔧 Executando comando FFmpeg: {' '.join(cmd)}")
                             result = subprocess.run(cmd, capture_output=True, text=True)
                             
-                            print(f"📊 Resultado FFmpeg: {result.returncode}")
+                            print(f" Resultado FFmpeg: {result.returncode}")
                             if result.stderr:
-                                print(f"📊 Stderr: {result.stderr}")
+                                print(f" Stderr: {result.stderr}")
                             
                             if result.returncode == 0 and os.path.exists(audio_path) and os.path.getsize(audio_path) > 0:
-                                print(f"✅ SUA VOZ clonada com sucesso: {audio_path}")
-                                print(f"📊 Tamanho: {os.path.getsize(audio_path)} bytes")
+                                print(f" SUA VOZ clonada com sucesso: {audio_path}")
+                                print(f" Tamanho: {os.path.getsize(audio_path)} bytes")
                                 return audio_path
                             else:
-                                print(f"❌ Erro FFmpeg: {result.stderr}")
-                                print("🔄 Usando sua voz original como fallback")
+                                print(f" Erro FFmpeg: {result.stderr}")
+                                print("Usando sua voz original como fallback")
                                 shutil.copy2(arquivo_voz, audio_path)
                                 return audio_path
                                 
                         except Exception as e:
-                            print(f"❌ Erro na clonagem TTS v2: {e}")
-                            print("🔄 Tentando Edge TTS como fallback...")
+                            print(f" Erro na clonagem TTS v2: {e}")
+                            print("Tentando Edge TTS como fallback...")
                             
                             # Fallback: Edge TTS com voz similar
                             try:
@@ -2439,49 +2578,38 @@ def gerar_audio_tts(texto, voice, lang_target):
                                 asyncio.run(gerar_audio_edge())
                                 
                                 if os.path.exists(audio_path) and os.path.getsize(audio_path) > 0:
-                                    print(f"✅ Áudio Edge TTS gerado: {os.path.getsize(audio_path)} bytes")
+                                    print(f" Áudio Edge TTS gerado: {os.path.getsize(audio_path)} bytes")
                                     return audio_path
                                 else:
-                                    print("❌ Edge TTS falhou, usando sua voz original")
+                                    print(" Edge TTS falhou, usando sua voz original")
                                     shutil.copy2(arquivo_voz, audio_path)
                                     return audio_path
                                     
                             except Exception as e2:
-                                print(f"❌ Erro no Edge TTS: {e2}")
-                                print("🔄 Usando sua voz original como último recurso")
+                                print(f" Erro no Edge TTS: {e2}")
+                                print("Usando sua voz original como ultimo recurso")
                                 shutil.copy2(arquivo_voz, audio_path)
                                 return audio_path
                                 
                         except ImportError:
-                            print("❌ Edge TTS não instalado, usando fallback")
+                            print(" Edge TTS não instalado, usando fallback")
                             # Fallback: copiar arquivo de exemplo
                             shutil.copy2(arquivo_voz, audio_path)
                             return audio_path
                         except Exception as e:
-                            print(f"❌ Erro na clonagem: {e}, usando fallback")
+                            print(f" Erro na clonagem: {e}, usando fallback")
                             # Fallback: copiar arquivo de exemplo
                             shutil.copy2(arquivo_voz, audio_path)
                             return audio_path
                 else:
-                    print(f"❌ Arquivo de voz clonada não encontrado: {arquivo_voz}")
+                    print(f" Arquivo de voz clonada não encontrado: {arquivo_voz}")
             else:
-                print(f"❌ Voz clonada não encontrada no registro: {nome_voz}")
+                print(f" Voz clonada não encontrada no registro: {nome_voz}")
         else:
-            print("❌ Arquivo de vozes clonadas não encontrado")
+            print(" Arquivo de vozes clonadas não encontrado")
         
         # Se não é voz clonada, usar lógica normal de TTS
-        print("🔧 Usando TTS normal...")
-=======
-        # VERIFICAR SE É VOZ CLONADA PRIMEIRO
-        if is_voz_clonada(voice):
-            print(f"🎭 Detectada voz clonada: {voice}")
-            audio_clonado = gerar_audio_voz_clonada(texto, voice, lang_target)
-            if audio_clonado and os.path.exists(audio_clonado):
-                print(f"✅ Áudio com voz clonada gerado com sucesso!")
-                return audio_clonado
-            else:
-                print("⚠️ Falha na voz clonada, usando fallback...")
->>>>>>> 100d948621266ee6c109edef866c7106234b6452
+        print(" Usando TTS normal...")
         
         # Criar arquivo temporário para áudio
         with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
@@ -2504,7 +2632,7 @@ def gerar_audio_tts(texto, voice, lang_target):
             
                     # Listar vozes disponíveis
                     voices = engine.getProperty('voices')
-                    print(f"🔍 Vozes disponíveis: {len(voices)}")
+                    print(f"[DEBUG] Vozes disponíveis: {len(voices)}")
                     for i, voice in enumerate(voices):
                         print(f"  {i}: {voice.name} - {voice.languages}")
                     
@@ -2513,12 +2641,12 @@ def gerar_audio_tts(texto, voice, lang_target):
                     for voice in voices:
                         if any('pt' in lang.lower() or 'portuguese' in lang.lower() for lang in voice.languages):
                             voz_selecionada = voice
-                            print(f"✅ Voz em português encontrada: {voice.name}")
+                            print(f" Voz em português encontrada: {voice.name}")
                             break
         
                     # Se não encontrou voz em português, pular pyttsx3 e ir direto para Edge TTS
                     if not voz_selecionada:
-                        print("❌ Nenhuma voz em português encontrada no pyttsx3, pulando para Edge TTS...")
+                        print(" Nenhuma voz em português encontrada no pyttsx3, pulando para Edge TTS...")
                         raise Exception("Nenhuma voz em português disponível")
                     
                     if voz_selecionada:
@@ -2533,10 +2661,10 @@ def gerar_audio_tts(texto, voice, lang_target):
                     engine.runAndWait()
                     
                     if os.path.exists(audio_path) and os.path.getsize(audio_path) > 0:
-                        print(f"✅ Áudio pyttsx3 gerado: {audio_path} ({os.path.getsize(audio_path)} bytes)")
+                        print(f" Áudio pyttsx3 gerado: {audio_path} ({os.path.getsize(audio_path)} bytes)")
                         return audio_path
                     else:
-                        print("❌ pyttsx3 falhou, tentando Edge TTS...")
+                        print(" pyttsx3 falhou, tentando Edge TTS...")
         
                 except Exception as e:
                     print(f"Erro com pyttsx3: {e}, tentando PowerShell...")
@@ -2572,10 +2700,10 @@ def gerar_audio_tts(texto, voice, lang_target):
                     asyncio.run(gerar_audio())
                     
                     if os.path.exists(audio_path) and os.path.getsize(audio_path) > 0:
-                        print(f"✅ Áudio Edge TTS gerado: {audio_path} ({os.path.getsize(audio_path)} bytes)")
+                        print(f" Áudio Edge TTS gerado: {audio_path} ({os.path.getsize(audio_path)} bytes)")
                         return audio_path
                     else:
-                        print("❌ Edge TTS falhou, tentando PowerShell...")
+                        print(" Edge TTS falhou, tentando PowerShell...")
                         
                 except ImportError:
                     print("Edge TTS não instalado, tentando PowerShell...")
@@ -2594,10 +2722,10 @@ def gerar_audio_tts(texto, voice, lang_target):
                                   capture_output=True, text=True, timeout=30)
             
             if os.path.exists(audio_path) and os.path.getsize(audio_path) > 0:
-                print(f"✅ Áudio PowerShell gerado: {audio_path} ({os.path.getsize(audio_path)} bytes)")
+                print(f" Áudio PowerShell gerado: {audio_path} ({os.path.getsize(audio_path)} bytes)")
                 return audio_path
             else:
-                print(f"❌ PowerShell falhou - arquivo não criado ou vazio")
+                print(f" PowerShell falhou - arquivo não criado ou vazio")
                 
         except Exception as e:
             print(f"Erro com PowerShell: {e}")
@@ -2634,7 +2762,7 @@ def gerar_audio_tts(texto, voice, lang_target):
             engine.runAndWait()
             
             if os.path.exists(audio_path) and os.path.getsize(audio_path) > 0:
-                print(f"✅ Áudio pyttsx3 gerado: {audio_path}")
+                print(f" Áudio pyttsx3 gerado: {audio_path}")
                 return audio_path
             
         except Exception as e:
@@ -2661,13 +2789,13 @@ def gerar_audio_tts(texto, voice, lang_target):
                 wav_file.setframerate(sample_rate)
                 wav_file.writeframes(silence.tobytes())
             
-            print(f"✅ Áudio silencioso criado: {audio_path}")
+            print(f" Áudio silencioso criado: {audio_path}")
             return audio_path
             
         except Exception as e:
             print(f"Erro ao criar áudio silencioso: {e}")
         
-        print("❌ Todos os métodos TTS falharam")
+        print(" Todos os métodos TTS falharam")
         return None
                 
     except Exception as e:
@@ -2703,7 +2831,7 @@ def salvar_metadados_planilha(arquivo_antigo, arquivo_novo, titulo, legenda, has
         
         # Salvar
         df.to_excel(planilha_path, index=False)
-        df.to_csv("metadados/videos.csv", index=False)
+        df.to_csv("metadados/videos.csv", index=False, encoding='utf-8')
         
         # 2. Salvar na planilha principal (data/planilhas/publicar.xlsx)
         planilha_principal_path = "data/planilhas/publicar.xlsx"
@@ -2752,9 +2880,9 @@ def salvar_metadados_planilha(arquivo_antigo, arquivo_novo, titulo, legenda, has
         
         # Salvar planilha principal
         df_principal.to_excel(planilha_principal_path, index=False)
-        df_principal.to_csv(csv_principal_path, index=False)
+        df_principal.to_csv(csv_principal_path, index=False, encoding='utf-8')
         
-        print(f"✅ Metadados salvos em {planilha_path} e {planilha_principal_path}")
+        print(f" Metadados salvos em {planilha_path} e {planilha_principal_path}")
         
     except Exception as e:
         print(f"Erro ao salvar planilha: {e}")
@@ -2798,20 +2926,36 @@ def cleanup_hard():
         
         pastas_limpar = [
             "data/videos", "data/cortes", "data/final", 
-            "static/final", "static/temp", "downloads", "tmp"
+            "data/cortes_dublado",  # NOVO: vídeos dublados
+            "data/transcricoes",    # NOVO: transcrições gerais
+            "data/transcricoes_cortes",  # NOVO: transcrições dos cortes
+            "data/audio",           # NOVO: arquivos de áudio
+            "outputs/dublados",     # NOVO: outputs de dublagem
+            "static/final", "static/dublados", "static/temp", 
+            "downloads", "tmp"
         ]
         deletados = []
         
         for pasta in pastas_limpar:
             if os.path.exists(pasta):
-                for arquivo in os.listdir(pasta):
-                    if arquivo.endswith(('.mp4', '.webm', '.wav', '.txt')):
-                        try:
-                            caminho = os.path.join(pasta, arquivo)
-                            os.remove(caminho)
-                            deletados.append(f"{pasta}/{arquivo}")
-                        except Exception as e:
-                            print(f"Erro ao remover {arquivo}: {e}")
+                # Deletar arquivos e subpastas recursivamente
+                import glob
+                # Buscar todos os arquivos recursivamente
+                arquivos_recursivos = []
+                arquivos_recursivos.extend(glob.glob(os.path.join(pasta, "**", "*.mp4"), recursive=True))
+                arquivos_recursivos.extend(glob.glob(os.path.join(pasta, "**", "*.webm"), recursive=True))
+                arquivos_recursivos.extend(glob.glob(os.path.join(pasta, "**", "*.wav"), recursive=True))
+                arquivos_recursivos.extend(glob.glob(os.path.join(pasta, "**", "*.mp3"), recursive=True))
+                arquivos_recursivos.extend(glob.glob(os.path.join(pasta, "**", "*.txt"), recursive=True))
+                arquivos_recursivos.extend(glob.glob(os.path.join(pasta, "**", "*.json"), recursive=True))
+                
+                for caminho in arquivos_recursivos:
+                    try:
+                        os.remove(caminho)
+                        deletados.append(caminho)
+                        print(f"✅ Deletado: {caminho}")
+                    except Exception as e:
+                        print(f"❌ Erro ao remover {caminho}: {e}")
         
         return jsonify({"ok": True, "deletados": deletados})
     except Exception as e:
@@ -2871,10 +3015,10 @@ def obter_opcoes_voz():
 def clonar_minha_voz():
     """Clona voz gravada pelo usuário"""
     try:
-        print(f"🔍 Debug - Content-Type: {request.content_type}")
-        print(f"🔍 Debug - Is JSON: {request.is_json}")
-        print(f"🔍 Debug - Form data: {dict(request.form)}")
-        print(f"🔍 Debug - Files: {list(request.files.keys())}")
+        print(f"[DEBUG] Debug - Content-Type: {request.content_type}")
+        print(f"[DEBUG] Debug - Is JSON: {request.is_json}")
+        print(f"[DEBUG] Debug - Form data: {dict(request.form)}")
+        print(f"[DEBUG] Debug - Files: {list(request.files.keys())}")
         
         # Verificar se é JSON ou FormData
         if request.is_json:
@@ -2901,16 +3045,16 @@ def clonar_minha_voz():
             nome_voz = request.form.get('nome_voz', 'Minha Voz')
             audio_file = request.files.get('audio')  # Corrigido: frontend envia como 'audio'
             
-            print(f"🔍 Debug - Audio file: {audio_file}")
-            print(f"🔍 Debug - Audio file filename: {audio_file.filename if audio_file else 'None'}")
-            print(f"🔍 Debug - Audio file content type: {audio_file.content_type if audio_file else 'None'}")
+            print(f"[DEBUG] Debug - Audio file: {audio_file}")
+            print(f"[DEBUG] Debug - Audio file filename: {audio_file.filename if audio_file else 'None'}")
+            print(f"[DEBUG] Debug - Audio file content type: {audio_file.content_type if audio_file else 'None'}")
             
             if not audio_file:
-                print("❌ Debug - Nenhum arquivo de áudio encontrado")
+                print(" Debug - Nenhum arquivo de áudio encontrado")
                 return jsonify({'success': False, 'error': 'Arquivo de áudio não fornecido'})
             
             if audio_file.filename == '':
-                print("❌ Debug - Nome do arquivo está vazio")
+                print(" Debug - Nome do arquivo está vazio")
                 return jsonify({'success': False, 'error': 'Arquivo de áudio não fornecido'})
             
             os.makedirs('temp_voice_cloning', exist_ok=True)
@@ -2920,8 +3064,8 @@ def clonar_minha_voz():
             audio_path = f'temp_voice_cloning/user_voice_{timestamp}.wav'
             
             audio_file.save(audio_path)
-            print(f"✅ Debug - Arquivo salvo em: {audio_path}")
-            print(f"✅ Debug - Tamanho do arquivo: {os.path.getsize(audio_path)} bytes")
+            print(f" Debug - Arquivo salvo em: {audio_path}")
+            print(f" Debug - Tamanho do arquivo: {os.path.getsize(audio_path)} bytes")
         
         vozes_path = 'vozes_clonadas.json'
         if os.path.exists(vozes_path):
@@ -2939,7 +3083,7 @@ def clonar_minha_voz():
         with open(vozes_path, 'w', encoding='utf-8') as f:
             json.dump(vozes_clonadas, f, indent=2, ensure_ascii=False)
         
-        print(f"✅ Debug - Voz salva com sucesso: {nome_voz}")
+        print(f" Debug - Voz salva com sucesso: {nome_voz}")
         return jsonify({
             'success': True, 
             'message': f'Voz "{nome_voz}" salva com sucesso!',
@@ -2986,14 +3130,38 @@ def gerar_voz_cortes():
         body = request.get_json(force=True) or {}
         lang_target = body.get("lang_target", "pt")  # Mudar default para português
         voice = body.get("voice", "piper")
+        apenas_com_legenda = body.get("apenas_com_legenda", False)  # NOVO: filtro de pasta
         
-        print(f"🔊 Iniciando dublagem com idioma: {lang_target}, voz: {voice}")
+        print(f"===== INICIANDO DUBLAGEM COM IDIOMA: {lang_target}, VOZ: {voice} =====")
+        print(f"===== APENAS COM LEGENDA: {apenas_com_legenda} =====")
+        import sys
+        sys.stdout.flush()
         
-        # Verificar se existem arquivos em static/final
-        arquivos = glob.glob("static/final/*.mp4")
+        # Verificar se foi especificado um arquivo específico
+        arquivo_especifico = body.get("arquivo_especifico")
+        
+        if arquivo_especifico:
+            # Processar apenas o arquivo especificado
+            arquivo_path = f"static/final/{arquivo_especifico}"
+            if os.path.exists(arquivo_path):
+                arquivos = [arquivo_path]
+                print(f"📹 Processando arquivo específico: {arquivo_especifico}")
+            else:
+                return jsonify({"ok": False, "error": f"Arquivo não encontrado: {arquivo_especifico}"})
+        else:
+            # NOVO: Filtrar por pasta selecionada
+            arquivos = []
+            
+            # Se apenas_com_legenda=True, buscar SOMENTE em static/final (vídeos visíveis na interface)
+            if apenas_com_legenda:
+                arquivos = glob.glob("static/final/*.mp4")
+                print(f"📁 Buscando APENAS vídeos com legenda (static/final): {len(arquivos)} encontrados")
+            else:
+                # Buscar em todas as pastas (comportamento original)
+                arquivos = glob.glob("static/final/*.mp4")
+                print(f"📁 Processando todos os arquivos encontrados: {len(arquivos)}")
+        
         count = len(arquivos)
-        
-        print(f"📁 Encontrados {count} arquivos em static/final")
         
         if count == 0:
             return jsonify({"ok": False, "error": "Nenhum arquivo encontrado em static/final"})
@@ -3032,26 +3200,39 @@ def gerar_voz_cortes():
             arquivo_nome = os.path.basename(arquivo_path)
             nome_base = os.path.splitext(arquivo_nome)[0]
             
+            # BUSCAR nome original do vídeo na planilha (mapeamento arquivo_novo -> arquivo_antigo)
+            arquivo_original = arquivo_nome
+            try:
+                if not df.empty and 'arquivo_novo' in df.columns and 'arquivo_antigo' in df.columns:
+                    for _, row in df.iterrows():
+                        if row.get('arquivo_novo', '') == arquivo_nome:
+                            arquivo_original = row.get('arquivo_antigo', arquivo_nome)
+                            print(f"===== MAPEAMENTO ENCONTRADO: {arquivo_nome} -> {arquivo_original} =====")
+                            break
+            except Exception as e:
+                print(f"Erro ao buscar mapeamento: {e}")
+            
             # Buscar transcrição individual do corte
             from cortes.cortar_video import buscar_texto_traduzido, atualizar_texto_traduzido
             
-            print(f"🔍 Buscando transcrição individual para: {nome_base}")
-            print(f"📁 Arquivo: {arquivo_nome}")
+            print(f"[DEBUG] Buscando transcrição individual para: {nome_base}")
+            print(f" Arquivo atual: {arquivo_nome}")
+            print(f" Arquivo original: {arquivo_original}")
             
-            # Primeiro, tentar buscar texto já traduzido
-            texto_traduzido_existente = buscar_texto_traduzido(arquivo_nome)
+            # Primeiro, tentar buscar texto já traduzido usando ARQUIVO ORIGINAL
+            texto_traduzido_existente = buscar_texto_traduzido(arquivo_original)
             if texto_traduzido_existente:
                 texto_para_dublagem = texto_traduzido_existente
-                print(f"✅ Usando texto já traduzido: {len(texto_para_dublagem)} chars")
+                print(f" Usando texto já traduzido: {len(texto_para_dublagem)} chars")
             else:
-                # Buscar transcrição original do arquivo individual
-                print(f"🔍 Buscando transcrição original em data/transcricoes_cortes/")
-                transcricao_individual = buscar_transcricao_individual(arquivo_nome)
+                # Buscar transcrição original do arquivo individual usando ARQUIVO ORIGINAL
+                print(f"[DEBUG] Buscando transcrição original em data/transcricoes_cortes/")
+                transcricao_individual = buscar_transcricao_individual(arquivo_original)
                 
                 if transcricao_individual and len(transcricao_individual) > 20:
                     texto_original = transcricao_individual
-                    print(f"✅ Transcrição individual encontrada: {len(texto_original)} chars")
-                    print(f"📝 Texto: {texto_original[:100]}...")
+                    print(f" Transcrição individual encontrada: {len(texto_original)} chars")
+                    print(f" Texto: {texto_original[:100]}...")
                 else:
                     # Fallback: usar nome do arquivo
                     texto_original = nome_base.replace('-', ' ').replace('_', ' ')
@@ -3074,20 +3255,20 @@ def gerar_voz_cortes():
                     if lang_target == "pt":
                         # Detectar se o texto está em inglês e traduzir para português
                         if any(palavra in texto_para_dublagem.lower() for palavra in ['the', 'and', 'you', 'your', 'this', 'that', 'with', 'from', 'they', 'have', 'will', 'can', 'are', 'was', 'were']):
-                            print(f"🌍 Detectado texto em inglês, traduzindo para português...")
+                            print(f" Detectado texto em inglês, traduzindo para português...")
                             texto_traduzido = GoogleTranslator(source='en', target='pt').translate(texto_para_dublagem)
-                            print(f"✅ Texto traduzido para português: {len(texto_traduzido)} chars")
+                            print(f" Texto traduzido para português: {len(texto_traduzido)} chars")
                             
                             # Salvar tradução no arquivo individual
                             atualizar_texto_traduzido(arquivo_nome, texto_traduzido)
                             
                             texto_para_dublagem = texto_traduzido
                         else:
-                            print(f"📝 Texto já em português, usando diretamente")
+                            print(f" Texto já em português, usando diretamente")
                     else:
                         # Traduzir para outro idioma
                         texto_traduzido = GoogleTranslator(source='pt', target=lang_target).translate(texto_para_dublagem)
-                        print(f"🌍 Texto traduzido para {lang_target}")
+                        print(f" Texto traduzido para {lang_target}")
                         
                         # Salvar tradução no arquivo individual
                         atualizar_texto_traduzido(arquivo_nome, texto_traduzido)
@@ -3095,9 +3276,9 @@ def gerar_voz_cortes():
                         texto_para_dublagem = texto_traduzido
                         
                 except Exception as e:
-                    print(f"❌ Erro na tradução: {e}")
+                    print(f" Erro na tradução: {e}")
             else:
-                print(f"✅ Usando texto já traduzido existente")
+                print(f" Usando texto já traduzido existente")
             
             # Gerar nome do arquivo de saída para dublagem
             nome_base = os.path.splitext(arquivo_nome)[0]
@@ -3106,57 +3287,63 @@ def gerar_voz_cortes():
             
             # Verificar se o texto é válido
             if not texto_para_dublagem or len(texto_para_dublagem) < 10:
-                print(f"⚠️ Texto muito curto para dublagem: {texto_para_dublagem}")
+                print(f" Texto muito curto para dublagem: {texto_para_dublagem}")
                 # Tentar buscar transcrição diretamente
                 transcricao_direta = buscar_transcricao_video(arquivo_path)
                 if transcricao_direta and len(transcricao_direta) > 20:
                     texto_para_dublagem = transcricao_direta
-                    print(f"✅ Usando transcrição direta: {len(texto_para_dublagem)} chars")
+                    print(f" Usando transcrição direta: {len(texto_para_dublagem)} chars")
                 else:
-                    print(f"❌ Não foi possível encontrar texto válido para dublagem")
+                    print(f" Não foi possível encontrar texto válido para dublagem")
                     continue
             
             # Log do texto final para dublagem
-            print(f"📝 Texto final para dublagem: {texto_para_dublagem[:100]}...")
+            print(f" Texto final para dublagem: {texto_para_dublagem[:100]}...")
             
             # Implementar dublagem real
             try:
-                print(f"🔊 Iniciando dublagem para {arquivo_nome}")
-                print(f"📝 Texto para dublagem: {texto_para_dublagem[:100]}...")
-                print(f"🌍 Idioma: {lang_target}, Voz: {voice}")
+                print(f"===== INICIANDO DUBLAGEM PARA: {arquivo_nome} =====")
+                print(f"===== TEXTO: {texto_para_dublagem[:100]}... =====")
+                print(f"===== IDIOMA: {lang_target}, VOZ: {voice} =====")
+                import sys
+                sys.stdout.flush()
                 
                 resultado_dublagem = dublar_video(arquivo_path, caminho_saida, texto_para_dublagem, voice, lang_target)
                 
                 if resultado_dublagem:
-                    print(f"✅ Dublagem concluída: {arquivo_saida}")
+                    print(f"===== DUBLAGEM CONCLUIDA COM SUCESSO: {arquivo_saida} =====")
+                    sys.stdout.flush()
                 else:
-                    print(f"❌ Dublagem falhou para {arquivo_nome}")
-                    # Fallback: copiar arquivo original
+                    print(f"===== ERRO: Dublagem falhou para {arquivo_nome} =====")
+                    print(f"===== FALLBACK: Copiando arquivo original sem dublagem =====")
                     import shutil
                     shutil.copy2(arquivo_path, caminho_saida)
-                    print(f"📋 Arquivo copiado como fallback: {arquivo_saida}")
+                    print(f"===== Arquivo copiado como fallback: {arquivo_saida} =====")
+                    sys.stdout.flush()
                     
             except Exception as e:
-                print(f"❌ Erro na dublagem de {arquivo_nome}: {e}")
+                print(f"===== ERRO NA DUBLAGEM DE {arquivo_nome}: {e} =====")
                 import traceback
                 traceback.print_exc()
                 # Fallback: copiar arquivo original
                 import shutil
                 shutil.copy2(arquivo_path, caminho_saida)
-                print(f"📋 Arquivo copiado como fallback: {arquivo_saida}")
+                print(f"===== Arquivo copiado como fallback: {arquivo_saida} =====")
+                sys.stdout.flush()
             
             resultados.append({
                 "arquivo_original": arquivo_nome,
-                "arquivo_dublado": arquivo_saida,
+                "arquivo_dublado": os.path.basename(resultado_dublagem) if resultado_dublagem else arquivo_saida,
                 "texto_usado": texto_para_dublagem,
                 "idioma_destino": lang_target,
                 "voz": voice
             })
         
-        print(f"📊 [DEBUG] Retornando resposta JSON:")
-        print(f"📊 [DEBUG] - ok: True")
-        print(f"📊 [DEBUG] - resultados: {len(resultados)} arquivos")
-        print(f"📊 [DEBUG] - message: Processados {len(resultados)} arquivos para {lang_target} com voz {voice}")
+        print(f"===== FINALIZANDO DUBLAGEM =====")
+        print(f"===== OK: True =====")
+        print(f"===== RESULTADOS: {len(resultados)} arquivos =====")
+        print(f"===== MESSAGE: Processados {len(resultados)} arquivos para {lang_target} com voz {voice} =====")
+        sys.stdout.flush()
         
         return jsonify({
             "ok": True, 
@@ -3164,6 +3351,10 @@ def gerar_voz_cortes():
             "message": f"Processados {len(resultados)} arquivos para {lang_target} com voz {voice}"
         })
     except Exception as e:
+        print(f"===== ERRO GERAL NA DUBLAGEM: {e} =====")
+        import traceback
+        traceback.print_exc()
+        sys.stdout.flush()
         return jsonify({"ok": False, "error": str(e)})
 
 # ==== PROCESSAMENTO SEQUENCIAL COM IA ====
@@ -3228,24 +3419,24 @@ def processar_sequencial_ia():
         
         # Sempre reprocessar todos os vídeos (modo forçado)
         arquivos_processados = set()
-        print("🔄 Modo reprocessamento: todos os vídeos serão processados novamente")
+        print("Modo reprocessamento: todos os videos serao processados novamente")
         
         # Processar vídeos pendentes
         resultados = []
         erros = []
         
-        print(f"📊 Total de vídeos encontrados: {len(arquivos_video)}")
-        print(f"📊 Vídeos já processados: {len(arquivos_processados)}")
-        print(f"📊 Vídeos para processar: {len(arquivos_video) - len(arquivos_processados)}")
+        print(f" Total de vídeos encontrados: {len(arquivos_video)}")
+        print(f" Vídeos já processados: {len(arquivos_processados)}")
+        print(f" Vídeos para processar: {len(arquivos_video) - len(arquivos_processados)}")
         
         for arquivo in arquivos_video:
             try:
                 # Verificar se já foi processado
                 if arquivo in arquivos_processados:
-                    print(f"⏭️ Pulando {arquivo} - já processado")
+                    print(f" Pulando {arquivo} - já processado")
                     continue
                 
-                print(f"🔄 Processando {arquivo}...")
+                print(f"Processando {arquivo}...")
                 
                 # Caminho completo do vídeo
                 caminho_video = os.path.join(pasta_final, arquivo)
@@ -3276,7 +3467,7 @@ def processar_sequencial_ia():
                 
                 # Verificar se o nome já é o mesmo (evitar renomear desnecessariamente)
                 if arquivo == novo_nome:
-                    print(f"📝 Arquivo {arquivo} já tem o nome correto, pulando...")
+                    print(f" Arquivo {arquivo} já tem o nome correto, pulando...")
                     continue
                 
                 # Renomear arquivo
@@ -3317,7 +3508,7 @@ def processar_sequencial_ia():
                     "hashtags": conteudo_ia['hashtags']
                 })
                 
-                print(f"✅ Processado: {arquivo} -> {novo_nome}")
+                print(f" Processado: {arquivo} -> {novo_nome}")
                 
             except Exception as e:
                 print(f"Erro ao processar {arquivo}: {e}")
@@ -3327,7 +3518,7 @@ def processar_sequencial_ia():
         # Salvar planilha atualizada
         try:
             df_existente.to_excel(planilha_path, index=False)
-            df_existente.to_csv(csv_path, index=False)
+            df_existente.to_csv(csv_path, index=False, encoding='utf-8')
         except Exception as e:
             print(f"Erro ao salvar planilha: {e}")
         
@@ -3342,6 +3533,220 @@ def processar_sequencial_ia():
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)})
 
+@app.route("/processar_sequencial_ia_dublados", methods=["POST"])
+def processar_sequencial_ia_dublados():
+    """Processa vídeos DUBLADOS sequencialmente com IA (mesma lógica dos legendados)"""
+    try:
+        body = request.get_json(force=True) or {}
+        nicho = body.get("nicho", "motivação e desenvolvimento pessoal")
+        
+        # Configurações do Ollama
+        ollama_host = os.getenv("OLLAMA_HOST", "http://127.0.0.1:11434")
+        
+        # Buscar modelo configurado no Ollama
+        ollama_model = "qwen2.5:7b-instruct"  # Default
+        try:
+            import ollama
+            client = ollama.Client(host=ollama_host)
+            models = client.list()
+            if models and 'models' in models and models['models']:
+                first_model = models['models'][0]
+                if hasattr(first_model, 'model'):
+                    ollama_model = first_model.model
+                elif 'model' in first_model:
+                    ollama_model = first_model['model']
+                else:
+                    ollama_model = str(first_model)
+        except ImportError:
+            print("Ollama não instalado")
+        except Exception as e:
+            print(f"Erro ao buscar modelo Ollama: {e}")
+        
+        # Buscar vídeos dublados em múltiplas pastas possíveis
+        pastas_dublados = ["data/cortes_dublado", "static/dublados", "outputs/dublados"]
+        pasta_dublados = None
+        
+        for pasta in pastas_dublados:
+            if os.path.exists(pasta):
+                pasta_dublados = pasta
+                break
+        
+        if not pasta_dublados:
+            return jsonify({"ok": False, "error": "Nenhuma pasta de vídeos dublados encontrada"})
+        
+        arquivos_video = [f for f in os.listdir(pasta_dublados) if f.endswith('.mp4')]
+        if not arquivos_video:
+            return jsonify({"ok": False, "error": f"Nenhum vídeo dublado encontrado em {pasta_dublados}"})
+        
+        # Carregar planilha existente para verificar idempotência
+        planilha_path = "data/planilhas/publicar.xlsx"
+        csv_path = "data/planilhas/publicar.csv"
+        
+        # Garantir que a pasta existe
+        os.makedirs("data/planilhas", exist_ok=True)
+        
+        # Carregar dados existentes
+        try:
+            if os.path.exists(planilha_path):
+                df_existente = pd.read_excel(planilha_path)
+            elif os.path.exists(csv_path):
+                df_existente = pd.read_csv(csv_path)
+            else:
+                df_existente = pd.DataFrame(columns=["arquivo_antigo", "arquivo_novo", "titulo", "legenda", "hashtags", "duracao", "origem", "idioma"])
+        except:
+            df_existente = pd.DataFrame(columns=["arquivo_antigo", "arquivo_novo", "titulo", "legenda", "hashtags", "duracao", "origem", "idioma"])
+        
+        # Sempre reprocessar todos os vídeos (modo forçado)
+        arquivos_processados = set()
+        print("Modo reprocessamento: todos os videos dublados serao processados novamente")
+        
+        # Processar vídeos pendentes
+        resultados = []
+        erros = []
+        
+        print(f" Total de vídeos dublados encontrados: {len(arquivos_video)}")
+        print(f" Vídeos já processados: {len(arquivos_processados)}")
+        print(f" Vídeos para processar: {len(arquivos_video) - len(arquivos_processados)}")
+        
+        for arquivo in arquivos_video:
+            try:
+                # Verificar se já foi processado
+                if arquivo in arquivos_processados:
+                    print(f" Pulando {arquivo} - já processado")
+                    continue
+                
+                print(f"Processando {arquivo}...")
+                
+                # Caminho completo do vídeo
+                caminho_video = os.path.join(pasta_dublados, arquivo)
+                
+                # Extrair nome base para buscar transcrição (remover sufixos dublados)
+                nome_base = arquivo.replace('.mp4', '').replace('_dublado_pt', '').replace('_legendado', '')
+                
+                # Buscar transcrição correspondente usando nome base
+                transcricao = buscar_transcricao_video_base(nome_base)
+                if not transcricao:
+                    print(f"Transcrição não encontrada para {nome_base}")
+                    erros.append(f"{arquivo}: Transcrição não encontrada para {nome_base}")
+                    continue
+                
+                # Gerar conteúdo com IA (MESMO prompt dos legendados)
+                conteudo_ia = gerar_conteudo_ia_sequencial(transcricao, nicho, ollama_host, ollama_model)
+                if not conteudo_ia:
+                    print(f"Erro ao gerar conteúdo IA para {arquivo}")
+                    erros.append(f"{arquivo}: Erro na geração IA")
+                    continue
+                
+                # Validar conteúdo
+                if not validar_conteudo_ia(conteudo_ia):
+                    print(f"Conteúdo inválido para {arquivo}")
+                    erros.append(f"{arquivo}: Conteúdo inválido")
+                    continue
+                
+                # Renomear arquivo
+                novo_nome = criar_slug_titulo(conteudo_ia['title']) + '.mp4'
+                novo_caminho = os.path.join(pasta_dublados, novo_nome)
+                
+                # Verificar se o nome já é o mesmo (evitar renomear desnecessariamente)
+                if arquivo == novo_nome:
+                    print(f" Arquivo {arquivo} já tem o nome correto, pulando...")
+                    continue
+                
+                # Renomear arquivo
+                os.rename(caminho_video, novo_caminho)
+                
+                # Salvar metadados no MP4 também
+                salvar_metadados_mp4(novo_caminho, conteudo_ia['title'], conteudo_ia['caption'], conteudo_ia['hashtags'], "Dublado")
+                print(f"✅ Metadados salvos no MP4: {novo_nome}")
+                
+                # Obter duração do vídeo
+                duracao = obter_duracao_video(novo_caminho)
+                
+                # Adicionar à planilha
+                nova_linha = {
+                    "arquivo_antigo": arquivo,
+                    "arquivo_novo": novo_nome,
+                    "titulo": conteudo_ia['title'],
+                    "legenda": conteudo_ia['caption'],
+                    "hashtags": conteudo_ia['hashtags'],
+                    "duracao": duracao,
+                    "origem": "dublado",
+                    "idioma": "pt"
+                }
+                
+                df_existente = pd.concat([df_existente, pd.DataFrame([nova_linha])], ignore_index=True)
+                
+                # Salvar metadados usando a função unificada
+                salvar_metadados_planilha(
+                    arquivo_antigo=arquivo,
+                    arquivo_novo=novo_nome,
+                    titulo=conteudo_ia['title'],
+                    legenda=conteudo_ia['caption'],
+                    hashtags=conteudo_ia['hashtags'],
+                    duracao=duracao
+                )
+                
+                resultados.append({
+                    "arquivo_original": arquivo,
+                    "arquivo_novo": novo_nome,
+                    "titulo": conteudo_ia['title'],
+                    "legenda": conteudo_ia['caption'],
+                    "hashtags": conteudo_ia['hashtags']
+                })
+                
+                print(f" ✅ {arquivo} -> {novo_nome}")
+                arquivos_processados.add(arquivo)
+                
+            except Exception as e:
+                print(f" ❌ Erro ao processar {arquivo}: {e}")
+                erros.append(f"{arquivo}: {str(e)}")
+                continue
+        
+        # Salvar planilha atualizada
+        try:
+            df_existente.to_excel(planilha_path, index=False)
+            df_existente.to_csv(csv_path, index=False, encoding='utf-8')
+            print(f"Planilha salva: {planilha_path}")
+        except Exception as e:
+            print(f"Erro ao salvar planilha: {e}")
+        
+        print(f"Processamento concluído: {len(resultados)} sucessos, {len(erros)} erros")
+        
+        return jsonify({
+            "ok": True,
+            "resultados": resultados,
+            "erros": erros,
+            "total_processados": len(resultados),
+            "total_erros": len(erros)
+        })
+        
+    except Exception as e:
+        print(f"Erro no processamento sequencial dublados: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"ok": False, "error": str(e)})
+
+def buscar_transcricao_video_base(nome_base):
+    """Busca transcrição usando nome base (para vídeos dublados)"""
+    try:
+        # Tentar múltiplos padrões de nome
+        possiveis_nomes = [
+            f"{nome_base}.mp4",
+            f"{nome_base}_legendado.mp4",
+            nome_base
+        ]
+        
+        for nome in possiveis_nomes:
+            transcricao = buscar_transcricao_video(nome)
+            if transcricao:
+                return transcricao
+        
+        return None
+        
+    except Exception as e:
+        print(f"Erro ao buscar transcrição base {nome_base}: {e}")
+        return None
+
 def buscar_transcricao_individual(nome_arquivo):
     """Busca transcrição específica de um corte individual"""
     try:
@@ -3351,7 +3756,7 @@ def buscar_transcricao_individual(nome_arquivo):
         # Remover sufixos comuns
         nome_limpo = nome_base.replace('_legendado', '').replace('_dublado', '')
         
-        print(f"🔍 Buscando transcrição individual para: {nome_limpo}")
+        print(f"[DEBUG] Buscando transcrição individual para: {nome_limpo}")
         
         # Mapeamento direto dos vídeos para transcrições (CORRIGIDO baseado no conteúdo real)
         mapeamento_direto = {
@@ -3392,7 +3797,7 @@ def buscar_transcricao_individual(nome_arquivo):
         for nome_arquivo_txt in possiveis_nomes:
             if nome_arquivo_txt:
                 transcricao_path = f"data/transcricoes_cortes/{nome_arquivo_txt}"
-                print(f"🔍 Tentando: {transcricao_path}")
+                print(f"[DEBUG] Tentando: {transcricao_path}")
                 if os.path.exists(transcricao_path):
                     with open(transcricao_path, 'r', encoding='utf-8') as f:
                         conteudo = f.read()
@@ -3400,21 +3805,21 @@ def buscar_transcricao_individual(nome_arquivo):
                         if "TEXTO:" in conteudo:
                             texto = conteudo.split("TEXTO:")[1].strip()
                             if texto and len(texto) > 10:
-                                print(f"✅ Transcrição individual encontrada: {transcricao_path} ({len(texto)} chars)")
+                                print(f" Transcrição individual encontrada: {transcricao_path} ({len(texto)} chars)")
                                 return texto
         
-        print(f"❌ Nenhuma transcrição individual encontrada para: {nome_limpo}")
+        print(f" Nenhuma transcrição individual encontrada para: {nome_limpo}")
         return None
         
     except Exception as e:
-        print(f"❌ Erro ao buscar transcrição individual: {e}")
+        print(f" Erro ao buscar transcrição individual: {e}")
         return None
 
 def buscar_transcricao_video(caminho_video):
     """Busca transcrição do vídeo com múltiplas tentativas"""
     try:
         nome_base = os.path.splitext(os.path.basename(caminho_video))[0]
-        print(f"🔍 Buscando transcrição para: {nome_base}")
+        print(f"[DEBUG] Buscando transcrição para: {nome_base}")
         
         # 1. PRIORIDADE: Tentar transcrição específica do corte
         # Primeiro tentar com o nome exato
@@ -3424,7 +3829,7 @@ def buscar_transcricao_video(caminho_video):
         if not os.path.exists(transcricao_corte_path) and "_legendado" in nome_base:
             nome_sem_sufixo = nome_base.replace("_legendado", "")
             transcricao_corte_path = f"data/transcricoes_cortes/{nome_sem_sufixo}.txt"
-            print(f"🔍 Tentando transcrição sem sufixo: {nome_sem_sufixo}")
+            print(f"[DEBUG] Tentando transcrição sem sufixo: {nome_sem_sufixo}")
         
         if os.path.exists(transcricao_corte_path):
             with open(transcricao_corte_path, 'r', encoding='utf-8') as f:
@@ -3442,7 +3847,7 @@ def buscar_transcricao_video(caminho_video):
                             texto_transcricao += linha + " "
                     
                     if texto_transcricao.strip():
-                        print(f"✅ Transcrição específica do corte encontrada: {transcricao_corte_path} ({len(texto_transcricao)} chars)")
+                        print(f" Transcrição específica do corte encontrada: {transcricao_corte_path} ({len(texto_transcricao)} chars)")
                         return texto_transcricao.strip()
         
         # 2. Tentar arquivo .txt correspondente no mesmo diretório
@@ -3451,7 +3856,7 @@ def buscar_transcricao_video(caminho_video):
             with open(txt_path, 'r', encoding='utf-8') as f:
                 conteudo = f.read().strip()
                 if conteudo and len(conteudo) > 20:  # Verificar se tem conteúdo real
-                    print(f"✅ Transcrição encontrada em: {txt_path} ({len(conteudo)} chars)")
+                    print(f" Transcrição encontrada em: {txt_path} ({len(conteudo)} chars)")
                     return conteudo
         
         # 3. Tentar em data/transcricoes com nome específico
@@ -3460,7 +3865,7 @@ def buscar_transcricao_video(caminho_video):
             with open(transcricao_path, 'r', encoding='utf-8') as f:
                 conteudo = f.read().strip()
                 if conteudo and len(conteudo) > 20:
-                    print(f"✅ Transcrição encontrada em: {transcricao_path} ({len(conteudo)} chars)")
+                    print(f" Transcrição encontrada em: {transcricao_path} ({len(conteudo)} chars)")
                     return conteudo
         
         # 4. Tentar buscar por arquivos de transcrição relacionados
@@ -3481,7 +3886,7 @@ def buscar_transcricao_video(caminho_video):
                             with open(caminho_completo, 'r', encoding='utf-8') as f:
                                 conteudo = f.read().strip()
                                 if conteudo and len(conteudo) > 20:
-                                    print(f"✅ Transcrição encontrada em: {caminho_completo} ({len(conteudo)} chars)")
+                                    print(f" Transcrição encontrada em: {caminho_completo} ({len(conteudo)} chars)")
                                     return conteudo
                         except Exception as e:
                             print(f"Erro ao ler {caminho_completo}: {e}")
@@ -3507,16 +3912,16 @@ def buscar_transcricao_video(caminho_video):
                                 with open(caminho_completo, 'r', encoding='utf-8') as f:
                                     conteudo = f.read().strip()
                                     if conteudo and len(conteudo) > 20:
-                                        print(f"✅ Transcrição encontrada por número de corte: {caminho_completo} ({len(conteudo)} chars)")
+                                        print(f" Transcrição encontrada por número de corte: {caminho_completo} ({len(conteudo)} chars)")
                                         return conteudo
                             except:
                                 continue
         
-        print(f"❌ Transcrição não encontrada para {nome_base}")
+        print(f" Transcrição não encontrada para {nome_base}")
         return None
         
     except Exception as e:
-        print(f"❌ Erro ao buscar transcrição: {e}")
+        print(f" Erro ao buscar transcrição: {e}")
         return None
 
 def gerar_conteudo_ia_sequencial(transcricao, nicho, ollama_host, ollama_model):
@@ -3572,7 +3977,7 @@ Resposta:"""
         response = client.generate(model=ollama_model, prompt=prompt)
         resposta_ia = response['response'].strip()
         
-        print(f"🤖 Resposta da IA: {resposta_ia[:200]}...")
+        print(f" Resposta da IA: {resposta_ia[:200]}...")
         
         # Tentar extrair JSON da resposta
         try:
@@ -3611,13 +4016,13 @@ Resposta:"""
                     "hashtags": hashtags
                 }
                 
-                print(f"✅ Conteúdo JSON extraído: {resultado}")
+                print(f" Conteúdo JSON extraído: {resultado}")
                 return resultado
             else:
                 raise ValueError("JSON não encontrado na resposta")
                 
         except Exception as e:
-            print(f"❌ Erro ao extrair JSON: {e}")
+            print(f" Erro ao extrair JSON: {e}")
             # Fallback: usar análise local
             return gerar_conteudo_local(transcricao, nicho)
             
@@ -3766,11 +4171,11 @@ def validar_conteudo_ia(conteudo):
         
         # Contar hashtags - mais flexível
         tags = hashtags.split()
-        if len(tags) < 3:  # Mínimo reduzido
+        if len(tags) < 2:  # Aceitar 2 hashtags válidas
             print(f"Poucas hashtags: {len(tags)}")
             return False
         
-        print(f"✅ Conteúdo válido: título='{title[:30]}...', caption='{caption[:30]}...', hashtags={len(tags)}")
+        print(f" Conteúdo válido: título='{title[:30]}...', caption='{caption[:30]}...', hashtags={len(tags)}")
         return True
         
     except Exception as e:
@@ -3833,9 +4238,14 @@ def salvar_metadados():
         titulo = body.get("titulo", "")
         legenda = body.get("legenda", "")
         hashtags = body.get("hashtags", "")
+        renomear = body.get("renomear", False)  # NOVO: flag para renomear
         
         if not filename:
             return jsonify({"ok": False, "error": "Nome do arquivo não fornecido"})
+        
+        print(f"📝 [METADADOS] Salvando metadados para: {filename}")
+        print(f"📝 [METADADOS] - Título: {titulo[:50]}...")
+        print(f"📝 [METADADOS] - Renomear: {renomear}")
         
         # Carregar planilha existente
         planilha_path = "data/planilhas/publicar.xlsx"
@@ -3851,10 +4261,46 @@ def salvar_metadados():
         except:
             df = pd.DataFrame(columns=["arquivo_antigo", "arquivo_novo", "titulo", "legenda", "hashtags", "duracao", "origem", "idioma"])
         
+        # NOVO: Se for para renomear, gerar novo nome e copiar transcrições
+        arquivo_novo = filename
+        if renomear and titulo:
+            from metadados.renomear import renomear_video
+            
+            # Renomear arquivo
+            caminho_antigo = os.path.join("static/final", filename)
+            if os.path.exists(caminho_antigo):
+                try:
+                    caminho_novo = renomear_video(caminho_antigo, titulo, destino_dir="static/final")
+                    arquivo_novo = os.path.basename(caminho_novo)
+                    print(f"✅ [METADADOS] Arquivo renomeado: {filename} -> {arquivo_novo}")
+                    
+                    # COPIAR transcrições para novo nome (SINCRONIA)
+                    nome_base_antigo = os.path.splitext(filename)[0].replace("_legendado", "")
+                    nome_base_novo = os.path.splitext(arquivo_novo)[0]
+                    
+                    # Copiar JSON
+                    json_antigo = f"data/transcricoes_cortes/json/{nome_base_antigo}.json"
+                    if os.path.exists(json_antigo):
+                        json_novo = f"data/transcricoes_cortes/json/{nome_base_novo}.json"
+                        shutil.copy2(json_antigo, json_novo)
+                        print(f"✅ [METADADOS] Transcrição JSON copiada: {json_antigo} -> {json_novo}")
+                    
+                    # Copiar TXT
+                    txt_antigo = f"data/transcricoes_cortes/{nome_base_antigo}.txt"
+                    if os.path.exists(txt_antigo):
+                        txt_novo = f"data/transcricoes_cortes/{nome_base_novo}.txt"
+                        shutil.copy2(txt_antigo, txt_novo)
+                        print(f"✅ [METADADOS] Transcrição TXT copiada: {txt_antigo} -> {txt_novo}")
+                    
+                except Exception as e:
+                    print(f"⚠️ [METADADOS] Erro ao renomear: {e}")
+                    arquivo_novo = filename
+        
         # Atualizar ou adicionar linha
         mask = df['arquivo_novo'] == filename
         if mask.any():
             # Atualizar linha existente
+            df.loc[mask, 'arquivo_novo'] = arquivo_novo  # Atualizar nome novo
             df.loc[mask, 'titulo'] = titulo
             df.loc[mask, 'legenda'] = legenda
             df.loc[mask, 'hashtags'] = hashtags
@@ -3862,7 +4308,7 @@ def salvar_metadados():
             # Adicionar nova linha
             nova_linha = {
                 "arquivo_antigo": filename,
-                "arquivo_novo": filename,
+                "arquivo_novo": arquivo_novo,
                 "titulo": titulo,
                 "legenda": legenda,
                 "hashtags": hashtags,
@@ -3874,11 +4320,31 @@ def salvar_metadados():
         
         # Salvar planilha
         df.to_excel(planilha_path, index=False)
-        df.to_csv(csv_path, index=False)
+        df.to_csv(csv_path, index=False, encoding='utf-8')
         
-        return jsonify({"ok": True, "message": "Metadados salvos com sucesso"})
+        # Salvar metadados no arquivo MP4 também
+        try:
+            caminho_video = os.path.join("static/final", arquivo_novo)
+            if os.path.exists(caminho_video):
+                salvar_metadados_mp4(caminho_video, titulo, legenda, hashtags, "Legendado")
+                print(f"✅ Metadados salvos no MP4: {caminho_video}")
+            else:
+                print(f"⚠️ Arquivo MP4 não encontrado para salvar metadados: {arquivo_novo}")
+        except Exception as mp4_error:
+            print(f"⚠️ Erro ao salvar metadados no MP4: {mp4_error}")
+        
+        print(f"✅ [METADADOS] Metadados salvos com sucesso")
+        
+        return jsonify({
+            "ok": True, 
+            "message": "Metadados salvos com sucesso",
+            "arquivo_novo": arquivo_novo
+        })
         
     except Exception as e:
+        print(f"❌ [METADADOS] Erro ao salvar: {e}")
+        import traceback
+        traceback.print_exc()
         return jsonify({"ok": False, "error": str(e)})
 
 @app.route("/exportar_excel", methods=["GET"])
@@ -3941,7 +4407,7 @@ def exportar_transcricoes():
         if os.path.exists(dublados_path):
             dublados_files = [f for f in os.listdir(dublados_path) if f.endswith('.mp4')]
         
-        print(f"📁 Vídeos encontrados: {len(cortes_files)} cortados + {len(dublados_files)} dublados = {len(cortes_files) + len(dublados_files)} total")
+        print(f" Vídeos encontrados: {len(cortes_files)} cortados + {len(dublados_files)} dublados = {len(cortes_files) + len(dublados_files)} total")
         
         # Processar vídeos cortados existentes
         for arquivo in cortes_files:
@@ -4062,7 +4528,7 @@ def renomear_video():
             from cortes.cortar_video import renomear_transcricao_individual
             renomear_transcricao_individual(filename, novo_nome)
         except Exception as e:
-            print(f"⚠️ Erro ao renomear transcrição: {e}")
+            print(f" Erro ao renomear transcrição: {e}")
         
         # Atualizar planilha
         try:
@@ -4073,12 +4539,12 @@ def renomear_video():
                 df.loc[mask, 'titulo'] = novoTitulo
                 df.to_excel("data/planilhas/publicar.xlsx", index=False)
         except Exception as e:
-            print(f"⚠️ Erro ao atualizar planilha: {e}")
+            print(f" Erro ao atualizar planilha: {e}")
         
         return jsonify({'ok': True, 'novo_nome': novo_nome})
         
     except Exception as e:
-        print(f"❌ Erro ao renomear vídeo: {e}")
+        print(f" Erro ao renomear vídeo: {e}")
         return jsonify({'ok': False, 'error': str(e)})
 
 @app.route("/buscar_transcricao", methods=["POST"])
@@ -4111,18 +4577,31 @@ def gerar_conteudo_individual():
         transcricao = body.get("transcricao", "")
         nicho = body.get("nicho", "motivação e desenvolvimento pessoal")
         
+        print(f"📝 [METADADOS] Gerando metadados individuais")
+        print(f"📝 [METADADOS] - Transcrição: {transcricao[:100]}...")
+        print(f"📝 [METADADOS] - Nicho: {nicho}")
+        
         if not transcricao:
+            print("❌ [METADADOS] Transcrição não fornecida")
             return jsonify({"ok": False, "error": "Transcrição não fornecida"})
         
         # Configurações do Ollama
         ollama_host = os.getenv("OLLAMA_HOST", "http://127.0.0.1:11434")
         ollama_model = "qwen2.5:7b"  # Usar modelo específico
         
+        print(f"🤖 [METADADOS] Chamando IA: {ollama_model}")
+        
         # Gerar conteúdo
         conteudo = gerar_conteudo_ia_sequencial(transcricao, nicho, ollama_host, ollama_model)
         
         if not conteudo:
-            return jsonify({"ok": False, "error": "Erro ao gerar conteúdo"})
+            print("❌ [METADADOS] IA não retornou conteúdo")
+            return jsonify({"ok": False, "error": "Erro ao gerar conteúdo com IA"})
+        
+        print(f"✅ [METADADOS] Conteúdo gerado com sucesso")
+        print(f"✅ [METADADOS] - Título: {conteudo.get('title', '')[:50]}...")
+        print(f"✅ [METADADOS] - Legenda: {conteudo.get('caption', '')[:50]}...")
+        print(f"✅ [METADADOS] - Hashtags: {conteudo.get('hashtags', '')}")
         
         return jsonify({
             "ok": True,
@@ -4132,6 +4611,9 @@ def gerar_conteudo_individual():
         })
         
     except Exception as e:
+        print(f"❌ [METADADOS] Erro ao gerar conteúdo: {e}")
+        import traceback
+        traceback.print_exc()
         return jsonify({"ok": False, "error": str(e)})
 
 @app.route("/importar_metadados", methods=["POST"])
@@ -4249,7 +4731,7 @@ def configurar_ai():
             import json
             json.dump(config, f)
         
-        print(f"✅ Configuração de IA salva: {config}")
+        print(f" Configuração de IA salva: {config}")
         return jsonify({"ok": True, "message": f"IA {ai_type} configurada com sucesso!"})
             
     except Exception as e:
@@ -4272,7 +4754,7 @@ def listar_modelos_ollama():
             import ollama
             print("✅ Ollama importado com sucesso")
         except ImportError:
-            print("❌ Ollama não instalado")
+            print(" Ollama não instalado")
             return jsonify({"ok": False, "error": "Ollama não instalado", "models": []})
         
         # Tentar conectar com Ollama
@@ -4280,9 +4762,9 @@ def listar_modelos_ollama():
             client = ollama.Client()
             print("✅ Cliente Ollama criado")
             models_response = client.list()
-            print(f"✅ Resposta do Ollama: {models_response}")
+            print(f" Resposta do Ollama: {models_response}")
         except Exception as e:
-            print(f"❌ Erro ao conectar com Ollama: {e}")
+            print(f" Erro ao conectar com Ollama: {e}")
             return jsonify({"ok": False, "error": f"Erro ao conectar com Ollama: {str(e)}", "models": []})
         
         # Verificar se a resposta tem modelos
@@ -4296,12 +4778,16 @@ def listar_modelos_ollama():
         
         if models_list:
             models = []
-            print(f"✅ Encontrados {len(models_list)} modelos")
+            print(f" Encontrados {len(models_list)} modelos")
             for model in models_list:
                 # Extrair nome do modelo de diferentes estruturas possíveis
                 model_name = None
-                if hasattr(model, 'name'):
+                if hasattr(model, 'model'):
+                    model_name = model.model
+                elif hasattr(model, 'name'):
                     model_name = model.name
+                elif isinstance(model, dict) and 'model' in model:
+                    model_name = model['model']
                 elif isinstance(model, dict) and 'name' in model:
                     model_name = model['name']
                 elif isinstance(model, str):
@@ -4312,18 +4798,18 @@ def listar_modelos_ollama():
                         "name": model_name,
                         "display": model_name.replace(':', ' - ').title()
                     })
-                    print(f"✅ Modelo encontrado: {model_name}")
+                    print(f" Modelo encontrado: {model_name}")
             
             return jsonify({"ok": True, "models": models})
         else:
-            print("❌ Nenhum modelo encontrado na resposta")
+            print(" Nenhum modelo encontrado na resposta")
             return jsonify({"ok": False, "error": "Nenhum modelo encontrado", "models": []})
             
     except ImportError:
-        print("❌ ImportError no Ollama")
+        print(" ImportError no Ollama")
         return jsonify({"ok": False, "error": "Ollama não instalado", "models": []})
     except Exception as e:
-        print(f"❌ Erro geral: {e}")
+        print(f" Erro geral: {e}")
         return jsonify({"ok": False, "error": f"Erro ao conectar com Ollama: {str(e)}", "models": []})
 
 def carregar_config_ai():
@@ -4471,7 +4957,7 @@ def listar_videos_dublados():
                 "caminho": arquivo,
                 "tamanho": tamanho,
                 "data_modificacao": data_modificacao,
-                "metadados": metadata
+                "metadata": metadata
             })
         
         # Ordenar por data de modificação (mais recentes primeiro)
@@ -4485,13 +4971,15 @@ def listar_videos_dublados():
 
 @app.route("/videos/dublados/<nome>", methods=["DELETE"])
 def deletar_video_dublado(nome):
-    """Deleta um vídeo dublado"""
+    """Deleta um vídeo dublado (SEM deletar transcrições)"""
     try:
         pasta_dublados = "data/cortes_dublado"
         arquivo_path = os.path.join(pasta_dublados, nome)
         
         if os.path.exists(arquivo_path):
             os.remove(arquivo_path)
+            print(f"✅ Vídeo dublado deletado: {arquivo_path}")
+            # NOTA: NÃO deletar transcrições - apenas o vídeo dublado
             return jsonify({"ok": True, "message": f"Vídeo '{nome}' deletado com sucesso"})
         else:
             return jsonify({"ok": False, "error": "Arquivo não encontrado"})
@@ -4507,6 +4995,23 @@ def servir_video_dublado(nome):
     try:
         pasta_dublados = "data/cortes_dublado"
         arquivo_path = os.path.join(pasta_dublados, nome)
+        
+        if os.path.exists(arquivo_path):
+            from flask import send_file
+            return send_file(arquivo_path, as_attachment=False)
+        else:
+            return "Arquivo não encontrado", 404
+            
+    except Exception as e:
+        print(f"Erro ao servir vídeo dublado: {e}")
+        return "Erro interno", 500
+
+@app.route("/data/cortes_dublado/<path:filename>")
+def servir_video_dublado_data(filename):
+    """Serve vídeos dublados from data/cortes_dublado folder"""
+    try:
+        pasta_dublados = "data/cortes_dublado"
+        arquivo_path = os.path.join(pasta_dublados, filename)
         
         if os.path.exists(arquivo_path):
             from flask import send_file
@@ -4545,6 +5050,70 @@ def buscar_transcricao_dublado():
             
     except Exception as e:
         print(f"Erro ao buscar transcrição dublado: {e}")
+        return jsonify({"ok": False, "error": str(e)})
+
+@app.route("/renomear_video_dublado", methods=["POST"])
+def renomear_video_dublado():
+    """Renomeia vídeo dublado baseado no título"""
+    try:
+        body = request.get_json(force=True) or {}
+        filename = body.get("filename")
+        titulo = body.get("titulo")
+        
+        print(f"📝 [RENOMEAR DUBLADO] Renomeando: {filename} -> {titulo}")
+        
+        if not filename or not titulo:
+            return jsonify({"ok": False, "error": "Nome do arquivo ou título não fornecidos"})
+        
+        from metadados.renomear import renomear_video
+        
+        # Buscar arquivo em múltiplas pastas possíveis
+        possible_paths = [
+            os.path.join("data/cortes_dublado", filename),
+            os.path.join("static/dublados", filename),
+            os.path.join("outputs/dublados", filename)
+        ]
+        
+        caminho_antigo = None
+        for path in possible_paths:
+            if os.path.exists(path):
+                caminho_antigo = path
+                break
+        
+        if not caminho_antigo:
+            return jsonify({"ok": False, "error": f"Arquivo não encontrado: {filename}"})
+        
+        # Renomear arquivo
+        pasta_destino = os.path.dirname(caminho_antigo)
+        caminho_novo = renomear_video(caminho_antigo, titulo, destino_dir=pasta_destino)
+        arquivo_novo = os.path.basename(caminho_novo)
+        
+        print(f"✅ [RENOMEAR DUBLADO] Arquivo renomeado: {filename} -> {arquivo_novo}")
+        
+        # Copiar transcrições para novo nome (sincronia)
+        nome_base_antigo = os.path.splitext(filename)[0].replace("_dublado_pt", "").replace("_legendado", "")
+        nome_base_novo = os.path.splitext(arquivo_novo)[0]
+        
+        # Copiar JSON
+        json_antigo = f"data/transcricoes_cortes/json/{nome_base_antigo}.json"
+        if os.path.exists(json_antigo):
+            json_novo = f"data/transcricoes_cortes/json/{nome_base_novo}.json"
+            shutil.copy2(json_antigo, json_novo)
+            print(f"✅ [RENOMEAR DUBLADO] Transcrição JSON copiada: {json_antigo} -> {json_novo}")
+        
+        # Copiar TXT
+        txt_antigo = f"data/transcricoes_cortes/{nome_base_antigo}.txt"
+        if os.path.exists(txt_antigo):
+            txt_novo = f"data/transcricoes_cortes/{nome_base_novo}.txt"
+            shutil.copy2(txt_antigo, txt_novo)
+            print(f"✅ [RENOMEAR DUBLADO] Transcrição TXT copiada: {txt_antigo} -> {txt_novo}")
+        
+        return jsonify({"ok": True, "arquivo_novo": arquivo_novo})
+        
+    except Exception as e:
+        print(f"❌ [RENOMEAR DUBLADO] Erro: {e}")
+        import traceback
+        traceback.print_exc()
         return jsonify({"ok": False, "error": str(e)})
 
 @app.route("/salvar_metadados_dublado", methods=["POST"])
@@ -4595,7 +5164,7 @@ def salvar_metadados_dublado():
         
         # Salvar planilha de dublados
         df_dublados.to_excel(planilha_dublados_path, index=False)
-        df_dublados.to_csv(csv_dublados_path, index=False)
+        df_dublados.to_csv(csv_dublados_path, index=False, encoding='utf-8')
         
         # Também salvar na planilha principal (publicar.xlsx)
         planilha_principal_path = "data/planilhas/publicar.xlsx"
@@ -4642,7 +5211,45 @@ def salvar_metadados_dublado():
         
         # Salvar planilha principal
         df_principal.to_excel(planilha_principal_path, index=False)
-        df_principal.to_csv(csv_principal_path, index=False)
+        df_principal.to_csv(csv_principal_path, index=False, encoding='utf-8')
+        
+        # Salvar metadados no arquivo MP4 também
+        try:
+            # Buscar arquivo em múltiplas pastas possíveis
+            possible_paths = [
+                os.path.join("data/cortes_dublado", filename),
+                os.path.join("static/dublados", filename),
+                os.path.join("outputs/dublados", filename)
+            ]
+            
+            caminho_video = None
+            for path in possible_paths:
+                if os.path.exists(path):
+                    caminho_video = path
+                    break
+            
+            if caminho_video:
+                salvar_metadados_mp4(caminho_video, titulo, legenda, hashtags, "Dublado")
+                print(f"✅ Metadados salvos no MP4: {caminho_video}")
+            else:
+                print(f"⚠️ Arquivo MP4 não encontrado para salvar metadados: {filename}")
+        except Exception as mp4_error:
+            print(f"⚠️ Erro ao salvar metadados no MP4: {mp4_error}")
+        
+        # Emitir evento SocketIO para atualizar interface
+        try:
+            socketio.emit('metadados_salvos', {
+                'arquivo': filename,
+                'tipo': 'Dublado',
+                'metadados': {
+                    'titulo': titulo,
+                    'legenda': legenda,
+                    'hashtags': hashtags
+                }
+            })
+            print(f"📡 Evento Socket.IO emitido para vídeo dublado: {filename}")
+        except Exception as socket_error:
+            print(f"⚠️ Erro ao emitir Socket.IO: {socket_error}")
         
         return jsonify({"ok": True, "message": "Metadados salvos com sucesso"})
         
@@ -4760,7 +5367,7 @@ def adicionar_coluna_tipo():
         
         # Salvar planilha atualizada
         df.to_excel(planilha_path, index=False)
-        df.to_csv(csv_path, index=False)
+        df.to_csv(csv_path, index=False, encoding='utf-8')
         
         return jsonify({
             "ok": True, 
@@ -4787,7 +5394,7 @@ def corrigir_planilha_principal():
         else:
             return jsonify({"ok": False, "error": "Planilha não encontrada"})
         
-        print(f"📊 Planilha carregada com {len(df)} linhas e colunas: {list(df.columns)}")
+        print(f" Planilha carregada com {len(df)} linhas e colunas: {list(df.columns)}")
         
         # Adicionar colunas faltantes
         colunas_faltantes = []
@@ -4805,12 +5412,12 @@ def corrigir_planilha_principal():
             df['postado'] = 'Não'
             colunas_faltantes.append('postado')
         
-        print(f"✅ Colunas adicionadas: {colunas_faltantes}")
-        print(f"📊 Nova estrutura: {list(df.columns)}")
+        print(f" Colunas adicionadas: {colunas_faltantes}")
+        print(f" Nova estrutura: {list(df.columns)}")
         
         # Salvar planilha corrigida
         df.to_excel(planilha_path, index=False)
-        df.to_csv(csv_path, index=False)
+        df.to_csv(csv_path, index=False, encoding='utf-8')
         
         # Mostrar estatísticas
         tipos_count = df['tipo'].value_counts().to_dict()
@@ -4893,7 +5500,7 @@ def aplicar_metadados_manuais():
                     
                     # Salvar planilhas
                     df.to_excel(planilha_path, index=False)
-                    df.to_csv(csv_path, index=False)
+                    df.to_csv(csv_path, index=False, encoding='utf-8')
                     
                     aplicados += 1
                     break
@@ -4918,19 +5525,12 @@ def dublar_xtts():
         body = request.get_json(force=True) or {}
         cut_id = body.get("cut_id")
         prefer_lang = body.get("prefer_lang", "pt")  # "pt" ou "en"
+        voice_ref = body.get("voice_ref", None)  # Caminho opcional para voz de referência
         
         if not cut_id:
             return jsonify({
                 "success": False, 
                 "message": "ID do corte não fornecido"
-            })
-        
-        # Verificar se o corte existe
-        video_path = f"data/cortes/{cut_id}.mp4"
-        if not os.path.exists(video_path):
-            return jsonify({
-                "success": False, 
-                "message": f"Vídeo do corte não encontrado: {video_path}"
             })
         
         # Verificar se existe transcrição JSON
@@ -4941,25 +5541,240 @@ def dublar_xtts():
                 "message": f"Transcrição JSON não encontrada: {json_path}. Execute o conversor primeiro."
             })
         
-        # Executar dublagem XTTS
+        # Executar dublagem XTTS (deixar a função encontrar o vídeo)
         result = dublar_corte_xtts(
             cut_id=cut_id,
             prefer_lang=prefer_lang,
             base_data_dir="data",
-            outputs_dir="outputs"
+            outputs_dir="outputs",
+            voice_ref=voice_ref
         )
+        
+        # Adicionar informações de métrica na resposta
+        metrics = result.get("metrics", {})
+        message = f"Dublagem concluída! {result['sentences']} sentenças processadas. Precisão média: {metrics.get('avg_precision_pct', 0):.1f}%"
         
         return jsonify({
             "success": True,
-            "message": f"Dublagem concluída com sucesso! {result['sentences']} sentenças processadas.",
+            "message": message,
             "result": result
         })
         
     except Exception as e:
         print(f"Erro na dublagem XTTS: {e}")
+        import traceback
+        traceback.print_exc()
         return jsonify({
             "success": False, 
             "message": f"Erro na dublagem: {str(e)}"
+        })
+
+@app.route("/dublar_batch", methods=["POST"])
+def dublar_batch():
+    """Dubla múltiplos vídeos de uma vez com feedback de progresso"""
+    try:
+        if not XTTS_AVAILABLE:
+            return jsonify({
+                "success": False, 
+                "message": "Sistema XTTS v2 não disponível."
+            })
+        
+        body = request.get_json(force=True) or {}
+        cut_ids = body.get("cut_ids", [])
+        prefer_lang = body.get("prefer_lang", "pt")
+        voice_ref = body.get("voice_ref", None)
+        
+        if not cut_ids or not isinstance(cut_ids, list):
+            return jsonify({
+                "success": False, 
+                "message": "Lista de cut_ids não fornecida ou inválida"
+            })
+        
+        results = []
+        sucessos = 0
+        falhas = 0
+        
+        for i, cut_id in enumerate(cut_ids):
+            try:
+                print(f"\n{'='*60}")
+                print(f"📹 Processando {i+1}/{len(cut_ids)}: {cut_id}")
+                print(f"{'='*60}")
+                
+                result = dublar_corte_xtts(
+                    cut_id=cut_id,
+                    prefer_lang=prefer_lang,
+                    base_data_dir="data",
+                    outputs_dir="outputs",
+                    voice_ref=voice_ref
+                )
+                
+                metrics = result.get("metrics", {})
+                results.append({
+                    "cut_id": cut_id,
+                    "status": "sucesso",
+                    "video": result.get("video"),
+                    "sentences": result.get("sentences"),
+                    "avg_precision_pct": metrics.get("avg_precision_pct", 0),
+                    "drift_ms": metrics.get("cumulative_drift_ms", 0)
+                })
+                sucessos += 1
+                print(f" {cut_id} dublado com sucesso!")
+                
+            except Exception as e:
+                print(f" Erro ao dublar {cut_id}: {e}")
+                results.append({
+                    "cut_id": cut_id,
+                    "status": "falha",
+                    "error": str(e)
+                })
+                falhas += 1
+        
+        return jsonify({
+            "success": True,
+            "message": f"Batch concluído: {sucessos} sucessos, {falhas} falhas",
+            "results": results,
+            "summary": {
+                "total": len(cut_ids),
+                "sucessos": sucessos,
+                "falhas": falhas
+            }
+        })
+        
+    except Exception as e:
+        print(f"Erro no batch: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "success": False, 
+            "message": f"Erro no processamento batch: {str(e)}"
+        })
+
+@app.route("/vozes_disponiveis", methods=["GET"])
+def vozes_disponiveis():
+    """Lista todas as vozes clonadas disponíveis"""
+    try:
+        vozes = []
+        
+        # Ler vozes_clonadas.json
+        vozes_json_path = "vozes_clonadas.json"
+        if os.path.exists(vozes_json_path):
+            with open(vozes_json_path, 'r', encoding='utf-8') as f:
+                vozes_data = json.load(f)
+                
+            if 'vozes' in vozes_data:
+                for voz in vozes_data['vozes']:
+                    if voz.get('ativo', False):
+                        arquivo = voz.get('arquivo_referencia', '')
+                        if arquivo and os.path.exists(arquivo):
+                            vozes.append({
+                                "id": voz.get('id', ''),
+                                "nome": voz.get('nome', ''),
+                                "descricao": voz.get('descricao', ''),
+                                "arquivo": arquivo,
+                                "tipo": "clonada",
+                                "tamanho_mb": os.path.getsize(arquivo) / (1024**2) if os.path.exists(arquivo) else 0
+                            })
+        
+        # Ler arquivos em voice_refs/
+        voice_refs_dir = Path("voice_refs")
+        if voice_refs_dir.exists():
+            for arquivo in voice_refs_dir.glob("*.wav"):
+                # Evitar duplicatas
+                if not any(v['arquivo'] == str(arquivo) for v in vozes):
+                    vozes.append({
+                        "id": f"file_{arquivo.stem}",
+                        "nome": arquivo.stem.replace("_", " ").title(),
+                        "descricao": f"Arquivo de voz: {arquivo.name}",
+                        "arquivo": str(arquivo),
+                        "tipo": "arquivo",
+                        "tamanho_mb": arquivo.stat().st_size / (1024**2)
+                    })
+        
+        return jsonify({
+            "success": True,
+            "vozes": vozes,
+            "total": len(vozes)
+        })
+        
+    except Exception as e:
+        print(f"Erro ao listar vozes: {e}")
+        return jsonify({
+            "success": False, 
+            "message": f"Erro ao listar vozes: {str(e)}",
+            "vozes": []
+        })
+
+@app.route("/testar_voz", methods=["POST"])
+def testar_voz():
+    """Testa voz clonada com texto curto"""
+    try:
+        if not XTTS_AVAILABLE:
+            return jsonify({
+                "success": False, 
+                "message": "Sistema XTTS v2 não disponível."
+            })
+        
+        body = request.get_json(force=True) or {}
+        voice_ref = body.get("voice_ref")
+        texto = body.get("texto", "Olá, este é um teste de clonagem de voz.")
+        
+        if not voice_ref:
+            return jsonify({
+                "success": False, 
+                "message": "Caminho da voz de referência não fornecido"
+            })
+        
+        if not os.path.exists(voice_ref):
+            return jsonify({
+                "success": False, 
+                "message": f"Arquivo de voz não encontrado: {voice_ref}"
+            })
+        
+        # Gerar áudio de teste
+        from dub_xtts import synth_tts_clone_xtts, _init_xtts
+        from pathlib import Path
+        import tempfile
+        
+        # Inicializar XTTS
+        _init_xtts()
+        
+        # Criar arquivo temporário
+        test_dir = Path("static/temp_tests")
+        test_dir.mkdir(parents=True, exist_ok=True)
+        
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        test_audio = test_dir / f"test_voice_{timestamp}.wav"
+        
+        # Sintetizar
+        synth_tts_clone_xtts(
+            text=texto,
+            voice_ref_wav=Path(voice_ref),
+            out_wav=test_audio,
+            language="pt"
+        )
+        
+        if test_audio.exists():
+            # Retornar caminho relativo para o static
+            audio_url = f"/static/temp_tests/{test_audio.name}"
+            return jsonify({
+                "success": True,
+                "message": "Áudio de teste gerado com sucesso!",
+                "audio_url": audio_url,
+                "texto": texto
+            })
+        else:
+            return jsonify({
+                "success": False, 
+                "message": "Falha ao gerar áudio de teste"
+            })
+        
+    except Exception as e:
+        print(f"Erro ao testar voz: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "success": False, 
+            "message": f"Erro ao testar voz: {str(e)}"
         })
 
 
@@ -4979,7 +5794,7 @@ def carregar_dados_whisper(arquivo_transcricao):
     """Carrega dados do Whisper do arquivo de transcrição"""
     try:
         if not os.path.exists(arquivo_transcricao):
-            print(f"❌ Arquivo de transcrição não encontrado: {arquivo_transcricao}")
+            print(f" Arquivo de transcrição não encontrado: {arquivo_transcricao}")
             return None
         
         with open(arquivo_transcricao, 'r', encoding='utf-8') as f:
@@ -4992,27 +5807,27 @@ def carregar_dados_whisper(arquivo_transcricao):
             if match:
                 timestamps_json = match.group(1)
                 timestamps = json.loads(timestamps_json)
-                print(f"✅ Carregados {len(timestamps)} timestamps do Whisper")
+                print(f" Carregados {len(timestamps)} timestamps do Whisper")
                 return {'timestamps_detalhados': timestamps}
         
         print("⚠️ TIMESTAMPS_DETALHADOS não encontrado no arquivo")
         return None
         
     except Exception as e:
-        print(f"❌ Erro ao carregar dados do Whisper: {e}")
+        print(f" Erro ao carregar dados do Whisper: {e}")
         return None
 
 if __name__ == "__main__":
     # Tentar encontrar uma porta livre
     port = find_free_port()
     if port is None:
-        print("❌ Nenhuma porta livre encontrada entre 5500-5600")
+        print("Nenhuma porta livre encontrada entre 5500-5600")
         port = 5500  # Fallback
     
-    print(f"🚀 Iniciando servidor na porta {port}")
+    print(f"Iniciando servidor na porta {port}")
     try:
         # DEPOIS:
-        app.run(host='127.0.0.1', port=port, debug=True)
+        socketio.run(app, host='127.0.0.1', port=port, debug=True)
     except OSError as e:
         if "10048" in str(e):
             print(f"❌ Porta {port} já está em uso. Tente fechar outros processos ou reiniciar o computador.")
